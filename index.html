@@ -238,7 +238,7 @@ header{
 
 /* ── PAGES ── */
 .page{display:none;flex:1;overflow:hidden;flex-direction:column;}
-.page.active{display:flex;}
+.page.active{display:flex;} #page-preco.active, #page-fiscal.active {display:block!important;height:calc(100vh - 54px);overflow-y:auto;flex:none;}
 .pscroll{flex:1;overflow-y:auto;padding:22px 26px;}
 
 /* ── FORM COMPONENTS ── */
@@ -4356,7 +4356,13 @@ function excluirRegra(id){
 var _goPageOriginal = goPage;
 goPage = function(id, btn){
   _goPageOriginal(id, btn);
-  if(id === 'fiscal'){ renderRegras(); renderFiscalKPIs(); }
+  if(id === 'fiscal'){ 
+    document.getElementById('page-fiscal').style.display='flex';
+    renderRegras(); renderFiscalKPIs(); 
+  }
+  if(id === 'preco'){
+    document.getElementById('page-preco').style.display='flex';
+  }
 };
 
 // iniciarFiscal chamado via hook no login
