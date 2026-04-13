@@ -1558,29 +1558,29 @@ function setupUI(){
 function goPage(id,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  btn.classList.add('active');
+  var target=document.getElementById('page-'+id);
+  if(!target){ console.error('Página não encontrada:', id); return; }
+  target.classList.add('active');
+  if(btn) btn.classList.add('active');
   if(id==='mapa')     setTimeout(()=>{initMapa();renderPins();renderMpList();},50);
   if(id==='bi')       setTimeout(renderBI,50);
   if(id==='cotacoes') updSelVend();
   if(id==='users')    {updSelVend();renderUsers();}
   if(id==='produtos') {renderProdutos();renderMarcas();updMarcaSelects();}
   if(id==='garantia') {updSelCotacaoAT();renderAT();}
-  if(id==='fiscal'){renderRegras();renderFiscalKPIs();}
+  if(id==='preco')    initPrecoVenda();
+  if(id==='fiscal')   initFiscal();
   if(id==='busca')    {updBpMarcas();sv('bp-busca','');document.getElementById('bp-resultados').style.display='none';document.getElementById('bp-selecionado').style.display='none';}
   if(id==='painel')   {
     const m=new Date().getMonth();const a=new Date().getFullYear();
     sv('pan-mes',m);sv('pan-ano',a);
     setTimeout(renderPainel,100);
   }
-  if(id==='garantia') {updSelCotacaoAT();renderAT();}
-  if(id==='fiscal'){renderRegras();renderFiscalKPIs();}
   if(id==='orcamento'){
     updSelVend();
     updMarcaSelects();
     renderItensOrc();
     if(!v('orc-data')){const hoje=new Date().toISOString().split('T')[0];sv('orc-data',hoje);}
-    // Re-popular vendedor ap\u00F3s delay (Firebase pode n\u00E3o ter carregado ainda)
     setTimeout(updSelVend, 800);
   }
 }
@@ -2278,6 +2278,8 @@ function renderAll(){
   if(document.getElementById('page-bi')?.classList.contains('active')) try{renderBI();}catch(e){}
   if(document.getElementById('page-mapa')?.classList.contains('active')) try{renderPins();renderMpList();updMpStats();}catch(e){}
   if(document.getElementById('page-painel')?.classList.contains('active')) try{renderPainel();}catch(e){}
+  if(document.getElementById('page-preco')?.classList.contains('active')) try{initPrecoVenda();}catch(e){ console.warn('initPrecoVenda',e); }
+  if(document.getElementById('page-fiscal')?.classList.contains('active')) try{initFiscal();}catch(e){ console.warn('initFiscal',e); }
 }
 
 // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
@@ -4019,6 +4021,48 @@ function renderListaPreco(){
 function remItemPreco(i){pcProdutos.splice(i,1);renderListaPreco();}
 function limparListaPreco(){pcProdutos=[];renderListaPreco();}
 
+
+
+function initPrecoVenda(){
+  var page=document.getElementById('page-preco');
+  if(!page) return;
+  var required=['pc-nome','pc-custo','pc-frete','pc-margem','pc-pv','pc-tipo-op','pc-r-custo','pc-r-frete','pc-r-icms','pc-r-difal','pc-r-com','pc-r-marg','pc-base-legal','pc-beneficio','pc-obs-fiscal','pc-alerta','pc-res-wrap','pc-lista-wrap','pc-lista-body','pc-lista-cnt'];
+  var missing=required.filter(function(id){ return !document.getElementById(id); });
+  if(missing.length){
+    page.innerHTML='<div class="pscroll"><div class="card"><div style="font-weight:700;color:#ef4444;margin-bottom:8px">Erro ao carregar Formação de Preço</div><div style="font-size:12px;color:var(--mu)">Campos ausentes: '+missing.join(', ')+'</div></div></div>';
+    console.error('Formação de preço com campos ausentes:', missing);
+    return;
+  }
+  if(!document.getElementById('pc-custo').value) document.getElementById('pc-custo').value='';
+  if(!document.getElementById('pc-frete').value) document.getElementById('pc-frete').value='0';
+  if(!document.getElementById('pc-margem').value) document.getElementById('pc-margem').value='20';
+  if(document.getElementById('pc-res-wrap') && !document.getElementById('pc-res-wrap').dataset.initDone){
+    document.getElementById('pc-res-wrap').style.display='none';
+    document.getElementById('pc-alerta').style.display='none';
+    document.getElementById('pc-res-wrap').dataset.initDone='1';
+  }
+}
+
+function initFiscal(){
+  var page=document.getElementById('page-fiscal');
+  if(!page) return;
+  window.DB_REGRAS = Array.isArray(window.DB_REGRAS) ? window.DB_REGRAS : [];
+  var required=['fiscal-data','fiscal-resp','fiscal-aviso','fiscal-kpis','fiscal-ncm-tags','fiscal-busca','fiscal-cnt','fiscal-body','fiscal-historico'];
+  var missing=required.filter(function(id){ return !document.getElementById(id); });
+  if(missing.length){
+    page.innerHTML='<div class="pscroll"><div class="card"><div style="font-weight:700;color:#ef4444;margin-bottom:8px">Erro ao carregar Módulo Fiscal</div><div style="font-size:12px;color:var(--mu)">Campos ausentes: '+missing.join(', ')+'</div></div></div>';
+    console.error('Fiscal com campos ausentes:', missing);
+    return;
+  }
+  try{
+    if(typeof renderRegras==='function') renderRegras();
+    if(typeof renderFiscalKPIs==='function') renderFiscalKPIs();
+  }catch(err){
+    console.error('Erro ao inicializar fiscal:', err);
+    page.innerHTML='<div class="pscroll"><div class="card"><div style="font-weight:700;color:#ef4444;margin-bottom:8px">Erro ao carregar Módulo Fiscal</div><div style="font-size:12px;color:var(--mu)">'+String(err && err.message ? err.message : err)+'</div></div></div>';
+  }
+}
+
 // ══════════════════════════════════════════════
 // MÓDULO FISCAL
 // ══════════════════════════════════════════════
@@ -4040,11 +4084,14 @@ var REGRAS_PADRAO = [
 ];
 
 function iniciarFiscal(){
-  if(!db){return;}
+  if(!db){ window.DB_REGRAS = REGRAS_PADRAO.slice(); initFiscal(); return; }
   db.collection('regras_fiscais').onSnapshot(function(snap){
     DB_REGRAS=snap.docs.map(function(d){return d.data();});
     if(!DB_REGRAS.length) DB_REGRAS=REGRAS_PADRAO.slice();
-    renderRegras(); renderFiscalKPIs();
+    initFiscal();
+  }, function(){
+    DB_REGRAS=REGRAS_PADRAO.slice();
+    initFiscal();
   });
   db.collection('fiscal_config').doc('config').get().then(function(doc){
     if(doc.exists){
@@ -4065,9 +4112,15 @@ function iniciarFiscal(){
 }
 
 function renderFiscalKPIs(){
+  window.DB_REGRAS = Array.isArray(window.DB_REGRAS) ? window.DB_REGRAS : [];
   var el=document.getElementById('fiscal-kpis');if(!el)return;
   var ufs=[],ncms={},comDifal=0;
-  DB_REGRAS.forEach(function(r){if(ufs.indexOf(r.uf_dest)<0)ufs.push(r.uf_dest);if(!ncms[r.ncm])ncms[r.ncm]=0;ncms[r.ncm]++;if(r.difal==='sim')comDifal++;});
+  DB_REGRAS.forEach(function(r){
+    if(!r) return;
+    if(ufs.indexOf(r.uf_dest)<0)ufs.push(r.uf_dest);
+    if(!ncms[r.ncm])ncms[r.ncm]=0;ncms[r.ncm]++;
+    if(r.difal==='sim')comDifal++;
+  });
   el.innerHTML=[
     {lbl:'Total de Regras',val:DB_REGRAS.length,cor:'var(--acc)'},
     {lbl:'UFs Cobertas',val:ufs.length,cor:'var(--blu)'},
@@ -4079,9 +4132,14 @@ function renderFiscalKPIs(){
 }
 
 function renderRegras(){
+  window.DB_REGRAS = Array.isArray(window.DB_REGRAS) ? window.DB_REGRAS : [];
   var busca=(document.getElementById('fiscal-busca')?document.getElementById('fiscal-busca').value:'').toLowerCase();
-  var arr=DB_REGRAS.filter(function(r){return !busca||r.ncm.toLowerCase().indexOf(busca)>=0||r.uf_dest.toLowerCase().indexOf(busca)>=0;});
-  document.getElementById('fiscal-cnt').textContent=arr.length;
+  var arr=DB_REGRAS.filter(function(r){
+    var ncm=String((r&&r.ncm)||'').toLowerCase();
+    var ufd=String((r&&r.uf_dest)||'').toLowerCase();
+    return !busca||ncm.indexOf(busca)>=0||ufd.indexOf(busca)>=0;
+  });
+  if(document.getElementById('fiscal-cnt')) document.getElementById('fiscal-cnt').textContent=arr.length;
   var isAdmin=SESSION&&SESSION.role==='admin';
   if(document.getElementById('th-fiscal-acoes'))document.getElementById('th-fiscal-acoes').style.display=isAdmin?'':'none';
   if(document.getElementById('btn-nova-regra'))document.getElementById('btn-nova-regra').style.display=isAdmin?'':'none';
