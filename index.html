@@ -4242,7 +4242,7 @@ function renderRegras(){
       +'<td><span class="badge '+(r.diferimento==='sim'||r.diferimento==='parcial'?'gold':'cinza')+'">'+(r.diferimento==='nao'?'Nao':r.diferimento)+'</span></td>'
       +'<td style="font-size:11px;color:var(--mu)">'+(r.beneficio||'—')+'</td>'
       +'<td style="font-size:10px;color:var(--mu);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+(r.base_legal||'')+'">'+(r.base_legal||'—')+'</td>'
-      +(isAdmin?'<td style="display:flex;gap:4px"><button class="btn btn-b btn-sm" onclick="abrirModalRegra(''+r.id+'')">Edit</button><button class="btn btn-r btn-sm" onclick="excluirRegra(''+r.id+'')">x</button></td>':'<td></td>')
+      +(isAdmin?'<td style="display:flex;gap:4px"><button class="btn btn-b btn-sm" data-id="'+r.id+'" onclick="abrirModalRegra(this.dataset.id)">Edit</button><button class="btn btn-r btn-sm" data-id="'+r.id+'" onclick="excluirRegra(this.dataset.id)">x</button></td>':'<td></td>')
     +'</tr>';
   }).join('');
   renderFiscalKPIs();
