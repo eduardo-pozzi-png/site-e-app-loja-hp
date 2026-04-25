@@ -475,7 +475,10 @@ td{padding:10px 14px;font-size:12px;vertical-align:middle;}
     </div>
     <div class="login-field">
       <label>Senha</label>
-      <input id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+      <div style="position:relative">
+        <input id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" style="padding-right:44px;width:100%">
+        <button type="button" onclick="var i=document.getElementById('l-pass');i.type=i.type==='password'?'text':'password';this.textContent=i.type==='password'?'👁':'🙈'" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--mu)">👁</button>
+      </div>
     </div>
     <button class="login-btn" onclick="doLogin()">Entrar →</button>
     <div class="login-err" id="l-err">Usuário ou senha incorretos.</div>
@@ -502,6 +505,7 @@ td{padding:10px 14px;font-size:12px;vertical-align:middle;}
     <button class="nb" id="btn-users" onclick="goPage('users',this)" style="display:none">🔐 Usuários</button>
     <button class="nb" onclick="goPage('preco',this)">💰 Preço de Venda</button>
     <button class="nb" onclick="goPage('fiscal',this)">⚖️ Fiscal</button>
+    <button class="nb" onclick="goPage('clickup',this)">🔗 ClickUp</button>
   </nav>
   <div class="user-info">
     <div class="user-badge">
@@ -543,7 +547,27 @@ td{padding:10px 14px;font-size:12px;vertical-align:middle;}
     </div>
     <button class="btn btn-p" onclick="addCad()">+ Adicionar Cadastro</button>
   </div>
-  <div class="tw" style="margin-top:16px">
+  <div class="card" style="margin-top:16px;margin-bottom:10px">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+      <div class="field" style="margin:0;flex:2;min-width:200px"><label>🔍 Pesquisar</label>
+        <input id="cad-busca" type="text" placeholder="Nome, empresa, cidade, telefone..." oninput="renderCads()"></div>
+      <div class="field" style="margin:0;min-width:120px"><label>Tipo</label>
+        <select id="cad-filtro-tipo" onchange="renderCads()">
+          <option value="">Todos</option>
+          <option value="vendedor">Vendedores</option>
+          <option value="cliente">Clientes</option>
+          <option value="distribuidor">Distribuidores</option>
+        </select></div>
+      <div class="field" style="margin:0;min-width:100px"><label>Estado</label>
+        <select id="cad-filtro-estado" onchange="renderCads()">
+          <option value="">Todos</option>
+          <option value="RS">RS</option><option value="SC">SC</option>
+          <option value="PR">PR</option><option value="SP">SP</option><option value="MS">MS</option>
+        </select></div>
+      <button class="btn btn-o btn-sm" style="align-self:flex-end" onclick="document.getElementById('cad-busca').value='';document.getElementById('cad-filtro-tipo').value='';document.getElementById('cad-filtro-estado').value='';renderCads()">✕ Limpar</button>
+    </div>
+  </div>
+  <div class="tw">
     <div class="thead-row"><h3>Todos os Cadastros</h3><span class="cnt" id="cad-cnt">0</span><button class="btn btn-g btn-sm" onclick="forcarImportBase()" title="Importar 268 cadastros da planilha">Carregar Base (268)</button></div>
     <table><thead><tr><th>Tipo</th><th>Nome</th><th>Empresa</th><th>UF</th><th>Município</th><th>Telefone</th><th>Início</th><th>Ações</th></tr></thead>
     <tbody id="cad-body"><tr><td colspan="8"><div class="empty"><span>📭</span>Nenhum cadastro.</div></td></tr></tbody></table>
@@ -673,7 +697,7 @@ td{padding:10px 14px;font-size:12px;vertical-align:middle;}
   </div>
   <div class="stitle">🏆 Ranking de Vendedores</div>
   <div class="tw">
-    <table><thead><tr><th>#</th><th>Vendedor</th><th>Qtde</th><th>Valor Total</th><th>Ganhos</th><th>Perdidos</th><th>Abertos</th><th>Conversão</th><th>Ticket Médio</th><th>⏱ Alertas</th></tr></thead>
+    <table><thead><tr><th>#</th><th>Vendedor</th><th>Qtde</th><th>Valor Total</th><th>Ganhos</th><th>Perdidos</th><th>Abertos</th><th>Conversão</th><th>Ticket Médio</th></tr></thead>
     <tbody id="bi-rank"></tbody></table>
   </div>
 </div></div>
@@ -775,7 +799,11 @@ td{padding:10px 14px;font-size:12px;vertical-align:middle;}
     <div class="fgrid">
       <div class="field"><label>Nome Completo</label><input id="u-nome" type="text" placeholder="Ex: Carlos Vendedor"></div>
       <div class="field"><label>Usuário (login)</label><input id="u-user" type="text" placeholder="carlos.vendedor"></div>
-      <div class="field"><label>Senha</label><input id="u-pass" type="password" placeholder="mínimo 6 caracteres"></div>
+      <div class="field"><label>Senha</label>
+        <div style="position:relative">
+          <input id="u-pass" type="password" placeholder="mínimo 6 caracteres" style="padding-right:40px">
+          <button type="button" onclick="toggleSenhaVis()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--mu);font-size:16px" id="btn-eye">👁</button>
+        </div></div>
       <div class="field"><label>Perfil</label>
         <select id="u-role">
           <option value="admin">Administrador (acesso total)</option>
@@ -1167,7 +1195,7 @@ td{padding:10px 14px;font-size:12px;vertical-align:middle;}
       <button class="btn btn-p" onclick="printPDF()">🖨️ Imprimir / Salvar PDF</button>
     </div>
   </div>
-</div>
+
 
 <!-- PREÇO DE VENDA -->
 <div class="page" id="page-preco">
@@ -1181,49 +1209,34 @@ td{padding:10px 14px;font-size:12px;vertical-align:middle;}
   <div class="fgrid">
     <div class="field"><label>UF Origem (Compra)</label>
       <select id="pc-uf-orig">
-        <option value="RS">RS — Rio Grande do Sul</option>
-        <option value="SC">SC — Santa Catarina</option>
-        <option value="PR">PR — Paraná</option>
-        <option value="SP">SP — São Paulo</option>
-        <option value="MG">MG — Minas Gerais</option>
-        <option value="MT">MT — Mato Grosso</option>
-        <option value="GO">GO — Goiás</option>
+        <option value="RS">RS</option><option value="SC">SC</option><option value="PR">PR</option>
+        <option value="SP">SP</option><option value="MG">MG</option><option value="MT">MT</option><option value="GO">GO</option>
       </select></div>
     <div class="field"><label>UF Destino (Venda)</label>
       <select id="pc-uf-dest">
-        <option value="RS">RS — Rio Grande do Sul</option>
-        <option value="SC">SC — Santa Catarina</option>
-        <option value="PR">PR — Paraná</option>
-        <option value="SP">SP — São Paulo</option>
-        <option value="MG">MG — Minas Gerais</option>
-        <option value="RJ">RJ — Rio de Janeiro</option>
-        <option value="MT">MT — Mato Grosso</option>
-        <option value="MS">MS — Mato Grosso do Sul</option>
-        <option value="GO">GO — Goiás</option>
-        <option value="BA">BA — Bahia</option>
-        <option value="CE">CE — Ceará</option>
-        <option value="PE">PE — Pernambuco</option>
-        <option value="PA">PA — Pará</option>
-        <option value="AM">AM — Amazonas</option>
+        <option value="RS">RS</option><option value="SC">SC</option><option value="PR">PR</option>
+        <option value="SP">SP</option><option value="MG">MG</option><option value="RJ">RJ</option>
+        <option value="MT">MT</option><option value="MS">MS</option><option value="GO">GO</option>
+        <option value="BA">BA</option><option value="CE">CE</option><option value="PE">PE</option><option value="AM">AM</option>
       </select></div>
     <div class="field"><label>Tipo de Cliente</label>
       <select id="pc-tipo-cli">
         <option value="produtor_ie">Produtor Rural com IE</option>
-        <option value="empresa_ie">Empresa com IE (Contrib. ICMS)</option>
+        <option value="empresa_ie">Empresa com IE</option>
         <option value="sem_ie">Consumidor Final / Sem IE</option>
       </select></div>
     <div class="field"><label>NCM do Produto</label>
       <select id="pc-ncm">
-        <option value="8432">8432 — Máquinas prep. solo</option>
+        <option value="8432">8432 — Máq. solo/cultura</option>
         <option value="8433">8433 — Colheitadeiras</option>
         <option value="8436">8436 — Outras máq. agrícolas</option>
-        <option value="8701">8701 — Tratores agrícolas</option>
+        <option value="8701">8701 — Tratores</option>
         <option value="8424">8424 — Pulverizadores</option>
         <option value="8437">8437 — Máq. limpeza grãos</option>
         <option value="8716">8716 — Reboques agrícolas</option>
-        <option value="outro">Outro NCM (regra geral)</option>
+        <option value="outro">Outro NCM</option>
       </select></div>
-    <div class="field"><label>Valor de Custo (R$)</label>
+    <div class="field"><label>Custo do Produto (R$)</label>
       <input id="pc-custo" type="number" step="0.01" min="0" placeholder="0,00"></div>
     <div class="field"><label>Frete (R$)</label>
       <input id="pc-frete" type="number" step="0.01" min="0" value="0"></div>
@@ -1236,7 +1249,7 @@ td{padding:10px 14px;font-size:12px;vertical-align:middle;}
       <input id="pc-margem" type="number" step="0.1" min="0" value="20"></div>
   </div>
   <div style="background:rgba(247,201,72,.1);border:1px solid rgba(247,201,72,.3);border-radius:8px;padding:10px;font-size:12px;color:var(--gold);margin-bottom:14px">
-    💡 Comissão travada em <b>25%</b> sobre o lucro bruto
+    💡 Comissão travada em <b>25%</b> sobre lucro bruto
   </div>
   <div style="display:flex;gap:10px">
     <button class="btn btn-p" style="flex:1;justify-content:center" onclick="calcPrecoVenda()">🔢 Calcular</button>
@@ -1252,34 +1265,14 @@ td{padding:10px 14px;font-size:12px;vertical-align:middle;}
       <div id="pc-tipo-op" style="font-size:11px;color:var(--mu);margin-top:4px"></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
-      <div style="background:var(--s3);border-radius:8px;padding:10px">
-        <div style="font-size:10px;color:var(--mu);text-transform:uppercase;margin-bottom:3px">Custo</div>
-        <div id="pc-r-custo" style="font-size:13px;font-weight:700;color:var(--tx)">—</div>
-      </div>
-      <div style="background:var(--s3);border-radius:8px;padding:10px">
-        <div style="font-size:10px;color:var(--mu);text-transform:uppercase;margin-bottom:3px">Frete</div>
-        <div id="pc-r-frete" style="font-size:13px;font-weight:700;color:var(--tx)">—</div>
-      </div>
-      <div style="background:var(--s3);border-radius:8px;padding:10px">
-        <div style="font-size:10px;color:var(--mu);text-transform:uppercase;margin-bottom:3px">ICMS</div>
-        <div id="pc-r-icms" style="font-size:13px;font-weight:700;color:var(--red)">—</div>
-      </div>
-      <div style="background:var(--s3);border-radius:8px;padding:10px">
-        <div style="font-size:10px;color:var(--mu);text-transform:uppercase;margin-bottom:3px">DIFAL</div>
-        <div id="pc-r-difal" style="font-size:13px;font-weight:700;color:var(--red)">—</div>
-      </div>
-      <div style="background:var(--s3);border-radius:8px;padding:10px">
-        <div style="font-size:10px;color:var(--mu);text-transform:uppercase;margin-bottom:3px">Comissão 25%</div>
-        <div id="pc-r-com" style="font-size:13px;font-weight:700;color:var(--gold)">—</div>
-      </div>
-      <div style="background:var(--s3);border-radius:8px;padding:10px">
-        <div style="font-size:10px;color:var(--mu);text-transform:uppercase;margin-bottom:3px">Margem Líquida</div>
-        <div id="pc-r-marg" style="font-size:13px;font-weight:700;color:var(--acc)">—</div>
-      </div>
+      <div style="background:var(--s3);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--mu);text-transform:uppercase;margin-bottom:3px">Custo</div><div id="pc-r-custo" style="font-size:13px;font-weight:700;color:var(--tx)">—</div></div>
+      <div style="background:var(--s3);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--mu);text-transform:uppercase;margin-bottom:3px">Frete</div><div id="pc-r-frete" style="font-size:13px;font-weight:700;color:var(--tx)">—</div></div>
+      <div style="background:var(--s3);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--mu);text-transform:uppercase;margin-bottom:3px">ICMS</div><div id="pc-r-icms" style="font-size:13px;font-weight:700;color:var(--red)">—</div></div>
+      <div style="background:var(--s3);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--mu);text-transform:uppercase;margin-bottom:3px">DIFAL</div><div id="pc-r-difal" style="font-size:13px;font-weight:700;color:var(--red)">—</div></div>
+      <div style="background:var(--s3);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--mu);text-transform:uppercase;margin-bottom:3px">Comissão 25%</div><div id="pc-r-com" style="font-size:13px;font-weight:700;color:var(--gold)">—</div></div>
+      <div style="background:var(--s3);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--mu);text-transform:uppercase;margin-bottom:3px">Margem Líquida</div><div id="pc-r-marg" style="font-size:13px;font-weight:700;color:var(--acc)">—</div></div>
     </div>
-    <div id="pc-alerta" style="display:none;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:10px;font-size:12px;color:#ef4444;margin-bottom:12px">
-      ⚠️ Margem abaixo do mínimo desejado!
-    </div>
+    <div id="pc-alerta" style="display:none;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:10px;font-size:12px;color:#ef4444;margin-bottom:12px">⚠️ Margem abaixo do mínimo desejado!</div>
     <div style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:8px;padding:12px;margin-bottom:14px">
       <div style="font-weight:700;color:#3b82f6;font-size:12px;margin-bottom:5px">⚖️ Base Legal</div>
       <div id="pc-base-legal" style="font-size:11px;color:var(--tx);line-height:1.6"></div>
@@ -1291,21 +1284,13 @@ td{padding:10px 14px;font-size:12px;vertical-align:middle;}
 </div>
 </div>
 <div id="pc-lista-wrap" style="display:none;margin-top:20px">
-  <div class="tw">
-    <div class="tw-head">
-      <h3>📋 Lista de Produtos Calculados</h3>
-      <div style="display:flex;gap:8px">
-        <span class="cnt" id="pc-lista-cnt">0</span>
-        <button class="btn btn-o btn-sm" onclick="limparListaPreco()">Limpar</button>
-      </div>
-    </div>
-    <div style="overflow-x:auto">
-      <table><thead><tr>
-        <th>Produto</th><th>NCM</th><th>UF</th><th>Tipo</th>
-        <th>Custo</th><th>Frete</th><th>ICMS</th><th>DIFAL</th>
-        <th>Comissão</th><th>Margem</th><th>Preço Venda</th><th></th>
-      </tr></thead><tbody id="pc-lista-body"></tbody></table>
-    </div>
+  <div class="tw"><div class="tw-head"><h3>📋 Lista de Produtos Calculados</h3>
+    <div style="display:flex;gap:8px"><span class="cnt" id="pc-lista-cnt">0</span>
+    <button class="btn btn-o btn-sm" onclick="limparListaPreco()">Limpar</button></div></div>
+    <div style="overflow-x:auto"><table><thead><tr>
+      <th>Produto</th><th>NCM</th><th>UF</th><th>Tipo</th><th>Custo</th><th>Frete</th>
+      <th>ICMS</th><th>DIFAL</th><th>Comissão</th><th>Margem</th><th>Preço Venda</th><th></th>
+    </tr></thead><tbody id="pc-lista-body"></tbody></table></div>
   </div>
 </div>
 </div>
@@ -1324,13 +1309,11 @@ td{padding:10px 14px;font-size:12px;vertical-align:middle;}
 <div class="card" style="margin-bottom:14px;border:1px solid rgba(247,201,72,.2)">
   <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
     <div>
-      <div style="font-size:11px;color:var(--mu)">Última atualização das regras tributárias</div>
+      <div style="font-size:11px;color:var(--mu)">Última atualização</div>
       <div id="fiscal-data" style="font-size:14px;font-weight:700;color:var(--tx)">Carregando...</div>
       <div id="fiscal-resp" style="font-size:11px;color:var(--mu)"></div>
     </div>
-    <div id="fiscal-aviso" style="display:none;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:8px 14px;font-size:12px;color:#ef4444">
-      ⚠️ Regras desatualizadas — clique em Atualizar
-    </div>
+    <div id="fiscal-aviso" style="display:none;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:8px 14px;font-size:12px;color:#ef4444">⚠️ Regras desatualizadas</div>
   </div>
 </div>
 <div class="kgrid" id="fiscal-kpis" style="margin-bottom:14px"></div>
@@ -1339,24 +1322,21 @@ td{padding:10px 14px;font-size:12px;vertical-align:middle;}
   <div id="fiscal-ncm-tags" style="display:flex;flex-wrap:wrap;gap:8px"></div>
 </div>
 <div class="tw" style="margin-bottom:14px">
-  <div class="tw-head">
-    <h3>Regras Tributárias</h3>
+  <div class="tw-head"><h3>Regras Tributárias</h3>
     <div style="display:flex;gap:8px;align-items:center">
-      <input type="text" id="fiscal-busca" placeholder="Buscar NCM, UF..." oninput="renderRegras()"
+      <input type="text" id="fiscal-busca" placeholder="Buscar..." oninput="renderRegras()"
         style="background:var(--s2);border:1px solid var(--bd);border-radius:7px;padding:5px 10px;color:var(--tx);font-size:12px;width:160px">
       <span class="cnt" id="fiscal-cnt">0</span>
     </div>
   </div>
-  <div style="overflow-x:auto">
-    <table><thead><tr>
-      <th>UF Orig</th><th>UF Dest</th><th>NCM</th><th>Tipo Cliente</th>
-      <th>Alíquota</th><th>DIFAL</th><th>Diferimento</th><th>Benefício</th><th>Base Legal</th>
-      <th id="th-fiscal-acoes" style="display:none">Ações</th>
-    </tr></thead><tbody id="fiscal-body"></tbody></table>
-  </div>
+  <div style="overflow-x:auto"><table><thead><tr>
+    <th>UF Orig</th><th>UF Dest</th><th>NCM</th><th>Tipo Cliente</th>
+    <th>Alíquota</th><th>DIFAL</th><th>Diferimento</th><th>Benefício</th><th>Base Legal</th>
+    <th id="th-fiscal-acoes" style="display:none">Ações</th>
+  </tr></thead><tbody id="fiscal-body"></tbody></table></div>
 </div>
 <div class="card">
-  <div style="font-family:Syne,sans-serif;font-size:11px;font-weight:700;color:var(--mu);margin-bottom:10px">HISTÓRICO DE ATUALIZAÇÕES</div>
+  <div style="font-family:Syne,sans-serif;font-size:11px;font-weight:700;color:var(--mu);margin-bottom:10px">HISTÓRICO</div>
   <div id="fiscal-historico"><div class="empty">Nenhuma atualização registrada.</div></div>
 </div>
 </div>
@@ -1403,21 +1383,78 @@ td{padding:10px 14px;font-size:12px;vertical-align:middle;}
           <option value="normal">Tributada Normal</option><option value="diferimento">Diferimento</option>
           <option value="isencao">Isencao</option><option value="reducao_bc">Reducao BC</option>
         </select></div>
-      <div class="field"><label>Validade</label>
-        <input id="rf-validade" type="date"></div>
+      <div class="field"><label>Validade</label><input id="rf-validade" type="date"></div>
     </div>
     <div class="field"><label>Benefício Fiscal</label>
-      <input id="rf-beneficio" type="text" placeholder="Ex: Conv. ICMS 52/91 - Reducao BC implementos"></div>
+      <input id="rf-beneficio" type="text" placeholder="Ex: Conv. ICMS 52/91"></div>
     <div class="field"><label>Base Legal</label>
       <textarea id="rf-base-legal" rows="2" placeholder="Ex: RICMS/RS, Art. 27, II"></textarea></div>
     <div class="field"><label>Observação (aparece no orçamento)</label>
-      <textarea id="rf-obs" rows="2" placeholder="Observacao que aparecera no rodape do orcamento..."></textarea></div>
+      <textarea id="rf-obs" rows="2"></textarea></div>
     <input type="hidden" id="rf-id-edit">
     <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px">
       <button class="btn btn-o" onclick="fecharModal('modal-regra-fiscal')">Cancelar</button>
-      <button class="btn btn-p" onclick="salvarRegraFiscal()">Salvar Regra</button>
+      <button class="btn btn-p" oncl
+
+<!-- CLICKUP -->
+<div class="page" id="page-clickup">
+<div class="pscroll">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px">
+    <div class="stitle" style="margin:0;flex:1">🔗 Cotações ClickUp</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
+      <div class="field" style="margin:0;min-width:150px"><label>Lista</label>
+        <select id="ck-lista-filtro" onchange="filtrarCotacoesClickUp()">
+          <option value="">Todas</option>
+          <option value="Siltomac">Siltomac</option>
+          <option value="Loja HP">Loja HP</option>
+          <option value="Priori - Linhas Amarela">Priori</option>
+        </select></div>
+      <div class="field" style="margin:0;min-width:150px"><label>Status</label>
+        <select id="ck-status-filtro" onchange="filtrarCotacoesClickUp()">
+          <option value="">Todos</option>
+          <option value="realizar contato">Realizar Contato</option>
+          <option value="contato realizado">Contato Realizado</option>
+          <option value="em negociacao">Em Negociação</option>
+          <option value="ganho">Ganho</option>
+          <option value="perdido">Perdido</option>
+        </select></div>
+      <div class="field" style="margin:0;min-width:180px"><label>Buscar</label>
+        <input id="ck-busca" type="text" placeholder="Cliente, equipamento, cidade..." oninput="filtrarCotacoesClickUp()"></div>
+      <button class="btn btn-p btn-sm" onclick="carregarCotacoesClickUp()">🔄 Atualizar</button>
     </div>
   </div>
+
+  <!-- KPIs -->
+  <div class="kgrid" id="ck-kpis" style="margin-bottom:16px"></div>
+
+  <!-- Tabela -->
+  <div class="tw">
+    <div class="tw-head">
+      <h3>Cotações por Lista</h3>
+      <span class="cnt" id="ck-cnt">0</span>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr>
+          <th>Lista</th>
+          <th>Cliente</th>
+          <th>Equipamento</th>
+          <th>Cidade / UF</th>
+          <th>Telefone</th>
+          <th>Status</th>
+          <th>Criado em</th>
+          <th>Link</th>
+        </tr></thead>
+        <tbody id="ck-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+ick="salvarRegraFiscal()">Salvar Regra</button>
+    </div>
+  </div>
+</div>
 </div>
 
 <div class="tip" id="tip"></div>
@@ -1509,6 +1546,11 @@ function doLogin(){
   }
   SESSION=found;
   setTimeout(iniciarFiscal, 1200);
+  // Listener ClickUp cotacoes
+  db.collection('ck_cotacoes').onSnapshot(function(snap){
+    CK_TASKS = snap.docs.map(function(d){return d.data();});
+    if(document.getElementById('page-clickup').classList.contains('active')) renderCotacoesClickUp(CK_TASKS);
+  });
   console.log('Login OK:', SESSION.nome, SESSION.role);
   document.getElementById('l-err').style.display='none';
   document.getElementById('login-screen').style.display='none';
@@ -1558,29 +1600,31 @@ function setupUI(){
 function goPage(id,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
-  var target=document.getElementById('page-'+id);
-  if(!target){ console.error('Página não encontrada:', id); return; }
-  target.classList.add('active');
-  if(btn) btn.classList.add('active');
+  document.getElementById('page-'+id).classList.add('active');
+  btn.classList.add('active');
   if(id==='mapa')     setTimeout(()=>{initMapa();renderPins();renderMpList();},50);
   if(id==='bi')       setTimeout(renderBI,50);
   if(id==='cotacoes') updSelVend();
   if(id==='users')    {updSelVend();renderUsers();}
   if(id==='produtos') {renderProdutos();renderMarcas();updMarcaSelects();}
   if(id==='garantia') {updSelCotacaoAT();renderAT();}
-  if(id==='preco')    initPrecoVenda();
-  if(id==='fiscal')   initFiscal();
+  if(id==='fiscal'){renderRegras();renderFiscalKPIs();}
+  if(id==='clickup'){carregarCotacoesClickUp();}
   if(id==='busca')    {updBpMarcas();sv('bp-busca','');document.getElementById('bp-resultados').style.display='none';document.getElementById('bp-selecionado').style.display='none';}
   if(id==='painel')   {
     const m=new Date().getMonth();const a=new Date().getFullYear();
     sv('pan-mes',m);sv('pan-ano',a);
     setTimeout(renderPainel,100);
   }
+  if(id==='garantia') {updSelCotacaoAT();renderAT();}
+  if(id==='fiscal'){renderRegras();renderFiscalKPIs();}
+  if(id==='clickup'){carregarCotacoesClickUp();}
   if(id==='orcamento'){
     updSelVend();
     updMarcaSelects();
     renderItensOrc();
     if(!v('orc-data')){const hoje=new Date().toISOString().split('T')[0];sv('orc-data',hoje);}
+    // Re-popular vendedor ap\u00F3s delay (Firebase pode n\u00E3o ter carregado ainda)
     setTimeout(updSelVend, 800);
   }
 }
@@ -1595,7 +1639,17 @@ function visibleCots(){
   return DB.cotacoes;
 }
 function visibleCads(){
-  return DB.cadastros; // todos podem ver cadastros
+  var busca = norm(document.getElementById('cad-busca') ? document.getElementById('cad-busca').value : '');
+  var filtroTipo = document.getElementById('cad-filtro-tipo') ? document.getElementById('cad-filtro-tipo').value : '';
+  var filtroEstado = document.getElementById('cad-filtro-estado') ? document.getElementById('cad-filtro-estado').value : '';
+  var arr = DB.cadastros;
+  if(busca) arr = arr.filter(function(c){
+    return norm(c.nome||'').includes(busca) || norm(c.empresa||'').includes(busca) ||
+           norm(c.cidade||'').includes(busca) || (c.tel||'').includes(busca);
+  });
+  if(filtroTipo) arr = arr.filter(function(c){ return c.tipo === filtroTipo; });
+  if(filtroEstado) arr = arr.filter(function(c){ return c.estado === filtroEstado; });
+  return arr;
 }
 
 // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
@@ -1858,7 +1912,7 @@ function renderBI(){
         <span style="font-size:10px;font-weight:700;color:var(--grn)">${r.cv2}%</span>
       </div></td>
       <td style="color:var(--pur);font-weight:700">${fmtBRL(r.tk)}</td>
-      <td>(r.al?'<span class="aging-badge over">'+r.al+' alerta'+(r.al>1?'s':'')+'</span>':'<span style="color:var(--grn);font-size:11px">[OK]</span>')</td>
+
     </tr>`).join('');
 }
 function clearFBI(){['bi-v','bi-de','bi-ate'].forEach(i=>sv(i,''));renderBI();}
@@ -2022,6 +2076,18 @@ function alterarSenha(id){
   notif(`[OK] Senha de ${u.nome} alterada em tempo real`);
 }
 
+function toggleSenhaVis(){
+  var input = document.getElementById('u-pass');
+  var btn = document.getElementById('btn-eye');
+  if(input.type === 'password'){
+    input.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁';
+  }
+}
+
 function renderUsers(){
   const list=document.getElementById('users-list');
   if(!DB.users.length){list.innerHTML='<div class="empty"><span></span>Nenhum usu\u00E1rio.</div>';return;}
@@ -2030,7 +2096,7 @@ function renderUsers(){
     const av=u.nome.charAt(0).toUpperCase();
     const cor=roleColors[u.role]||'#666';
     const vincStr=u.vendedor?' \u00B7 Vinculado: '+u.vendedor:'';
-    const btnSenha='<button class="btn btn-o btn-sm" onclick="alterarSenha(this.dataset.id)" data-id="'+u.id+'" title="Alterar senha">\u1F511 Senha</button>';
+    const btnSenha='<button class="btn btn-o btn-sm" onclick="alterarSenha(this.dataset.id)" data-id="'+u.id+'" title="Alterar senha">🔑 Redefinir Senha</button>';
     const btnDel=u.id!==SESSION.id?'<button class="btn btn-d btn-sm" onclick="remUser(this.dataset.id)" data-id="'+u.id+'">\u2715</button>':'<span style="font-size:11px;color:var(--mu)">(voc\u00EA)</span>';
     return '<div class="user-row">'
       +'<div class="ua" style="background:'+cor+'">'+av+'</div>'
@@ -2278,8 +2344,6 @@ function renderAll(){
   if(document.getElementById('page-bi')?.classList.contains('active')) try{renderBI();}catch(e){}
   if(document.getElementById('page-mapa')?.classList.contains('active')) try{renderPins();renderMpList();updMpStats();}catch(e){}
   if(document.getElementById('page-painel')?.classList.contains('active')) try{renderPainel();}catch(e){}
-  if(document.getElementById('page-preco')?.classList.contains('active')) try{initPrecoVenda();}catch(e){ console.warn('initPrecoVenda',e); }
-  if(document.getElementById('page-fiscal')?.classList.contains('active')) try{initFiscal();}catch(e){ console.warn('initFiscal',e); }
 }
 
 // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
@@ -2391,6 +2455,14 @@ function renderMarcas() {
       + ' style="width:65px;background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:3px 7px;color:var(--grn);font-size:12px;font-weight:700;outline:none;text-align:center"'
       + ' onchange="editMargem(this.dataset.mid,this.dataset.mnome,this.value)">'
       + '<span style="color:var(--mu)">% margem</span>'
+      + '<span style="color:var(--mu);margin-left:8px">Comissão:</span>'
+      + '<input type="number" value="' + (m.comissao||'') + '" min="0" max="100" step="0.1"'
+      + ' data-mid="' + mid + '" data-mnome="' + mnome + '"'
+      + ' placeholder="25"'
+      + ' title="Comissao fixa para esta marca (deixe vazio para usar 25% padrao)"'
+      + ' style="width:60px;background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:3px 7px;color:var(--gold);font-size:12px;font-weight:700;outline:none;text-align:center"'
+      + ' onchange="editComissaoMarca(this.dataset.mid,this.dataset.mnome,this.value)">'
+      + '<span style="color:var(--mu)">%</span>'
       + '<button data-mid="' + mid + '" onclick="fbDelMarca(this.dataset.mid)"'
       + ' style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;padding:0 4px">x</button>'
       + '</div>';
@@ -3888,362 +3960,332 @@ setTimeout(() => {
   }
 }, 8000);
 
-// ══════════════════════════════════════════════
 // CALCULADORA DE PREÇO DE VENDA
-// ══════════════════════════════════════════════
-var ALIQ_INTER_PC = {RS:12,SC:12,PR:12,SP:12,MG:12,RJ:12,ES:12,MT:7,MS:7,GO:7,DF:7,BA:7,CE:7,PE:7,MA:7,PA:7,TO:7,RO:7,AM:7};
-var ALIQ_INT_DEST_PC = {RS:17,SC:17,PR:17,SP:18,MG:18,RJ:20,ES:17,MT:17,MS:17,GO:17,DF:18,BA:20,CE:20,PE:18,MA:22,PA:19,TO:18,RO:17,AM:20};
-var NCM_AGRIC_PC = ['8432','8433','8436','8701','8424','8437','8716'];
-var pcProdutos = [];
-
+var ALIQ_INTER_PC={RS:12,SC:12,PR:12,SP:12,MG:12,RJ:12,ES:12,MT:7,MS:7,GO:7,DF:7,BA:7,CE:7,PE:7,MA:7,PA:7,TO:7,RO:7,AM:7};
+var ALIQ_INT_DEST_PC={RS:17,SC:17,PR:17,SP:18,MG:18,RJ:20,ES:17,MT:17,MS:17,GO:17,DF:18,BA:20,CE:20,PE:18,MA:22,PA:19,TO:18,RO:17,AM:20};
+var NCM_AGRIC_PC=['8432','8433','8436','8701','8424','8437','8716'];
+var pcProdutos=[];
 function fmtR(v){return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v||0);}
-
 function calcPrecoVenda(){
-  var custo = parseFloat(document.getElementById('pc-custo').value)||0;
+  var custo=parseFloat(document.getElementById('pc-custo').value)||0;
   if(custo<=0){notif('[!] Informe o valor de custo');return;}
-  var ufDest = document.getElementById('pc-uf-dest').value;
-  var tipoCli = document.getElementById('pc-tipo-cli').value;
-  var ncm = document.getElementById('pc-ncm').value;
-  var frete = parseFloat(document.getElementById('pc-frete').value)||0;
-  var tipoFrete = document.getElementById('pc-tipo-frete').value;
-  var margemMin = parseFloat(document.getElementById('pc-margem').value)||20;
-  var interno = (ufDest==='RS');
-  var implAgric = NCM_AGRIC_PC.indexOf(ncm)>=0;
-  var aliqICMS=0, aliqDifal=0, tipoOp='', baseLegal='', beneficio='', obs='';
-
+  var ufDest=document.getElementById('pc-uf-dest').value;
+  var tipoCli=document.getElementById('pc-tipo-cli').value;
+  var ncm=document.getElementById('pc-ncm').value;
+  var frete=parseFloat(document.getElementById('pc-frete').value)||0;
+  var tipoFrete=document.getElementById('pc-tipo-frete').value;
+  var margemMin=parseFloat(document.getElementById('pc-margem').value)||20;
+  var interno=(ufDest==='RS');
+  var implAgric=NCM_AGRIC_PC.indexOf(ncm)>=0;
+  var aliqICMS=0,aliqDifal=0,tipoOp='',baseLegal='',beneficio='',obs='';
   if(interno){
-    aliqICMS = implAgric ? 12 : 17;
-    tipoOp = 'Operacao Interna RS';
-    if(implAgric){baseLegal='RICMS/RS, Art. 27, II — Aliquota 12% implementos agricolas';beneficio='Aliquota reduzida 12%';}
-    else{baseLegal='RICMS/RS — Aliquota geral 17%';}
-    if(tipoCli==='produtor_ie'&&implAgric) obs='Produtor rural RS c/ IE: verificar diferimento com contador.';
+    aliqICMS=implAgric?12:17; tipoOp='Operacao Interna RS';
+    if(implAgric){baseLegal='RICMS/RS, Art. 27, II - Aliquota 12% impl. agricolas';beneficio='Aliquota reduzida 12%';}
+    else{baseLegal='RICMS/RS - Aliquota geral 17%';}
+    if(tipoCli==='produtor_ie'&&implAgric)obs='Produtor rural RS c/ IE: verificar diferimento com contador.';
   } else {
-    aliqICMS = ALIQ_INTER_PC[ufDest]||12;
-    var aliqInt = ALIQ_INT_DEST_PC[ufDest]||18;
-    tipoOp = 'Operacao Interestadual RS → '+ufDest;
-    baseLegal = 'Res. Senado 22/89 — Aliquota '+aliqICMS+'% RS→'+ufDest;
-    if(tipoCli==='sem_ie'){
-      aliqDifal = Math.max(0, aliqInt-aliqICMS);
-      tipoOp += ' — Cons. Final (c/ DIFAL)';
-      baseLegal += ' | LC 190/2022 — DIFAL obrigatorio';
-      obs = 'DIFAL '+aliqDifal.toFixed(1)+'% recolhido ao '+ufDest+'.';
-    } else if(tipoCli==='produtor_ie'){
-      tipoOp += ' — Produtor Rural c/ IE';
-      obs = 'Produtor rural contribuinte ICMS: sem DIFAL.';
-      if(implAgric) beneficio='Conv. ICMS 52/91 — possivel reducao BC no destino';
-    } else {
-      tipoOp += ' — Empresa c/ IE';
-      obs = 'Contribuinte ICMS: sem DIFAL.';
+    aliqICMS=ALIQ_INTER_PC[ufDest]||12;
+    var aliqInt=ALIQ_INT_DEST_PC[ufDest]||18;
+    tipoOp='Interestadual RS->'+ufDest;
+    baseLegal='Res. Senado 22/89 - Aliquota '+aliqICMS+'% RS->'+ufDest;
+    if(tipoCli==='sem_ie'){aliqDifal=Math.max(0,aliqInt-aliqICMS);tipoOp+=' (c/ DIFAL)';baseLegal+=' | LC 190/2022';obs='DIFAL '+aliqDifal.toFixed(1)+'% ao '+ufDest+'.';}
+    else if(tipoCli==='produtor_ie'){tipoOp+=' - Prod. Rural c/ IE';obs='Sem DIFAL.';if(implAgric)beneficio='Conv. ICMS 52/91 possivel no destino';}
+    else{tipoOp+=' - Empresa c/ IE';obs='Sem DIFAL.';}
+  }
+  var baseCusto=custo+(tipoFrete==='cif'?frete:0);
+  var totTrib=(aliqICMS+aliqDifal)/100,margPct=margemMin/100;
+  var pv=baseCusto/(1-totTrib-margPct);
+  for(var i=0;i<30;i++){var t=pv*totTrib,lb=pv-baseCusto-t,c=lb>0?lb*comissaoPct:0,pvN=(baseCusto+t+c)/(1-margPct);if(Math.abs(pvN-pv)<0.01){pv=pvN;break;}pv=pvN;}
+  // Comissao por marca ou padrao 25%
+  var comissaoPct = 0.25;
+  if(window._marcaSelecionadaCalc){
+    var mObj = DB.marcas ? DB.marcas.find(function(m){ return norm(m.nome)===norm(window._marcaSelecionadaCalc); }) : null;
+    if(mObj && mObj.comissao !== null && mObj.comissao !== undefined && String(mObj.comissao)!==''){
+      comissaoPct = parseFloat(mObj.comissao) / 100;
     }
   }
-
-  var baseCusto = custo+(tipoFrete==='cif'?frete:0);
-  var totTrib = (aliqICMS+aliqDifal)/100;
-  var margPct = margemMin/100;
-  var pv = baseCusto/(1-totTrib-margPct);
-  for(var i=0;i<30;i++){
-    var trib=pv*totTrib, lb=pv-baseCusto-trib, com=lb>0?lb*0.25:0;
-    var pvN=(baseCusto+trib+com)/(1-margPct);
-    if(Math.abs(pvN-pv)<0.01){pv=pvN;break;} pv=pvN;
-  }
-  var icmsR=pv*(aliqICMS/100), difalR=pv*(aliqDifal/100);
-  var lb2=pv-baseCusto-icmsR-difalR, comR=lb2>0?lb2*0.25:0;
+  var icmsR=pv*(aliqICMS/100),difalR=pv*(aliqDifal/100),lb2=pv-baseCusto-icmsR-difalR,comR=lb2>0?lb2*comissaoPct:0;
   var margReal=(pv-baseCusto-icmsR-difalR-comR)/pv*100;
-
   document.getElementById('pc-pv').textContent=fmtR(pv);
   document.getElementById('pc-tipo-op').textContent=tipoOp;
   document.getElementById('pc-r-custo').textContent=fmtR(custo);
   document.getElementById('pc-r-frete').textContent=fmtR(frete)+' ('+tipoFrete.toUpperCase()+')';
   document.getElementById('pc-r-icms').textContent=fmtR(icmsR)+' ('+aliqICMS+'%)';
   document.getElementById('pc-r-difal').textContent=aliqDifal>0?fmtR(difalR)+' ('+aliqDifal.toFixed(1)+'%)':'N/A';
-  document.getElementById('pc-r-com').textContent=fmtR(comR);
-  var margEl=document.getElementById('pc-r-marg');
-  margEl.textContent=margReal.toFixed(2)+'%';
-  margEl.style.color=margReal<margemMin?'var(--red)':'var(--acc)';
+  document.getElementById('pc-r-com').textContent=fmtR(comR)+' ('+(comissaoPct*100).toFixed(0)+'%)';
+  var me=document.getElementById('pc-r-marg');me.textContent=margReal.toFixed(2)+'%';me.style.color=margReal<margemMin?'var(--red)':'var(--acc)';
   document.getElementById('pc-alerta').style.display=margReal<margemMin?'block':'none';
   document.getElementById('pc-base-legal').textContent=baseLegal;
   document.getElementById('pc-beneficio').textContent=beneficio;
   document.getElementById('pc-obs-fiscal').textContent=obs;
-  var wrap=document.getElementById('pc-res-wrap');
-  wrap.style.display='block';
+  var wrap=document.getElementById('pc-res-wrap');wrap.style.display='block';
   wrap.dataset.pv=pv.toFixed(2);wrap.dataset.icms=icmsR.toFixed(2);wrap.dataset.difal=difalR.toFixed(2);
   wrap.dataset.com=comR.toFixed(2);wrap.dataset.marg=margReal.toFixed(2);
   wrap.dataset.nome=document.getElementById('pc-nome').value||'Produto';
   wrap.dataset.ncm=ncm;wrap.dataset.uf=ufDest;wrap.dataset.tipoCli=tipoCli;wrap.dataset.tipoFrete=tipoFrete;
 }
-
 function limparCalcPreco(){
-  ['pc-nome','pc-custo'].forEach(function(i){document.getElementById(i).value='';});
-  document.getElementById('pc-frete').value='0';
-  document.getElementById('pc-margem').value='20';
+  document.getElementById('pc-nome').value='';document.getElementById('pc-custo').value='';
+  document.getElementById('pc-frete').value='0';document.getElementById('pc-margem').value='20';
   document.getElementById('pc-res-wrap').style.display='none';
 }
-
 function adicionarNaListaPreco(){
   var wrap=document.getElementById('pc-res-wrap');
   if(!wrap||wrap.style.display==='none'){notif('Calcule primeiro!');return;}
-  pcProdutos.push({
-    nome:wrap.dataset.nome, ncm:wrap.dataset.ncm, uf:wrap.dataset.uf,
-    tipoCli:wrap.dataset.tipoCli, tipoFrete:wrap.dataset.tipoFrete,
-    custo:parseFloat(document.getElementById('pc-custo').value)||0,
-    frete:parseFloat(document.getElementById('pc-frete').value)||0,
-    pv:parseFloat(wrap.dataset.pv)||0, icms:parseFloat(wrap.dataset.icms)||0,
-    difal:parseFloat(wrap.dataset.difal)||0, com:parseFloat(wrap.dataset.com)||0,
-    marg:parseFloat(wrap.dataset.marg)||0
-  });
-  renderListaPreco(); notif('Produto adicionado!');
+  pcProdutos.push({nome:wrap.dataset.nome,ncm:wrap.dataset.ncm,uf:wrap.dataset.uf,tipoCli:wrap.dataset.tipoCli,tipoFrete:wrap.dataset.tipoFrete,
+    custo:parseFloat(document.getElementById('pc-custo').value)||0,frete:parseFloat(document.getElementById('pc-frete').value)||0,
+    pv:parseFloat(wrap.dataset.pv)||0,icms:parseFloat(wrap.dataset.icms)||0,difal:parseFloat(wrap.dataset.difal)||0,
+    com:parseFloat(wrap.dataset.com)||0,marg:parseFloat(wrap.dataset.marg)||0});
+  renderListaPreco();notif('Produto adicionado!');
 }
-
 function renderListaPreco(){
-  var wrap=document.getElementById('pc-lista-wrap');
-  var body=document.getElementById('pc-lista-body');
+  var wrap=document.getElementById('pc-lista-wrap'),body=document.getElementById('pc-lista-body');
   if(!pcProdutos.length){wrap.style.display='none';return;}
-  wrap.style.display='block';
-  document.getElementById('pc-lista-cnt').textContent=pcProdutos.length;
-  var cliLbl={produtor_ie:'Produtor c/IE',empresa_ie:'Empresa c/IE',sem_ie:'Sem IE'};
+  wrap.style.display='block';document.getElementById('pc-lista-cnt').textContent=pcProdutos.length;
+  var cliLbl={produtor_ie:'Prod c/IE',empresa_ie:'Empresa c/IE',sem_ie:'Sem IE'};
   body.innerHTML=pcProdutos.map(function(p,i){
-    return '<tr>'
-      +'<td style="font-weight:600;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+p.nome+'</td>'
-      +'<td><span class="badge azul">'+p.ncm+'</span></td>'
-      +'<td>'+p.uf+'</td>'
+    return '<tr><td style="font-weight:600;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+p.nome+'</td>'
+      +'<td><span class="badge azul">'+p.ncm+'</span></td><td>'+p.uf+'</td>'
       +'<td style="font-size:11px">'+(cliLbl[p.tipoCli]||p.tipoCli)+'</td>'
-      +'<td>'+fmtR(p.custo)+'</td>'
-      +'<td>'+fmtR(p.frete)+' '+p.tipoFrete.toUpperCase()+'</td>'
+      +'<td>'+fmtR(p.custo)+'</td><td>'+fmtR(p.frete)+' '+p.tipoFrete.toUpperCase()+'</td>'
       +'<td style="color:var(--red)">'+fmtR(p.icms)+'</td>'
       +'<td style="color:var(--red)">'+(p.difal>0?fmtR(p.difal):'—')+'</td>'
       +'<td style="color:var(--gold)">'+fmtR(p.com)+'</td>'
       +'<td style="color:'+(p.marg<20?'var(--red)':'var(--acc)')+'">'+p.marg.toFixed(1)+'%</td>'
       +'<td style="font-weight:700;color:var(--acc)">'+fmtR(p.pv)+'</td>'
-      +'<td><button class="btn btn-r btn-sm" onclick="remItemPreco('+i+')">x</button></td>'
-    +'</tr>';
+      +'<td><button class="btn btn-r btn-sm" onclick="remItemPreco('+i+')">x</button></td></tr>';
   }).join('');
 }
 function remItemPreco(i){pcProdutos.splice(i,1);renderListaPreco();}
 function limparListaPreco(){pcProdutos=[];renderListaPreco();}
 
-
-
-function initPrecoVenda(){
-  var page=document.getElementById('page-preco');
-  if(!page) return;
-  var required=['pc-nome','pc-custo','pc-frete','pc-margem','pc-pv','pc-tipo-op','pc-r-custo','pc-r-frete','pc-r-icms','pc-r-difal','pc-r-com','pc-r-marg','pc-base-legal','pc-beneficio','pc-obs-fiscal','pc-alerta','pc-res-wrap','pc-lista-wrap','pc-lista-body','pc-lista-cnt'];
-  var missing=required.filter(function(id){ return !document.getElementById(id); });
-  if(missing.length){
-    page.innerHTML='<div class="pscroll"><div class="card"><div style="font-weight:700;color:#ef4444;margin-bottom:8px">Erro ao carregar Formação de Preço</div><div style="font-size:12px;color:var(--mu)">Campos ausentes: '+missing.join(', ')+'</div></div></div>';
-    console.error('Formação de preço com campos ausentes:', missing);
-    return;
-  }
-  if(!document.getElementById('pc-custo').value) document.getElementById('pc-custo').value='';
-  if(!document.getElementById('pc-frete').value) document.getElementById('pc-frete').value='0';
-  if(!document.getElementById('pc-margem').value) document.getElementById('pc-margem').value='20';
-  if(document.getElementById('pc-res-wrap') && !document.getElementById('pc-res-wrap').dataset.initDone){
-    document.getElementById('pc-res-wrap').style.display='none';
-    document.getElementById('pc-alerta').style.display='none';
-    document.getElementById('pc-res-wrap').dataset.initDone='1';
-  }
-}
-
-function initFiscal(){
-  var page=document.getElementById('page-fiscal');
-  if(!page) return;
-  window.DB_REGRAS = Array.isArray(window.DB_REGRAS) ? window.DB_REGRAS : [];
-  var required=['fiscal-data','fiscal-resp','fiscal-aviso','fiscal-kpis','fiscal-ncm-tags','fiscal-busca','fiscal-cnt','fiscal-body','fiscal-historico'];
-  var missing=required.filter(function(id){ return !document.getElementById(id); });
-  if(missing.length){
-    page.innerHTML='<div class="pscroll"><div class="card"><div style="font-weight:700;color:#ef4444;margin-bottom:8px">Erro ao carregar Módulo Fiscal</div><div style="font-size:12px;color:var(--mu)">Campos ausentes: '+missing.join(', ')+'</div></div></div>';
-    console.error('Fiscal com campos ausentes:', missing);
-    return;
-  }
-  try{
-    if(typeof renderRegras==='function') renderRegras();
-    if(typeof renderFiscalKPIs==='function') renderFiscalKPIs();
-  }catch(err){
-    console.error('Erro ao inicializar fiscal:', err);
-    page.innerHTML='<div class="pscroll"><div class="card"><div style="font-weight:700;color:#ef4444;margin-bottom:8px">Erro ao carregar Módulo Fiscal</div><div style="font-size:12px;color:var(--mu)">'+String(err && err.message ? err.message : err)+'</div></div></div>';
-  }
-}
-
-// ══════════════════════════════════════════════
 // MÓDULO FISCAL
-// ══════════════════════════════════════════════
-var DB_REGRAS = [];
-var rfEditId = null;
-var REGRAS_PADRAO = [
+var DB_REGRAS=[],rfEditId=null;
+var REGRAS_PADRAO=[
   {id:'r01',uf_orig:'RS',uf_dest:'RS',ncm:'8432',tipo_cli:'todos',aliquota:12,red_bc:0,tipo_op:'normal',difal:'nao',diferimento:'nao',beneficio:'Aliquota 12% impl. agricolas',base_legal:'RICMS/RS, Art. 27, II',obs:'Operacao interna RS'},
   {id:'r02',uf_orig:'RS',uf_dest:'RS',ncm:'8433',tipo_cli:'todos',aliquota:12,red_bc:0,tipo_op:'normal',difal:'nao',diferimento:'nao',beneficio:'Aliquota 12% maq. colheita',base_legal:'RICMS/RS, Art. 27, II',obs:'Operacao interna RS'},
-  {id:'r03',uf_orig:'RS',uf_dest:'RS',ncm:'8436',tipo_cli:'todos',aliquota:12,red_bc:0,tipo_op:'normal',difal:'nao',diferimento:'nao',beneficio:'Aliquota 12% maq. agricolas',base_legal:'RICMS/RS, Art. 27, II',obs:'Operacao interna RS'},
-  {id:'r04',uf_orig:'RS',uf_dest:'RS',ncm:'8701',tipo_cli:'todos',aliquota:12,red_bc:0,tipo_op:'normal',difal:'nao',diferimento:'nao',beneficio:'Aliquota 12% tratores',base_legal:'RICMS/RS, Art. 27, II',obs:'Operacao interna RS'},
-  {id:'r05',uf_orig:'RS',uf_dest:'RS',ncm:'todos',tipo_cli:'produtor_ie',aliquota:12,red_bc:0,tipo_op:'diferimento',difal:'nao',diferimento:'sim',beneficio:'Diferimento produtor rural RS c/ IE',base_legal:'RICMS/RS - diferimento',obs:'Verificar com contador'},
-  {id:'r06',uf_orig:'RS',uf_dest:'SC',ncm:'todos',tipo_cli:'empresa_ie',aliquota:12,red_bc:0,tipo_op:'normal',difal:'nao',diferimento:'nao',beneficio:'',base_legal:'Res. Senado 22/89 - 12% RS->SC',obs:'Sem DIFAL'},
-  {id:'r07',uf_orig:'RS',uf_dest:'PR',ncm:'todos',tipo_cli:'empresa_ie',aliquota:12,red_bc:0,tipo_op:'normal',difal:'nao',diferimento:'nao',beneficio:'',base_legal:'Res. Senado 22/89 - 12% RS->PR',obs:'Sem DIFAL'},
-  {id:'r08',uf_orig:'RS',uf_dest:'SP',ncm:'todos',tipo_cli:'empresa_ie',aliquota:12,red_bc:0,tipo_op:'normal',difal:'nao',diferimento:'nao',beneficio:'',base_legal:'Res. Senado 22/89 - 12% RS->SP',obs:'Sem DIFAL'},
-  {id:'r09',uf_orig:'RS',uf_dest:'SC',ncm:'todos',tipo_cli:'sem_ie',aliquota:12,red_bc:0,tipo_op:'normal',difal:'sim',diferimento:'nao',beneficio:'',base_legal:'LC 190/2022 - DIFAL Lucro Real',obs:'DIFAL 5% ao SC'},
-  {id:'r10',uf_orig:'RS',uf_dest:'SP',ncm:'todos',tipo_cli:'sem_ie',aliquota:12,red_bc:0,tipo_op:'normal',difal:'sim',diferimento:'nao',beneficio:'',base_legal:'LC 190/2022 - DIFAL Lucro Real',obs:'DIFAL 6% ao SP'},
-  {id:'r11',uf_orig:'RS',uf_dest:'norte_nordeste',ncm:'todos',tipo_cli:'empresa_ie',aliquota:7,red_bc:0,tipo_op:'normal',difal:'nao',diferimento:'nao',beneficio:'',base_legal:'Res. Senado 22/89 - 7% RS->Norte/Nordeste',obs:'Sem DIFAL'},
-  {id:'r12',uf_orig:'RS',uf_dest:'norte_nordeste',ncm:'todos',tipo_cli:'sem_ie',aliquota:7,red_bc:0,tipo_op:'normal',difal:'sim',diferimento:'nao',beneficio:'',base_legal:'LC 190/2022 - DIFAL Lucro Real',obs:'DIFAL variavel conforme UF'},
+  {id:'r03',uf_orig:'RS',uf_dest:'RS',ncm:'8436',tipo_cli:'todos',aliquota:12,red_bc:0,tipo_op:'normal',difal:'nao',diferimento:'nao',beneficio:'Aliquota 12% maq. agricolas',base_legal:'RICMS/RS, Art. 27, II',obs:''},
+  {id:'r04',uf_orig:'RS',uf_dest:'RS',ncm:'8701',tipo_cli:'todos',aliquota:12,red_bc:0,tipo_op:'normal',difal:'nao',diferimento:'nao',beneficio:'Aliquota 12% tratores',base_legal:'RICMS/RS, Art. 27, II',obs:''},
+  {id:'r05',uf_orig:'RS',uf_dest:'RS',ncm:'todos',tipo_cli:'produtor_ie',aliquota:12,red_bc:0,tipo_op:'diferimento',difal:'nao',diferimento:'sim',beneficio:'Diferimento prod. rural c/ IE',base_legal:'RICMS/RS diferimento',obs:'Verificar com contador'},
+  {id:'r06',uf_orig:'RS',uf_dest:'SC',ncm:'todos',tipo_cli:'empresa_ie',aliquota:12,red_bc:0,tipo_op:'normal',difal:'nao',diferimento:'nao',beneficio:'',base_legal:'Res. Senado 22/89 - 12%',obs:'Sem DIFAL'},
+  {id:'r07',uf_orig:'RS',uf_dest:'PR',ncm:'todos',tipo_cli:'empresa_ie',aliquota:12,red_bc:0,tipo_op:'normal',difal:'nao',diferimento:'nao',beneficio:'',base_legal:'Res. Senado 22/89 - 12%',obs:'Sem DIFAL'},
+  {id:'r08',uf_orig:'RS',uf_dest:'SP',ncm:'todos',tipo_cli:'empresa_ie',aliquota:12,red_bc:0,tipo_op:'normal',difal:'nao',diferimento:'nao',beneficio:'',base_legal:'Res. Senado 22/89 - 12%',obs:'Sem DIFAL'},
+  {id:'r09',uf_orig:'RS',uf_dest:'SC',ncm:'todos',tipo_cli:'sem_ie',aliquota:12,red_bc:0,tipo_op:'normal',difal:'sim',diferimento:'nao',beneficio:'',base_legal:'LC 190/2022 - DIFAL',obs:'DIFAL 5% ao SC'},
+  {id:'r10',uf_orig:'RS',uf_dest:'SP',ncm:'todos',tipo_cli:'sem_ie',aliquota:12,red_bc:0,tipo_op:'normal',difal:'sim',diferimento:'nao',beneficio:'',base_legal:'LC 190/2022 - DIFAL',obs:'DIFAL 6% ao SP'},
+  {id:'r11',uf_orig:'RS',uf_dest:'norte_nordeste',ncm:'todos',tipo_cli:'empresa_ie',aliquota:7,red_bc:0,tipo_op:'normal',difal:'nao',diferimento:'nao',beneficio:'',base_legal:'Res. Senado 22/89 - 7%',obs:'Sem DIFAL'},
+  {id:'r12',uf_orig:'RS',uf_dest:'norte_nordeste',ncm:'todos',tipo_cli:'sem_ie',aliquota:7,red_bc:0,tipo_op:'normal',difal:'sim',diferimento:'nao',beneficio:'',base_legal:'LC 190/2022 - DIFAL',obs:'DIFAL variavel'},
 ];
-
 function iniciarFiscal(){
-  if(!db){ window.DB_REGRAS = REGRAS_PADRAO.slice(); initFiscal(); return; }
+  if(typeof db==='undefined')return;
   db.collection('regras_fiscais').onSnapshot(function(snap){
     DB_REGRAS=snap.docs.map(function(d){return d.data();});
-    if(!DB_REGRAS.length) DB_REGRAS=REGRAS_PADRAO.slice();
-    initFiscal();
-  }, function(){
-    DB_REGRAS=REGRAS_PADRAO.slice();
-    initFiscal();
+    if(!DB_REGRAS.length)DB_REGRAS=REGRAS_PADRAO.slice();
+    renderRegras();renderFiscalKPIs();
   });
   db.collection('fiscal_config').doc('config').get().then(function(doc){
     if(doc.exists){
       var d=doc.data();
       document.getElementById('fiscal-data').textContent=d.ultima_atualizacao||'Nunca';
       document.getElementById('fiscal-resp').textContent=d.responsavel?'Por: '+d.responsavel:'';
-      if(d.historico) renderFiscalHistorico(d.historico);
-      if(d.ultima_atualizacao){
-        var dt=d.ultima_atualizacao.split('/');
-        var dias=Math.floor((new Date()-new Date(dt[2]+'-'+dt[1]+'-'+dt[0]))/86400000);
-        if(dias>30) document.getElementById('fiscal-aviso').style.display='block';
-      }
-    } else {
-      document.getElementById('fiscal-data').textContent='Nunca atualizado';
-      document.getElementById('fiscal-aviso').style.display='block';
-    }
+      if(d.historico)renderFiscalHistorico(d.historico);
+      if(d.ultima_atualizacao){var dt=d.ultima_atualizacao.split('/');var dias=Math.floor((new Date()-new Date(dt[2]+'-'+dt[1]+'-'+dt[0]))/86400000);if(dias>30)document.getElementById('fiscal-aviso').style.display='block';}
+    } else {document.getElementById('fiscal-data').textContent='Nunca atualizado';document.getElementById('fiscal-aviso').style.display='block';}
   }).catch(function(){document.getElementById('fiscal-data').textContent='Nao configurado';});
 }
-
 function renderFiscalKPIs(){
-  window.DB_REGRAS = Array.isArray(window.DB_REGRAS) ? window.DB_REGRAS : [];
   var el=document.getElementById('fiscal-kpis');if(!el)return;
   var ufs=[],ncms={},comDifal=0;
-  DB_REGRAS.forEach(function(r){
-    if(!r) return;
-    if(ufs.indexOf(r.uf_dest)<0)ufs.push(r.uf_dest);
-    if(!ncms[r.ncm])ncms[r.ncm]=0;ncms[r.ncm]++;
-    if(r.difal==='sim')comDifal++;
-  });
-  el.innerHTML=[
-    {lbl:'Total de Regras',val:DB_REGRAS.length,cor:'var(--acc)'},
-    {lbl:'UFs Cobertas',val:ufs.length,cor:'var(--blu)'},
-    {lbl:'NCMs Mapeados',val:Object.keys(ncms).length,cor:'var(--gold)'},
-    {lbl:'Regras c/ DIFAL',val:comDifal,cor:'var(--red)'},
-  ].map(function(k){return '<div class="kpi" style="--kc:'+k.cor+'"><div class="kpi-lbl">'+k.lbl+'</div><div class="kpi-val">'+k.val+'</div></div>';}).join('');
+  DB_REGRAS.forEach(function(r){if(ufs.indexOf(r.uf_dest)<0)ufs.push(r.uf_dest);if(!ncms[r.ncm])ncms[r.ncm]=0;ncms[r.ncm]++;if(r.difal==='sim')comDifal++;});
+  el.innerHTML=[{lbl:'Total Regras',val:DB_REGRAS.length,cor:'var(--acc)'},{lbl:'UFs',val:ufs.length,cor:'var(--blu)'},{lbl:'NCMs',val:Object.keys(ncms).length,cor:'var(--gold)'},{lbl:'c/ DIFAL',val:comDifal,cor:'var(--red)'}]
+    .map(function(k){return '<div class="kpi" style="--kc:'+k.cor+'"><div class="kpi-lbl">'+k.lbl+'</div><div class="kpi-val">'+k.val+'</div></div>';}).join('');
   var tags=document.getElementById('fiscal-ncm-tags');
-  if(tags) tags.innerHTML=Object.keys(ncms).map(function(ncm){return '<div style="background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:6px 12px;font-size:12px"><b style="color:var(--acc)">'+ncm+'</b> <span style="color:var(--mu)">'+ncms[ncm]+'x</span></div>';}).join('');
+  if(tags)tags.innerHTML=Object.keys(ncms).map(function(n){return '<div style="background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:6px 12px;font-size:12px"><b style="color:var(--acc)">'+n+'</b> <span style="color:var(--mu)">'+ncms[n]+'x</span></div>';}).join('');
 }
-
 function renderRegras(){
-  window.DB_REGRAS = Array.isArray(window.DB_REGRAS) ? window.DB_REGRAS : [];
   var busca=(document.getElementById('fiscal-busca')?document.getElementById('fiscal-busca').value:'').toLowerCase();
-  var arr=DB_REGRAS.filter(function(r){
-    var ncm=String((r&&r.ncm)||'').toLowerCase();
-    var ufd=String((r&&r.uf_dest)||'').toLowerCase();
-    return !busca||ncm.indexOf(busca)>=0||ufd.indexOf(busca)>=0;
-  });
-  if(document.getElementById('fiscal-cnt')) document.getElementById('fiscal-cnt').textContent=arr.length;
+  var arr=DB_REGRAS.filter(function(r){return !busca||r.ncm.toLowerCase().indexOf(busca)>=0||r.uf_dest.toLowerCase().indexOf(busca)>=0;});
+  document.getElementById('fiscal-cnt').textContent=arr.length;
   var isAdmin=SESSION&&SESSION.role==='admin';
   if(document.getElementById('th-fiscal-acoes'))document.getElementById('th-fiscal-acoes').style.display=isAdmin?'':'none';
   if(document.getElementById('btn-nova-regra'))document.getElementById('btn-nova-regra').style.display=isAdmin?'':'none';
   var tb=document.getElementById('fiscal-body');
-  if(!arr.length){tb.innerHTML='<tr><td colspan="10"><div class="empty">Nenhuma regra cadastrada.</div></td></tr>';return;}
+  if(!arr.length){tb.innerHTML='<tr><td colspan="10"><div class="empty">Nenhuma regra.</div></td></tr>';return;}
   var cliLbl={todos:'Todos',produtor_ie:'Produtor c/IE',empresa_ie:'Empresa c/IE',sem_ie:'Sem IE'};
   tb.innerHTML=arr.map(function(r){
-    return '<tr>'
-      +'<td><span class="badge azul">'+r.uf_orig+'</span></td>'
-      +'<td><span class="badge verde">'+r.uf_dest+'</span></td>'
-      +'<td><span class="badge gold">'+r.ncm+'</span></td>'
-      +'<td style="font-size:11px">'+(cliLbl[r.tipo_cli]||r.tipo_cli)+'</td>'
+    return '<tr><td><span class="badge azul">'+r.uf_orig+'</span></td><td><span class="badge verde">'+r.uf_dest+'</span></td>'
+      +'<td><span class="badge gold">'+r.ncm+'</span></td><td style="font-size:11px">'+(cliLbl[r.tipo_cli]||r.tipo_cli)+'</td>'
       +'<td style="font-weight:700;color:var(--acc)">'+r.aliquota+'%</td>'
       +'<td><span class="badge '+(r.difal==='sim'?'red':'cinza')+'">'+(r.difal==='sim'?'Sim':'Nao')+'</span></td>'
       +'<td><span class="badge '+(r.diferimento!=='nao'?'gold':'cinza')+'">'+(r.diferimento==='nao'?'Nao':r.diferimento)+'</span></td>'
       +'<td style="font-size:11px;color:var(--mu)">'+(r.beneficio||'—')+'</td>'
-      +'<td style="font-size:10px;color:var(--mu);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+(r.base_legal||'')+'">'+(r.base_legal||'—')+'</td>'
+      +'<td style="font-size:10px;color:var(--mu);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+(r.base_legal||'')+'">'+(r.base_legal||'—')+'</td>'
       +(isAdmin?'<td style="display:flex;gap:4px"><button class="btn btn-b btn-sm" data-id="'+r.id+'" onclick="abrirModalRegra(this.dataset.id)">Edit</button><button class="btn btn-r btn-sm" data-id="'+r.id+'" onclick="excluirRegra(this.dataset.id)">x</button></td>':'<td></td>')
     +'</tr>';
   }).join('');
   renderFiscalKPIs();
 }
-
 function renderFiscalHistorico(hist){
   var el=document.getElementById('fiscal-historico');if(!el)return;
-  if(!hist||!hist.length){el.innerHTML='<div class="empty">Nenhuma atualizacao registrada.</div>';return;}
-  el.innerHTML=hist.slice(0,10).map(function(h){
-    return '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bd);font-size:12px">'
-      +'<div><b style="color:var(--tx)">'+h.data+'</b> <span style="color:var(--mu)">por '+h.resp+'</span></div>'
-      +'<div style="color:var(--mu)">'+h.obs+'</div></div>';
-  }).join('');
+  if(!hist||!hist.length){el.innerHTML='<div class="empty">Nenhuma atualizacao.</div>';return;}
+  el.innerHTML=hist.slice(0,10).map(function(h){return '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bd);font-size:12px"><div><b style="color:var(--tx)">'+h.data+'</b> <span style="color:var(--mu)">por '+h.resp+'</span></div><div style="color:var(--mu)">'+h.obs+'</div></div>';}).join('');
 }
-
 function atualizarFiscal(){
   if(!SESSION)return;
   if(!confirm('Confirmar atualizacao das regras tributarias?'))return;
   var hoje=new Date().toLocaleDateString('pt-BR');
   db.collection('fiscal_config').doc('config').get().then(function(doc){
     var hist=doc.exists&&doc.data().historico?doc.data().historico:[];
-    hist.unshift({data:hoje,resp:SESSION.nome,obs:'Atualizacao manual'});
-    if(hist.length>20)hist=hist.slice(0,20);
+    hist.unshift({data:hoje,resp:SESSION.nome,obs:'Atualizacao manual'});if(hist.length>20)hist=hist.slice(0,20);
     db.collection('fiscal_config').doc('config').set({ultima_atualizacao:hoje,responsavel:SESSION.nome,data_iso:new Date().toISOString(),historico:hist}).then(function(){
-      if(!DB_REGRAS.length||DB_REGRAS===REGRAS_PADRAO){
-        var batch=db.batch();
-        REGRAS_PADRAO.forEach(function(r){batch.set(db.collection('regras_fiscais').doc(r.id),Object.assign({},r,{atualizado_em:hoje,atualizado_por:SESSION.nome}));});
-        batch.commit().then(function(){notif('Regras salvas! '+REGRAS_PADRAO.length+' regras.');});
-      } else {notif('Atualizacao registrada: '+hoje);}
-      document.getElementById('fiscal-data').textContent=hoje;
-      document.getElementById('fiscal-resp').textContent='Por: '+SESSION.nome;
-      document.getElementById('fiscal-aviso').style.display='none';
-      renderFiscalHistorico(hist);
+      if(!DB_REGRAS.length||DB_REGRAS===REGRAS_PADRAO){var batch=db.batch();REGRAS_PADRAO.forEach(function(r){batch.set(db.collection('regras_fiscais').doc(r.id),Object.assign({},r,{atualizado_em:hoje,atualizado_por:SESSION.nome}));});batch.commit().then(function(){notif('Regras salvas!');});}
+      else{notif('Atualizacao registrada: '+hoje);}
+      document.getElementById('fiscal-data').textContent=hoje;document.getElementById('fiscal-resp').textContent='Por: '+SESSION.nome;
+      document.getElementById('fiscal-aviso').style.display='none';renderFiscalHistorico(hist);
     });
   });
 }
-
 function abrirModalRegra(id){
-  rfEditId=id||null;
-  document.getElementById('modal-regra-titulo').textContent=id?'Editar Regra':'Nova Regra Fiscal';
-  if(id){
-    var r=DB_REGRAS.find(function(x){return String(x.id)===String(id);});
-    if(r){
-      document.getElementById('rf-orig').value=r.uf_orig||'RS';
-      document.getElementById('rf-dest').value=r.uf_dest||'todas';
-      document.getElementById('rf-ncm').value=r.ncm||'todos';
-      document.getElementById('rf-cli').value=r.tipo_cli||'todos';
-      document.getElementById('rf-aliquota').value=r.aliquota||'';
-      document.getElementById('rf-red-bc').value=r.red_bc||0;
-      document.getElementById('rf-difal').value=r.difal||'nao';
-      document.getElementById('rf-diferimento').value=r.diferimento||'nao';
-      document.getElementById('rf-tipo-op').value=r.tipo_op||'normal';
-      document.getElementById('rf-validade').value=r.validade||'';
-      document.getElementById('rf-beneficio').value=r.beneficio||'';
-      document.getElementById('rf-base-legal').value=r.base_legal||'';
-      document.getElementById('rf-obs').value=r.obs||'';
-    }
-  } else {
-    ['rf-aliquota','rf-beneficio','rf-base-legal','rf-obs','rf-validade'].forEach(function(i){document.getElementById(i).value='';});
-    document.getElementById('rf-orig').value='RS';document.getElementById('rf-dest').value='todas';
-    document.getElementById('rf-ncm').value='todos';document.getElementById('rf-cli').value='todos';
-    document.getElementById('rf-red-bc').value='0';document.getElementById('rf-difal').value='nao';
-    document.getElementById('rf-diferimento').value='nao';document.getElementById('rf-tipo-op').value='normal';
-  }
+  rfEditId=id||null;document.getElementById('modal-regra-titulo').textContent=id?'Editar Regra':'Nova Regra Fiscal';
+  if(id){var r=DB_REGRAS.find(function(x){return String(x.id)===String(id);});
+    if(r){document.getElementById('rf-orig').value=r.uf_orig||'RS';document.getElementById('rf-dest').value=r.uf_dest||'todas';document.getElementById('rf-ncm').value=r.ncm||'todos';document.getElementById('rf-cli').value=r.tipo_cli||'todos';document.getElementById('rf-aliquota').value=r.aliquota||'';document.getElementById('rf-red-bc').value=r.red_bc||0;document.getElementById('rf-difal').value=r.difal||'nao';document.getElementById('rf-diferimento').value=r.diferimento||'nao';document.getElementById('rf-tipo-op').value=r.tipo_op||'normal';document.getElementById('rf-validade').value=r.validade||'';document.getElementById('rf-beneficio').value=r.beneficio||'';document.getElementById('rf-base-legal').value=r.base_legal||'';document.getElementById('rf-obs').value=r.obs||'';}
+  } else {['rf-aliquota','rf-beneficio','rf-base-legal','rf-obs','rf-validade'].forEach(function(i){document.getElementById(i).value='';});document.getElementById('rf-orig').value='RS';document.getElementById('rf-dest').value='todas';document.getElementById('rf-ncm').value='todos';document.getElementById('rf-cli').value='todos';document.getElementById('rf-red-bc').value='0';document.getElementById('rf-difal').value='nao';document.getElementById('rf-diferimento').value='nao';document.getElementById('rf-tipo-op').value='normal';}
   document.getElementById('modal-regra-fiscal').classList.add('open');
 }
-
 function salvarRegraFiscal(){
-  var aliq=parseFloat(document.getElementById('rf-aliquota').value);
-  if(isNaN(aliq)){notif('[!] Informe a aliquota');return;}
+  var aliq=parseFloat(document.getElementById('rf-aliquota').value);if(isNaN(aliq)){notif('[!] Informe a aliquota');return;}
   var id=rfEditId||String(Date.now());
-  var r={id:id,uf_orig:document.getElementById('rf-orig').value,uf_dest:document.getElementById('rf-dest').value,
-    ncm:document.getElementById('rf-ncm').value,tipo_cli:document.getElementById('rf-cli').value,
-    aliquota:aliq,red_bc:parseFloat(document.getElementById('rf-red-bc').value)||0,
-    difal:document.getElementById('rf-difal').value,diferimento:document.getElementById('rf-diferimento').value,
-    tipo_op:document.getElementById('rf-tipo-op').value,validade:document.getElementById('rf-validade').value,
-    beneficio:document.getElementById('rf-beneficio').value.trim(),
-    base_legal:document.getElementById('rf-base-legal').value.trim(),
-    obs:document.getElementById('rf-obs').value.trim(),
-    atualizado_em:new Date().toLocaleDateString('pt-BR'),atualizado_por:SESSION?SESSION.nome:''};
+  var r={id:id,uf_orig:document.getElementById('rf-orig').value,uf_dest:document.getElementById('rf-dest').value,ncm:document.getElementById('rf-ncm').value,tipo_cli:document.getElementById('rf-cli').value,aliquota:aliq,red_bc:parseFloat(document.getElementById('rf-red-bc').value)||0,difal:document.getElementById('rf-difal').value,diferimento:document.getElementById('rf-diferimento').value,tipo_op:document.getElementById('rf-tipo-op').value,validade:document.getElementById('rf-validade').value,beneficio:document.getElementById('rf-beneficio').value.trim(),base_legal:document.getElementById('rf-base-legal').value.trim(),obs:document.getElementById('rf-obs').value.trim(),atualizado_em:new Date().toLocaleDateString('pt-BR'),atualizado_por:SESSION?SESSION.nome:''};
   db.collection('regras_fiscais').doc(id).set(r).then(function(){fecharModal('modal-regra-fiscal');notif('Regra salva!');});
 }
+function excluirRegra(id){if(!confirm('Excluir esta regra?'))return;db.collection('regras_fiscais').doc(String(id)).delete().then(function(){notif('Regra excluida!');});}
 
-function excluirRegra(id){
-  if(!confirm('Excluir esta regra?'))return;
-  db.collection('regras_fiscais').doc(String(id)).delete().then(function(){notif('Regra excluida!');});
+
+// ══════════════════════════════════════════════
+// INTEGRAÇÃO CLICKUP
+// ══════════════════════════════════════════════
+var CK_TASKS = [];
+var CK_LISTAS = {
+  '901316109849': 'Siltomac',
+  '901316110143': 'Loja HP',
+  '901325524441': 'Priori - Linhas Amarela'
+};
+var CK_STATUS_CORES = {
+  'realizar contato': 'gold',
+  'contato realizado': 'azul',
+  'em negociacao': 'verde',
+  'ganho': 'verde',
+  'perdido': 'red'
+};
+
+function parsearTarefa(t) {
+  // Nome formato: "Cliente - Equipamento - Cidade UF" ou "Cliente - Equipamento"
+  var nome = t.name || '';
+  var partes = nome.split(' - ');
+  var cliente = partes[0] ? partes[0].trim() : nome;
+  var equipamento = partes[1] ? partes[1].trim() : '—';
+  // Cidade pode estar no final
+  var cidade = '';
+  if (partes.length > 2) {
+    cidade = partes.slice(2).join(' - ').trim();
+  }
+  // Telefone da description ou custom fields
+  var tel = t.text_content || '';
+  if (t.custom_fields) {
+    var cfTel = t.custom_fields.find(function(cf){ return cf.name === 'Contato'; });
+    if (cfTel && cfTel.value) tel = cfTel.value;
+  }
+  // Data criação
+  var dataCriacao = '';
+  if (t.date_created) {
+    var d = new Date(parseInt(t.date_created));
+    dataCriacao = d.toLocaleDateString('pt-BR');
+  }
+  return {
+    id: t.id,
+    lista: CK_LISTAS[t.list && t.list.id] || (t.list && t.list.name) || '—',
+    lista_id: t.list && t.list.id,
+    cliente: cliente,
+    equipamento: equipamento,
+    cidade: cidade,
+    tel: tel,
+    status: t.status && t.status.status ? t.status.status : '—',
+    data_criacao: dataCriacao,
+    url: t.url || ''
+  };
+}
+
+function carregarCotacoesClickUp() {
+  document.getElementById('ck-body').innerHTML = '<tr><td colspan="8"><div class="empty">Carregando...</div></td></tr>';
+  db.collection('ck_cotacoes').get().then(function(snap) {
+    CK_TASKS = snap.docs.map(function(d) { return d.data(); });
+    if (!CK_TASKS.length) {
+      document.getElementById('ck-body').innerHTML = '<tr><td colspan="8"><div class="empty">Nenhuma cotacao importada ainda.<br><small>Use o arquivo de importacao para carregar os dados do ClickUp.</small></div></td></tr>';
+      return;
+    }
+    renderCotacoesClickUp(CK_TASKS);
+    notif('ClickUp: ' + CK_TASKS.length + ' cotacoes carregadas!');
+  }).catch(function(e) {
+    document.getElementById('ck-body').innerHTML = '<tr><td colspan="8"><div class="empty">Erro ao carregar dados.</div></td></tr>';
+  });
+}
+
+function filtrarCotacoesClickUp() {
+  var lista = document.getElementById('ck-lista-filtro').value;
+  var status = document.getElementById('ck-status-filtro').value;
+  var busca = norm(document.getElementById('ck-busca').value);
+  var arr = CK_TASKS.filter(function(t) {
+    if (lista && t.lista !== lista) return false;
+    if (status && t.status !== status) return false;
+    if (busca && !norm(t.cliente).includes(busca) && !norm(t.equipamento).includes(busca) && !norm(t.cidade).includes(busca)) return false;
+    return true;
+  });
+  renderCotacoesClickUp(arr);
+}
+
+function renderCotacoesClickUp(arr) {
+  document.getElementById('ck-cnt').textContent = arr.length;
+
+  // KPIs
+  var kpis = document.getElementById('ck-kpis');
+  var total = arr.length;
+  var porStatus = {};
+  var porLista = {};
+  arr.forEach(function(t) {
+    porStatus[t.status] = (porStatus[t.status] || 0) + 1;
+    porLista[t.lista] = (porLista[t.lista] || 0) + 1;
+  });
+  kpis.innerHTML = [
+    { lbl: 'Total', val: total, cor: 'var(--acc)' },
+    { lbl: 'Realizar Contato', val: porStatus['realizar contato'] || 0, cor: 'var(--gold)' },
+    { lbl: 'Contato Realizado', val: porStatus['contato realizado'] || 0, cor: 'var(--blu)' },
+    { lbl: 'Siltomac', val: porLista['Siltomac'] || 0, cor: '#8b5cf6' },
+  ].map(function(k) {
+    return '<div class="kpi" style="--kc:' + k.cor + '"><div class="kpi-lbl">' + k.lbl + '</div><div class="kpi-val">' + k.val + '</div></div>';
+  }).join('');
+
+  // Tabela
+  var tb = document.getElementById('ck-body');
+  if (!arr.length) {
+    tb.innerHTML = '<tr><td colspan="8"><div class="empty">Nenhuma cotacao encontrada.</div></td></tr>';
+    return;
+  }
+
+  var listasCores = { 'Siltomac': 'azul', 'Loja HP': 'verde', 'Priori - Linhas Amarela': 'gold' };
+
+  tb.innerHTML = arr.map(function(t) {
+    var cor = CK_STATUS_CORES[t.status] || 'cinza';
+    var liCor = listasCores[t.lista] || 'cinza';
+    return '<tr>'
+      + '<td><span class="badge ' + liCor + '">' + t.lista + '</span></td>'
+      + '<td style="font-weight:600">' + t.cliente + '</td>'
+      + '<td style="color:var(--mu)">' + t.equipamento + '</td>'
+      + '<td style="font-size:11px;color:var(--mu)">' + (t.cidade || '—') + '</td>'
+      + '<td style="color:var(--acc)">' + (t.tel || '—') + '</td>'
+      + '<td><span class="badge ' + cor + '">' + t.status + '</span></td>'
+      + '<td style="font-size:11px;color:var(--mu)">' + t.data_criacao + '</td>'
+      + '<td><a href="' + t.url + '" target="_blank" style="color:var(--acc);font-size:11px">Abrir ↗</a></td>'
+    + '</tr>';
+  }).join('');
 }
 
 </script>
