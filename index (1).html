@@ -239,7 +239,7 @@ header{
 
 /* ── PAGES ── */
 .page{display:none;flex:1;overflow:hidden;flex-direction:column;}
-.page.active{display:flex;}
+.page.active{display:flex;} #page-preco.active{display:flex!important;flex-direction:column!important;flex:1!important;overflow:hidden!important;}
 .pscroll{flex:1;overflow-y:auto;padding:22px 26px;}
 
 /* ── FORM COMPONENTS ── */
@@ -1412,7 +1412,11 @@ function goPage(id,btn){
   if(id==='users')    {updSelVend();renderUsers();}
   if(id==='produtos') {renderProdutos();renderMarcas();updMarcaSelects();}
   if(id==='garantia') {updSelCotacaoAT();renderAT();}
-  if(id==='preco'){setTimeout(function(){document.getElementById('pc-custo').focus();},100);}
+  if(id==='preco'){
+    var pp=document.getElementById('page-preco');
+    if(pp){pp.style.display='flex';pp.style.flexDirection='column';pp.style.flex='1';}
+    setTimeout(function(){var el=document.getElementById('pc-custo');if(el)el.focus();},100);
+  }
   if(id==='busca')    {updBpMarcas();sv('bp-busca','');document.getElementById('bp-resultados').style.display='none';document.getElementById('bp-selecionado').style.display='none';}
   if(id==='painel')   {
     const m=new Date().getMonth();const a=new Date().getFullYear();
