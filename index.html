@@ -500,6 +500,7 @@ td{padding:10px 14px;font-size:12px;vertical-align:middle;}
     <button class="nb" id="btn-import" onclick="goPage('import',this)" style="display:none">📥 Importar</button>
     <button class="nb" onclick="goPage('garantia',this)">Garantia AT</button>
     <button class="nb" id="btn-users" onclick="goPage('users',this)" style="display:none">🔐 Usuários</button>
+    <button class="nb" onclick="goPage('preco',this)">💰 Preço de Venda</button>
   </nav>
   <div class="user-info">
     <div class="user-badge">
@@ -1162,7 +1163,154 @@ td{padding:10px 14px;font-size:12px;vertical-align:middle;}
     <div id="pdf-preview"></div>
     <div style="display:flex;gap:10px;margin-top:18px;justify-content:flex-end">
       <button class="btn btn-o" onclick="closePDF()">Cancelar</button>
-      <button class="btn btn-p" onclick="printPDF()">🖨️ Imprimir / Salvar PDF</button>
+      <button class="btn bt
+<!-- PREÇO DE VENDA -->
+<div class="page" id="page-preco">
+<div class="pscroll">
+<div class="stitle">💰 Calculadora de Preço de Venda</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:1200px">
+
+  <!-- FORMULÁRIO -->
+  <div class="card">
+    <div style="font-family:Syne,sans-serif;font-size:13px;font-weight:700;margin-bottom:16px;color:var(--acc)">📥 Dados da Operação</div>
+    <div class="field"><label>Nome do Produto</label>
+      <input id="pc-nome" type="text" placeholder="Ex: Pulverizador Poly 2073 800L"></div>
+    <div class="fgrid">
+      <div class="field"><label>UF Origem (Compra)</label>
+        <select id="pc-uf-orig">
+          <option value="RS">RS — Rio Grande do Sul</option>
+          <option value="SC">SC — Santa Catarina</option>
+          <option value="PR">PR — Paraná</option>
+          <option value="SP">SP — São Paulo</option>
+          <option value="MG">MG — Minas Gerais</option>
+          <option value="MT">MT — Mato Grosso</option>
+        </select></div>
+      <div class="field"><label>UF Destino (Venda)</label>
+        <select id="pc-uf-dest">
+          <option value="RS">RS — Rio Grande do Sul</option>
+          <option value="SC">SC — Santa Catarina</option>
+          <option value="PR">PR — Paraná</option>
+          <option value="SP">SP — São Paulo</option>
+          <option value="MG">MG — Minas Gerais</option>
+          <option value="RJ">RJ — Rio de Janeiro</option>
+          <option value="MT">MT — Mato Grosso</option>
+          <option value="MS">MS — Mato Grosso do Sul</option>
+          <option value="GO">GO — Goiás</option>
+          <option value="BA">BA — Bahia</option>
+          <option value="CE">CE — Ceará</option>
+          <option value="PE">PE — Pernambuco</option>
+          <option value="AM">AM — Amazonas</option>
+          <option value="PA">PA — Pará</option>
+        </select></div>
+      <div class="field"><label>Tipo de Cliente</label>
+        <select id="pc-tipo-cli">
+          <option value="produtor_ie">Produtor Rural com IE</option>
+          <option value="empresa_ie">Empresa com IE (Contribuinte ICMS)</option>
+          <option value="sem_ie">Consumidor Final / Sem IE</option>
+        </select></div>
+      <div class="field"><label>NCM do Produto</label>
+        <select id="pc-ncm">
+          <option value="8432">8432 — Máq. prep. solo/cultura</option>
+          <option value="8433">8433 — Colheitadeiras</option>
+          <option value="8436">8436 — Outras máq. agrícolas</option>
+          <option value="8701">8701 — Tratores agrícolas</option>
+          <option value="8424">8424 — Pulverizadores</option>
+          <option value="8437">8437 — Máq. limpeza grãos</option>
+          <option value="8716">8716 — Reboques agrícolas</option>
+          <option value="outro">Outro NCM (regra geral)</option>
+        </select></div>
+      <div class="field"><label>Custo do Produto (R$)</label>
+        <input id="pc-custo" type="number" step="0.01" min="0" placeholder="0,00"></div>
+      <div class="field"><label>Frete (R$)</label>
+        <input id="pc-frete" type="number" step="0.01" min="0" value="0"></div>
+      <div class="field"><label>Tipo de Frete</label>
+        <select id="pc-tipo-frete">
+          <option value="cif">CIF — Por conta da HP</option>
+          <option value="fob">FOB — Por conta do cliente</option>
+        </select></div>
+      <div class="field"><label>Margem Mínima Desejada (%)</label>
+        <input id="pc-margem" type="number" step="0.1" min="0" value="20"></div>
+    </div>
+    <div style="background:rgba(247,201,72,.1);border:1px solid rgba(247,201,72,.3);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--gold);margin-bottom:16px">
+      💡 Comissão travada em <b>25%</b> sobre o lucro bruto
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-p" style="flex:1;justify-content:center" onclick="calcPrecoVenda()">🔢 Calcular Preço de Venda</button>
+      <button class="btn btn-o" onclick="limparCalcPreco()">Limpar</button>
+    </div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div id="pc-res-wrap" style="display:none">
+    <div class="card" style="border:2px solid rgba(0,200,83,.3)">
+      <div style="font-family:Syne,sans-serif;font-size:13px;font-weight:700;margin-bottom:14px;color:var(--acc)">📊 Resultado do Cálculo</div>
+      <div style="background:var(--s2);border-radius:12px;padding:20px;text-align:center;margin-bottom:16px">
+        <div style="font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Preço de Venda Sugerido</div>
+        <div id="pc-pv" style="font-family:Syne,sans-serif;font-size:38px;font-weight:800;color:var(--acc)">R$ 0,00</div>
+        <div id="pc-tipo-op" style="font-size:12px;color:var(--mu);margin-top:6px"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+        <div style="background:var(--s3);border-radius:8px;padding:12px">
+          <div style="font-size:10px;color:var(--mu);text-transform:uppercase;margin-bottom:4px">Custo do Produto</div>
+          <div id="pc-r-custo" style="font-size:14px;font-weight:700;color:var(--tx)">—</div>
+        </div>
+        <div style="background:var(--s3);border-radius:8px;padding:12px">
+          <div style="font-size:10px;color:var(--mu);text-transform:uppercase;margin-bottom:4px">Frete</div>
+          <div id="pc-r-frete" style="font-size:14px;font-weight:700;color:var(--tx)">—</div>
+        </div>
+        <div style="background:var(--s3);border-radius:8px;padding:12px">
+          <div style="font-size:10px;color:var(--mu);text-transform:uppercase;margin-bottom:4px">ICMS</div>
+          <div id="pc-r-icms" style="font-size:14px;font-weight:700;color:var(--red)">—</div>
+        </div>
+        <div style="background:var(--s3);border-radius:8px;padding:12px">
+          <div style="font-size:10px;color:var(--mu);text-transform:uppercase;margin-bottom:4px">DIFAL</div>
+          <div id="pc-r-difal" style="font-size:14px;font-weight:700;color:var(--red)">—</div>
+        </div>
+        <div style="background:var(--s3);border-radius:8px;padding:12px">
+          <div style="font-size:10px;color:var(--mu);text-transform:uppercase;margin-bottom:4px">Comissão (25%)</div>
+          <div id="pc-r-com" style="font-size:14px;font-weight:700;color:var(--gold)">—</div>
+        </div>
+        <div style="background:var(--s3);border-radius:8px;padding:12px">
+          <div style="font-size:10px;color:var(--mu);text-transform:uppercase;margin-bottom:4px">Margem Líquida</div>
+          <div id="pc-r-marg" style="font-size:14px;font-weight:700;color:var(--acc)">—</div>
+        </div>
+      </div>
+      <div id="pc-alerta" style="display:none;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:10px 14px;font-size:12px;color:#ef4444;margin-bottom:12px">
+        ⚠️ <b>Atenção:</b> Margem abaixo do mínimo desejado!
+      </div>
+      <div style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:8px;padding:12px;margin-bottom:14px">
+        <div style="font-weight:700;color:#3b82f6;font-size:12px;margin-bottom:6px">⚖️ Base Legal / Tributação</div>
+        <div id="pc-base-legal" style="font-size:11px;color:var(--tx);line-height:1.6"></div>
+        <div id="pc-beneficio" style="font-size:11px;color:var(--acc);margin-top:4px"></div>
+        <div id="pc-obs-fiscal" style="font-size:11px;color:var(--mu);margin-top:4px;font-style:italic"></div>
+      </div>
+      <button class="btn btn-p" style="width:100%;justify-content:center" onclick="adicionarNaListaPreco()">➕ Adicionar à Lista</button>
+    </div>
+  </div>
+</div>
+
+<!-- LISTA DE PRODUTOS -->
+<div id="pc-lista-wrap" style="display:none;margin-top:20px">
+  <div class="tw">
+    <div class="tw-head">
+      <h3>📋 Lista de Produtos Calculados</h3>
+      <div style="display:flex;gap:8px">
+        <span class="cnt" id="pc-lista-cnt">0</span>
+        <button class="btn btn-o btn-sm" onclick="limparListaPreco()">Limpar Lista</button>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table><thead><tr>
+        <th>Produto</th><th>NCM</th><th>UF</th><th>Tipo Cliente</th>
+        <th>Custo</th><th>Frete</th><th>ICMS</th><th>DIFAL</th>
+        <th>Comissão</th><th>Margem</th><th>Preço Venda</th><th></th>
+      </tr></thead><tbody id="pc-lista-body"></tbody></table>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+n-p" onclick="printPDF()">🖨️ Imprimir / Salvar PDF</button>
     </div>
   </div>
 </div>
@@ -1312,6 +1460,7 @@ function goPage(id,btn){
   if(id==='users')    {updSelVend();renderUsers();}
   if(id==='produtos') {renderProdutos();renderMarcas();updMarcaSelects();}
   if(id==='garantia') {updSelCotacaoAT();renderAT();}
+  if(id==='preco'){document.getElementById('pc-custo').focus();}
   if(id==='busca')    {updBpMarcas();sv('bp-busca','');document.getElementById('bp-resultados').style.display='none';document.getElementById('bp-selecionado').style.display='none';}
   if(id==='painel')   {
     const m=new Date().getMonth();const a=new Date().getFullYear();
@@ -1319,6 +1468,7 @@ function goPage(id,btn){
     setTimeout(renderPainel,100);
   }
   if(id==='garantia') {updSelCotacaoAT();renderAT();}
+  if(id==='preco'){document.getElementById('pc-custo').focus();}
   if(id==='orcamento'){
     updSelVend();
     updMarcaSelects();
@@ -3629,6 +3779,148 @@ setTimeout(() => {
     el.textContent='[!] sem internet';
   }
 }, 8000);
+
+// ═══════════════════════════════════════════════════
+// CALCULADORA DE PREÇO DE VENDA
+// ═══════════════════════════════════════════════════
+var ALIQ_INTER_RS = {RS:12,SC:12,PR:12,SP:12,MG:12,RJ:12,ES:12,MT:7,MS:7,GO:7,DF:7,BA:7,CE:7,PE:7,MA:7,PA:7,TO:7,RO:7,AM:7,PI:7,RN:7,PB:7,SE:7,AL:7,AP:7,AC:7,RR:7};
+var ALIQ_INT_DEST = {RS:17,SC:17,PR:17,SP:18,MG:18,RJ:20,ES:17,MT:17,MS:17,GO:17,DF:18,BA:20,CE:20,PE:18,MA:22,PA:19,TO:18,RO:17,AM:20,PI:21,RN:20,PB:20,SE:19,AL:19,AP:18,AC:19,RR:20};
+var NCM_AGRIC = ['8432','8433','8436','8701','8424','8437','8716'];
+var pcListaProdutos = [];
+
+function fmtBRL(v){return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v||0);}
+
+function calcPrecoVenda(){
+  var custo = parseFloat(document.getElementById('pc-custo').value)||0;
+  if(custo <= 0){ notif('[!] Informe o valor de custo'); return; }
+  var ufDest = document.getElementById('pc-uf-dest').value;
+  var tipoCli = document.getElementById('pc-tipo-cli').value;
+  var ncm = document.getElementById('pc-ncm').value;
+  var frete = parseFloat(document.getElementById('pc-frete').value)||0;
+  var tipoFrete = document.getElementById('pc-tipo-frete').value;
+  var margemMin = parseFloat(document.getElementById('pc-margem').value)||20;
+  var interno = (ufDest === 'RS');
+  var implAgric = NCM_AGRIC.indexOf(ncm) >= 0;
+  var aliqICMS = 0, aliqDifal = 0, tipoOp = '', baseLegal = '', beneficio = '', obs = '';
+
+  if(interno){
+    aliqICMS = implAgric ? 12 : 17;
+    tipoOp = 'Operacao Interna RS';
+    if(implAgric){ baseLegal = 'RICMS/RS, Art. 27, II — Aliquota 12% implementos agricolas'; beneficio = 'Aliquota reduzida 12% — implementos agricolas'; }
+    else { baseLegal = 'RICMS/RS — Aliquota geral interna 17%'; }
+    if(tipoCli === 'produtor_ie' && implAgric) obs = 'Produtor rural RS com IE: verificar diferimento com contador.';
+  } else {
+    aliqICMS = ALIQ_INTER_RS[ufDest] || 12;
+    var aliqIntDest = ALIQ_INT_DEST[ufDest] || 18;
+    tipoOp = 'Operacao Interestadual RS -> ' + ufDest;
+    baseLegal = 'Res. Senado 22/89 — Aliquota ' + aliqICMS + '% RS->' + ufDest;
+    if(tipoCli === 'sem_ie'){
+      aliqDifal = Math.max(0, aliqIntDest - aliqICMS);
+      tipoOp += ' — Cons. Final (c/ DIFAL)';
+      baseLegal += ' | LC 190/2022 — DIFAL obrigatorio Lucro Real';
+      obs = 'DIFAL ' + aliqDifal.toFixed(1) + '% recolhido ao estado de destino (' + ufDest + ').';
+    } else if(tipoCli === 'produtor_ie'){
+      tipoOp += ' — Produtor Rural c/ IE (sem DIFAL)';
+      obs = 'Produtor rural contribuinte ICMS: sem DIFAL.';
+      if(implAgric) beneficio = 'Conv. ICMS 52/91 — possivel reducao BC no estado destino';
+    } else {
+      tipoOp += ' — Empresa c/ IE (sem DIFAL)';
+      obs = 'Destinatario contribuinte ICMS: sem DIFAL.';
+    }
+  }
+
+  var baseCusto = custo + (tipoFrete === 'cif' ? frete : 0);
+  var totTrib = (aliqICMS + aliqDifal) / 100;
+  var margPct = margemMin / 100;
+  var pv = baseCusto / (1 - totTrib - margPct);
+  for(var i = 0; i < 30; i++){
+    var t = pv * totTrib, lb = pv - baseCusto - t, c = lb > 0 ? lb * 0.25 : 0;
+    var pvN = (baseCusto + t + c) / (1 - margPct);
+    if(Math.abs(pvN - pv) < 0.01){ pv = pvN; break; } pv = pvN;
+  }
+  var icmsR = pv * (aliqICMS / 100), difalR = pv * (aliqDifal / 100);
+  var lb2 = pv - baseCusto - icmsR - difalR, comR = lb2 > 0 ? lb2 * 0.25 : 0;
+  var margReal = (pv - baseCusto - icmsR - difalR - comR) / pv * 100;
+
+  document.getElementById('pc-pv').textContent = fmtBRL(pv);
+  document.getElementById('pc-tipo-op').textContent = tipoOp;
+  document.getElementById('pc-r-custo').textContent = fmtBRL(custo);
+  document.getElementById('pc-r-frete').textContent = fmtBRL(frete) + ' (' + tipoFrete.toUpperCase() + ')';
+  document.getElementById('pc-r-icms').textContent = fmtBRL(icmsR) + ' (' + aliqICMS + '%)';
+  document.getElementById('pc-r-difal').textContent = aliqDifal > 0 ? fmtBRL(difalR) + ' (' + aliqDifal.toFixed(1) + '%)' : 'N/A';
+  document.getElementById('pc-r-com').textContent = fmtBRL(comR);
+  var me = document.getElementById('pc-r-marg');
+  me.textContent = margReal.toFixed(2) + '%';
+  me.style.color = margReal < margemMin ? 'var(--red)' : 'var(--acc)';
+  document.getElementById('pc-alerta').style.display = margReal < margemMin ? 'block' : 'none';
+  document.getElementById('pc-base-legal').textContent = baseLegal;
+  document.getElementById('pc-beneficio').textContent = beneficio;
+  document.getElementById('pc-obs-fiscal').textContent = obs;
+  var wrap = document.getElementById('pc-res-wrap');
+  wrap.style.display = 'block';
+  wrap.dataset.pv = pv.toFixed(2);
+  wrap.dataset.icms = icmsR.toFixed(2);
+  wrap.dataset.difal = difalR.toFixed(2);
+  wrap.dataset.com = comR.toFixed(2);
+  wrap.dataset.marg = margReal.toFixed(2);
+  wrap.dataset.nome = document.getElementById('pc-nome').value || 'Produto';
+  wrap.dataset.ncm = ncm;
+  wrap.dataset.uf = ufDest;
+  wrap.dataset.tipoCli = tipoCli;
+  wrap.dataset.tipoFrete = tipoFrete;
+}
+
+function limparCalcPreco(){
+  document.getElementById('pc-nome').value = '';
+  document.getElementById('pc-custo').value = '';
+  document.getElementById('pc-frete').value = '0';
+  document.getElementById('pc-margem').value = '20';
+  document.getElementById('pc-res-wrap').style.display = 'none';
+}
+
+function adicionarNaListaPreco(){
+  var wrap = document.getElementById('pc-res-wrap');
+  if(!wrap || wrap.style.display === 'none'){ notif('Calcule primeiro!'); return; }
+  pcListaProdutos.push({
+    nome: wrap.dataset.nome, ncm: wrap.dataset.ncm, uf: wrap.dataset.uf,
+    tipoCli: wrap.dataset.tipoCli, tipoFrete: wrap.dataset.tipoFrete,
+    custo: parseFloat(document.getElementById('pc-custo').value)||0,
+    frete: parseFloat(document.getElementById('pc-frete').value)||0,
+    pv: parseFloat(wrap.dataset.pv)||0, icms: parseFloat(wrap.dataset.icms)||0,
+    difal: parseFloat(wrap.dataset.difal)||0, com: parseFloat(wrap.dataset.com)||0,
+    marg: parseFloat(wrap.dataset.marg)||0
+  });
+  renderListaPreco();
+  notif('Produto adicionado a lista!');
+}
+
+function renderListaPreco(){
+  var wrap = document.getElementById('pc-lista-wrap');
+  var body = document.getElementById('pc-lista-body');
+  if(!pcListaProdutos.length){ wrap.style.display = 'none'; return; }
+  wrap.style.display = 'block';
+  document.getElementById('pc-lista-cnt').textContent = pcListaProdutos.length;
+  var cliLbl = {produtor_ie:'Produtor c/IE', empresa_ie:'Empresa c/IE', sem_ie:'Sem IE'};
+  body.innerHTML = pcListaProdutos.map(function(p, i){
+    return '<tr>'
+      +'<td style="font-weight:600;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + p.nome + '</td>'
+      +'<td><span class="badge azul">' + p.ncm + '</span></td>'
+      +'<td>' + p.uf + '</td>'
+      +'<td style="font-size:11px">' + (cliLbl[p.tipoCli]||p.tipoCli) + '</td>'
+      +'<td>' + fmtBRL(p.custo) + '</td>'
+      +'<td>' + fmtBRL(p.frete) + ' ' + p.tipoFrete.toUpperCase() + '</td>'
+      +'<td style="color:var(--red)">' + fmtBRL(p.icms) + '</td>'
+      +'<td style="color:var(--red)">' + (p.difal > 0 ? fmtBRL(p.difal) : '—') + '</td>'
+      +'<td style="color:var(--gold)">' + fmtBRL(p.com) + '</td>'
+      +'<td style="color:' + (p.marg < 20 ? 'var(--red)' : 'var(--acc)') + '">' + p.marg.toFixed(1) + '%</td>'
+      +'<td style="font-weight:700;color:var(--acc)">' + fmtBRL(p.pv) + '</td>'
+      +'<td><button class="btn btn-r btn-sm" onclick="remItemPreco(' + i + ')">x</button></td>'
+    +'</tr>';
+  }).join('');
+}
+function remItemPreco(i){ pcListaProdutos.splice(i,1); renderListaPreco(); }
+function limparListaPreco(){ pcListaProdutos = []; renderListaPreco(); }
+
 </script>
 </body>
 </html>
