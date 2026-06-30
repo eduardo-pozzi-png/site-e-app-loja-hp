@@ -1,0 +1,2154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HP AGRO ERP PRO</title>
+<style>
+:root{
+  --v:#137A55;--v2:#19A974;--dark:#0E2A1F;--bg:#EEF2EA;--card:#FFFFFF;
+  --r:#C0392B;--a:#B87517;--b:#185FA5;--muted:#6D766F;--line:#E1E7DF;--p:#6A4FB8;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Segoe UI,Arial,system-ui,sans-serif;background:radial-gradient(circle at top left,#f8fbf6 0,#eef2ea 42%,#e7ede3 100%);color:#1b1f1c;font-size:14px}
+.app{display:flex;min-height:100vh}
+aside{width:265px;background:linear-gradient(180deg,#0E2A1F 0%,#163C2D 100%);color:#fff;position:fixed;inset:0 auto 0 0;overflow:auto;box-shadow:8px 0 28px rgba(0,0,0,.12)}
+.logo{padding:24px 20px 20px;border-bottom:1px solid rgba(255,255,255,.12)}
+.logo h1{font-size:18px;color:#fff;margin:0;font-weight:900;letter-spacing:.02em}
+.logo p{font-size:12px;color:#BBD7CA;margin:7px 0 0}
+.label{font-size:10px;text-transform:uppercase;color:#8FB9A7;font-weight:900;letter-spacing:.12em;padding:16px 20px 6px}
+.nav{display:block;width:calc(100% - 20px);margin:3px 10px;border:0;background:transparent;text-align:left;padding:11px 13px;cursor:pointer;color:#DBECE5;border-radius:12px;font-weight:650}
+.nav:hover{background:rgba(255,255,255,.09);color:#fff}
+.nav.active{background:#fff;color:var(--v);font-weight:900;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+main{margin-left:265px;padding:30px;width:calc(100% - 265px)}
+.page{display:none}.page.active{display:block}
+.headerbar{background:linear-gradient(135deg,#ffffff 0%,#F8FBF6 100%);border:1px solid var(--line);border-radius:20px;padding:22px 24px;display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:22px;flex-wrap:wrap;box-shadow:0 12px 35px rgba(22,60,45,.06)}
+.headerbar h2{margin:0;font-size:25px;font-weight:950;letter-spacing:-.02em;color:#12251C}
+.headerbar p{margin:6px 0 0;color:var(--muted);font-size:13.5px;max-width:780px;line-height:1.4}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:15px}
+.kpi,.card{background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:17px;box-shadow:0 10px 26px rgba(30,50,35,.055)}
+.kpi small{display:block;color:var(--muted);margin-bottom:9px;font-weight:800;text-transform:uppercase;font-size:11px;letter-spacing:.05em}
+.kpi b{font-size:25px;letter-spacing:-.02em}.green{color:var(--v2)}.red{color:var(--r)}.amber{color:var(--a)}.blue{color:var(--b)}.purple{color:var(--p)}
+.btn{border:1px solid #CFD8D0;background:#fff;border-radius:12px;padding:10px 15px;font-weight:850;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.04)}
+.btn:hover{transform:translateY(-1px);box-shadow:0 7px 18px rgba(0,0,0,.08)}
+.primary{background:linear-gradient(135deg,var(--v2),var(--v));color:#fff;border-color:var(--v)}
+.danger{color:var(--r);border-color:#efb5b5}.small{padding:6px 9px;font-size:12px}
+.tablewrap{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:auto;margin-bottom:18px;box-shadow:0 12px 30px rgba(20,40,25,.055)}
+table{width:100%;min-width:900px;border-collapse:collapse}
+th,td{padding:12px 13px;border-bottom:1px solid #edf0eb;text-align:left}
+th{background:#F7FAF5;color:#66706A;font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+td{font-size:13.2px}tr:hover td{background:#FBFDF9}
+.badge{padding:4px 9px;border-radius:999px;font-size:11px;font-weight:900}.ok{background:#E1F5EE;color:#0F6E56}.bad{background:#FEECEC;color:#C0392B}.warn{background:#FAEEDA;color:#854F0B}.gray{background:#EEF0EC;color:#555}.purplebg{background:#EEEAFB;color:#6A4FB8}
+.modalbg{display:none;position:fixed;inset:0;background:rgba(5,18,12,.58);z-index:30;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.modalbg.open{display:flex}
+.modal{background:#fff;border-radius:20px;padding:24px;max-width:780px;width:96vw;max-height:92vh;overflow:auto;box-shadow:0 25px 80px rgba(0,0,0,.28)}
+.modal h3{font-size:21px;margin:0 0 18px;color:#12251C}
+.fg{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}
+.field label{font-size:11px;text-transform:uppercase;color:#5F6B63;font-weight:900;display:block;margin-bottom:6px;letter-spacing:.04em}
+.field input,.field select,.field textarea{width:100%;padding:11px;border:1px solid #DDE4DC;border-radius:11px;background:#FBFCFA;outline:none;font-family:inherit}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--v2);box-shadow:0 0 0 4px rgba(25,169,116,.12);background:#fff}
+.footer{display:flex;justify-content:flex-end;gap:9px;margin-top:17px;padding-top:16px;border-top:1px solid #edf0eb}
+.notice{padding:13px;border-radius:12px;background:#E6F1FB;color:#185FA5;margin-bottom:13px}
+.alertbox{padding:13px;border-radius:12px;background:#FAEEDA;color:#854F0B;margin-bottom:13px}
+.alertbox.danger2{background:#FEECEC;color:#C0392B}
+.search{margin-bottom:14px;display:flex;gap:8px;flex-wrap:wrap}.search input,.search select{padding:11px;border:1px solid #DDE4DC;border-radius:11px;background:#fff}
+.chip{display:inline-flex;align-items:center;gap:6px;background:#F2F6F1;border:1px solid #DCE5DA;border-radius:999px;padding:6px 10px;font-size:12px;margin:3px}
+.barRow{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:12px}
+.barLbl{width:110px;text-align:right;color:var(--muted);flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.barTrack{flex:1;background:#EDF1EA;border-radius:6px;height:16px;overflow:hidden}
+.barFill{height:100%;border-radius:6px;transition:width .4s}
+.barVal{width:90px;font-size:12px;color:var(--muted)}
+.tabs2{display:flex;gap:4px;border-bottom:2px solid #edf0eb;margin-bottom:16px;flex-wrap:wrap}
+.tab2{padding:9px 16px;cursor:pointer;border:none;background:none;font-size:13px;color:#888;border-bottom:3px solid transparent;margin-bottom:-2px;font-weight:700}
+.tab2.active{color:var(--v);border-bottom-color:var(--v)}
+.tabpanel2{display:none}.tabpanel2.active{display:block}
+.ingrow{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #f1f3ef}
+.ingrow input[type=checkbox]{width:16px;height:16px}
+.ingrow .nm{flex:1;font-size:13px}
+.ingrow input[type=number]{width:80px}
+@media(max-width:750px){aside{display:none}main{margin:0;width:100%;padding:14px}.fg{grid-template-columns:1fr}}
+</style>
+</head>
+<body><div class="app"><aside>
+<div class="logo"><h1>🌿 HP AGRO</h1><p>Gestão do confinamento</p></div>
+<div class="label">Geral</div>
+<button class="nav active" onclick="go('dash',this)">🏠 Painel Principal</button>
+<div class="label">Pecuária</div>
+<button class="nav" onclick="go('animais',this)">🐂 Animais</button>
+<button class="nav" onclick="go('currais',this)">🏚️ Currais</button>
+<button class="nav" onclick="go('lotes',this)">📦 Lotes</button>
+<button class="nav" onclick="go('pesagens',this)">⚖️ Pesagens / GMD</button>
+<button class="nav" onclick="go('remanejamento',this)">🔀 Remanejamento</button>
+<button class="nav" onclick="go('dietaperiodo',this)">🍽️ Dieta por Curral</button>
+<button class="nav" onclick="go('sanidade',this)">💉 Sanidade</button>
+<button class="nav" onclick="go('vendas',this)">💰 Vendas</button>
+<div class="label">Nutrição</div>
+<button class="nav" onclick="go('ingredientes',this)">🌾 Ingredientes</button>
+<button class="nav" onclick="go('dietas',this)">📋 Dietas</button>
+<button class="nav" onclick="go('medicamentos',this)">💊 Medicamentos</button>
+<div class="label">Cadastros</div>
+<button class="nav" onclick="go('fornecedores',this)">🧾 Fornecedores</button>
+<button class="nav" onclick="go('clientes',this)">🤝 Clientes</button>
+<button class="nav" onclick="go('estoque',this)">📦 Estoque</button>
+<button class="nav" onclick="go('agro',this)">🌽 Agricultura/Feno</button>
+<button class="nav" onclick="go('maq',this)">🚜 Máquinas</button>
+<button class="nav" onclick="go('patrimonio',this)">🏛️ Patrimônio Imobilizado</button>
+<button class="nav" onclick="go('construcoes',this)">🏗️ Construções</button>
+<div class="label">Financeiro</div>
+<button class="nav" onclick="go('fin',this)">🏦 Caixa Real</button>
+<button class="nav" onclick="go('dre',this)">📊 Resultado / DRE</button>
+<button class="nav" onclick="go('estoqueinsumos',this)">📥 Compra de Insumos</button>
+<button class="nav" onclick="go('relatorios',this)">📑 Relatórios</button>
+<div style="padding:16px 20px 4px"><span id="syncStatus" style="font-size:12px;color:#BBD7CA;font-weight:700">⏳ Conectando...</span></div>
+<div style="padding:8px 16px 16px"><button class="btn" style="width:100%" onclick="exportData()">⬇️ Exportar backup</button>
+<button class="btn" style="width:100%;margin-top:8px" onclick="document.getElementById('importFile').click()">⬆️ Importar backup</button>
+<input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)"></div>
+</aside><main>
+<section id="dash" class="page active">
+<div class="headerbar"><div><h2>Painel Principal</h2><p>Resumo da operação: animais ativos, peso médio, caixa real, estoque, vendas e lucro.</p></div><button class="btn primary" onclick="render()">Atualizar</button></div>
+<div id="alerts"></div>
+<div class="grid" id="kpis"></div>
+<div class="card"><h3>Animais por curral</h3><div id="chartCurrais"></div></div>
+<div class="card"><h3>Financeiro do mês — entradas vs saídas</h3><div id="chartFin"></div></div>
+<div class="card"><h3>Atalho rápido</h3><p>Pesou um animal aleatório? Clique aqui para lançar uma nova pesagem e atualizar o GMD dele.</p><button class="btn primary" onclick="go('pesagens',document.querySelector('[onclick*=\'pesagens\']'));openM('mPesagem')">⚖️ Lançar Nova Pesagem</button></div>
+</section>
+
+<section id="animais" class="page">
+<div class="headerbar"><div><h2>Cadastro dos Animais</h2><p>Registre cada boi pelo brinco e acompanhe peso, lote, curral, custos e situação.</p></div><button class="btn primary" onclick="editAnimalId=null;a_brinco.value='';a_idade.value='';a_peso.value='';a_precokg.value='';a_valor.value='';a_forma.value='vista';toggleAnimalPagamento();a_venc.value=hoje();document.querySelector('#mAnimal .notice').style.display='block';document.getElementById('a_forma').closest('.fg').style.display='grid';openM('mAnimal')">Cadastrar</button></div>
+<div class="search"><input id="buscaAnimal" oninput="renderAnimais()" placeholder="Buscar brinco, curral ou lote"> <select id="fStatus" onchange="renderAnimais()"><option value="">Todos</option><option>ATIVO</option><option>VENDIDO</option><option>MORTO</option></select></div>
+<div class="tablewrap"><table><thead><tr><th>ID</th><th>Brinco</th><th>Categoria</th><th>Idade</th><th>Curral</th><th>Lote</th><th>Peso entrada</th><th>Peso atual</th><th>GMD</th><th>Custo acumulado</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tbAnimais"></tbody></table></div>
+</section>
+
+<section id="currais" class="page">
+<div class="headerbar"><div><h2>Currais e Piquetes</h2><p>Veja a capacidade, ocupação e dieta vigente em cada espaço.</p></div><button class="btn primary" onclick="editCurralId=null;c_nome.value='';c_cap.value='40';c_tipo.value='Engorda';openM('mCurral')">Novo Curral</button></div>
+<div class="tablewrap"><table><thead><tr><th>ID</th><th>Nome</th><th>Capacidade</th><th>Animais</th><th>Ocupação</th><th>Tipo</th><th>Dieta vigente</th><th>Custo/cab/dia</th><th></th></tr></thead><tbody id="tbCurrais"></tbody></table></div>
+</section>
+
+<section id="lotes" class="page">
+<div class="headerbar"><div><h2>Lotes de Animais</h2><p>Organize os animais por recria, engorda, terminação ou teste alimentar.</p></div><button class="btn primary" onclick="openM('mLote')">Novo Lote</button></div>
+<div class="tablewrap"><table><thead><tr><th>ID</th><th>Nome</th><th>Objetivo</th><th>Fornecedor</th><th>Animais</th><th>Peso médio</th><th>GMD médio</th><th>Custo</th><th>Receita</th><th>Lucro</th><th>Ações</th></tr></thead><tbody id="tbLotes"></tbody></table></div>
+</section>
+
+<section id="pesagens" class="page">
+<div class="headerbar"><div><h2>Pesagens e Ganho Médio Diário</h2><p>Escolha qualquer animal, informe a nova data e o novo peso. O sistema recalcula o GMD automaticamente.</p></div><button class="btn primary" onclick="openM('mPesagem')">⚖️ + Nova Pesagem</button></div>
+<div class="tablewrap"><table><thead><tr><th>Data</th><th>Animal</th><th>Peso ant.</th><th>Peso atual</th><th>Ganho</th><th>Dias total</th><th>GMD acum.</th><th>GMD período</th><th>Proj. 30d</th><th>Proj. 60d</th><th>Proj. 90d</th><th>Ações</th></tr></thead><tbody id="tbPesagens"></tbody></table></div>
+</section>
+<section id="remanejamento" class="page">
+<div class="headerbar"><div><h2>Remanejamento entre Currais</h2><p>Movimente animais entre currais conforme avançam de fase (ex: adaptação → engorda → terminação). O histórico fica registrado na ficha de cada animal, e o custo de alimentação passa a ser calculado pela dieta do novo curral a partir da data do remanejamento.</p></div><button class="btn primary" onclick="openNovo('mRemanej',['rm_animal','rm_obs'],()=>{rm_data.value=hoje();})">+ Novo Remanejamento</button></div>
+<div class="search">
+<select id="rm_filtro_curral_origem" onchange="renderRemanejTable()"><option value="">Todos os currais de origem</option></select>
+<input id="rm_busca" placeholder="Buscar por brinco" oninput="renderRemanejTable()">
+</div>
+<div class="tablewrap"><table><thead><tr><th>Data</th><th>Animal</th><th>De</th><th>Para</th><th>Motivo</th><th>Observação</th><th>Ações</th></tr></thead><tbody id="tbRemanej"></tbody></table></div>
+</section>
+<section id="dietaperiodo" class="page">
+<div class="headerbar"><div><h2>Dieta por Curral</h2><p>Defina qual dieta cada curral está recebendo e o período de vigência. Todos os animais ativos daquele curral consomem essa dieta nesses dias — o custo entra automaticamente no acumulado de cada animal. Isso NÃO baixa o caixa (o caixa é movimentado na compra das matérias-primas).</p></div><button class="btn primary" onclick="openM('mDietaPeriodo')">+ Novo Período de Dieta</button></div>
+<div class="tablewrap"><table><thead><tr><th>Curral</th><th>Dieta</th><th>Início</th><th>Fim</th><th>Custo/cab/dia</th><th>Animais no período</th><th>Custo total período</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tbDietaPeriodo"></tbody></table></div>
+</section>
+
+<section id="ingredientes" class="page">
+<div class="headerbar"><div><h2>Ingredientes</h2><p>Cadastro de matérias-primas usadas nas dietas. O custo por kg alimenta automaticamente o cálculo de custo das dietas.</p></div><button class="btn primary" onclick="openNovo('mIngrediente',['ig_nome','ig_custo'])">+ Novo Ingrediente</button></div>
+<div class="tablewrap"><table><thead><tr><th>Nome</th><th>Categoria</th><th>Custo/kg</th><th>Estoque vinculado</th><th>Ações</th></tr></thead><tbody id="tbIngredientes"></tbody></table></div>
+</section>
+
+<section id="dietas" class="page">
+<div class="headerbar"><div><h2>Dietas</h2><p>Monte a formulação selecionando ingredientes e a quantidade em kg por cabeça/dia. O custo/cabeça/dia é calculado automaticamente.</p></div><button class="btn primary" onclick="openNovo('mDieta',['dt_nome'])">+ Nova Dieta</button></div>
+<div id="dietasList"></div>
+</section>
+
+<section id="medicamentos" class="page">
+<div class="headerbar"><div><h2>Medicamentos</h2><p>Cadastro de produtos veterinários usados nas aplicações sanitárias.</p></div><button class="btn primary" onclick="openNovo('mMedicamento',['md_nome','md_custo','md_carencia'])">+ Novo Medicamento</button></div>
+<div class="tablewrap"><table><thead><tr><th>Nome</th><th>Tipo</th><th>Unidade</th><th>Custo unitário</th><th>Carência (dias)</th><th>Ações</th></tr></thead><tbody id="tbMedicamentos"></tbody></table></div>
+</section>
+
+<section id="sanidade" class="page">
+<div class="headerbar"><div><h2>Vacinas e Medicamentos Aplicados</h2><p>Selecione os animais que efetivamente receberam a aplicação. O custo entra direto no acumulado de cada um deles (sem rateio automático).</p></div><button class="btn primary" onclick="openNovo('mSan',['s_dose','s_custounit','s_carencia'],()=>{s_dose.value='1';s_data.value=hoje();})">+ Aplicar</button></div>
+<div class="tablewrap"><table><thead><tr><th>Data</th><th>Medicamento</th><th>Animais aplicados</th><th>Dose/cab.</th><th>Custo/cab.</th><th>Custo total</th><th>Carência</th><th>Ações</th></tr></thead><tbody id="tbSan"></tbody></table></div>
+</section>
+
+<section id="vendas" class="page">
+<div class="headerbar"><div><h2>Venda de Animais</h2><p>Selecione o animal vendido, informe peso e valor, e veja o lucro real por cabeça.</p></div><button class="btn primary" onclick="v_peso.value='';v_precokg.value='';v_bruto.value='';v_desp.value='0';v_comprador.value='';v_data.value=hoje();v_recstatus.value='RECEBIDO';toggleVendaVenc();openM('mVenda')">Vender Animal</button></div>
+<div class="tablewrap"><table><thead><tr><th>Data</th><th>Animal</th><th>Peso venda</th><th>Receita líquida</th><th>Custo</th><th>Lucro</th><th>GMD final</th><th>Ações</th></tr></thead><tbody id="tbVendas"></tbody></table></div>
+</section>
+
+<section id="fornecedores" class="page">
+<div class="headerbar"><div><h2>Fornecedores</h2><p>Cadastro de fornecedores de animais, insumos e serviços.</p></div><button class="btn primary" onclick="editFornecedorId=null;fr_nome.value='';fr_doc.value='';fr_end.value='';fr_ie.value='';fr_tel.value='';fr_email.value='';openM('mFornecedor')">+ Novo Fornecedor</button></div>
+<div class="tablewrap"><table><thead><tr><th>Nome</th><th>CPF/CNPJ</th><th>Telefone</th><th>E-mail</th><th>Endereço</th><th>IE</th><th>Ações</th></tr></thead><tbody id="tbFornecedores"></tbody></table></div>
+</section>
+
+<section id="clientes" class="page">
+<div class="headerbar"><div><h2>Clientes</h2><p>Cadastro de compradores de animais (frigoríficos, pecuaristas, etc).</p></div><button class="btn primary" onclick="editClienteId=null;cl_nome.value='';cl_doc.value='';cl_end.value='';cl_ie.value='';cl_tel.value='';cl_email.value='';openM('mCliente')">+ Novo Cliente</button></div>
+<div class="tablewrap"><table><thead><tr><th>Nome</th><th>CPF/CNPJ</th><th>Telefone</th><th>E-mail</th><th>Endereço</th><th>IE</th><th>Ações</th></tr></thead><tbody id="tbClientes"></tbody></table></div>
+</section>
+
+<section id="estoque" class="page">
+<div class="headerbar"><div><h2>Estoque da Operação</h2><p>Acompanhe insumos, feno, silagem, ração, medicamentos, vacinas, combustível. A compra aqui é o que movimenta o Caixa Real.</p></div><button class="btn primary" onclick="openNovo('mEstoque',['e_prod','e_qtd','e_valor','e_min'],()=>{e_tipo.value='ENTRADA';toggleEstoqueFin();})">Movimentar</button></div>
+<div class="tablewrap"><table><thead><tr><th>Produto</th><th>Categoria</th><th>Saldo</th><th>Unidade</th><th>Custo médio</th><th>Valor estoque</th><th>Mínimo</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tbEstoque"></tbody></table></div>
+</section>
+
+<section id="agro" class="page">
+<div class="headerbar"><div><h2>Plantio, Feno e Silagem</h2><p>Registre a lavoura, some os custos e transforme a colheita em estoque com custo real.</p></div><button class="btn primary" onclick="openNovo('mAgro',['g_nome','g_cult','g_area','g_prod','g_sem','g_ins','g_serv','g_out','g_qtd'])">Nova Safra</button></div>
+<div class="tablewrap"><table><thead><tr><th>Safra</th><th>Cultura</th><th>Área</th><th>Destino</th><th>Custo total</th><th>Produção</th><th>Custo/un.</th><th>Custo/kg</th><th>Ações</th></tr></thead><tbody id="tbAgro"></tbody></table></div>
+</section>
+
+<section id="maq" class="page">
+<div class="headerbar"><div><h2>Máquinas e Estrutura</h2><p>Controle tratores, vagões, cochos, manutenções, investimentos e depreciação.</p></div><button class="btn primary" onclick="openNovo('mMaq',['m_nome','m_val','m_manut'],()=>{m_vida.value='10';})">Cadastrar Máquina</button></div>
+<div class="tablewrap"><table><thead><tr><th>Máquina</th><th>Valor compra</th><th>Vida útil</th><th>Depreciação mensal</th><th>Manutenção</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tbMaq"></tbody></table></div>
+</section>
+
+<section id="patrimonio" class="page">
+<div class="headerbar"><div><h2>Patrimônio Imobilizado</h2><p>Bens duráveis da operação: benfeitorias, construções concluídas, equipamentos fixos e outros ativos imobilizados — com valor de aquisição, depreciação e status.</p></div><button class="btn primary" onclick="openM('mPatrimonio')">+ Cadastrar Item</button></div>
+<div class="grid" id="kpiPatrimonio"></div>
+<div class="tablewrap"><table><thead><tr><th>Item</th><th>Categoria</th><th>Origem</th><th>Data aquisição</th><th>Valor</th><th>Vida útil</th><th>Depreciação mensal</th><th>Valor atual</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tbPatrimonio"></tbody></table></div>
+</section>
+
+<section id="construcoes" class="page">
+<div class="headerbar"><div><h2>Construções / Obras</h2><p>Acompanhe obras em andamento com seus itens e custos. Ao marcar uma obra como <b>Finalizada</b>, ela é automaticamente lançada no Patrimônio Imobilizado com o valor total acumulado.</p></div><button class="btn primary" onclick="openM('mConstrucao')">+ Nova Construção</button></div>
+<div class="grid" id="kpiConstrucoes"></div>
+<div class="tablewrap"><table><thead><tr><th>Obra</th><th>Início</th><th>Previsão término</th><th>Itens lançados</th><th>Custo acumulado</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tbConstrucoes"></tbody></table></div>
+</section>
+<section id="fin" class="page">
+<div class="headerbar"><div><h2>Caixa Real</h2><p>Mostra o dinheiro que entrou, saiu, ficou pendente e o saldo atual da operação. Compras de animais, insumos (matéria-prima) e vendas geram lançamentos automáticos aqui.</p></div><button class="btn primary" onclick="openM('mFin')">+ Lançar Manual</button></div>
+<div id="finAlerts"></div>
+<div class="grid" id="kpiFin"></div>
+<div class="search"><input id="buscaFin" oninput="renderFinTable()" placeholder="Buscar descrição ou centro de custo"><select id="fFinStatus" onchange="renderFinTable()"><option value="">Todos status</option><option>PAGO</option><option>PENDENTE</option><option>RECEBIDO</option><option>A RECEBER</option><option>VENCIDO</option></select></div>
+<div class="tablewrap"><table><thead><tr><th>Data</th><th>Vencimento</th><th>Tipo</th><th>Descrição</th><th>Centro</th><th>Valor</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tbFin"></tbody></table></div>
+</section>
+
+<section id="dre" class="page">
+<div class="headerbar"><div><h2>Resultado da Operação (DRE)</h2><p>Receita realizada menos o CUSTO REALMENTE CONSUMIDO no período (não o que foi apenas comprado). Compras que ainda estão em estoque não entram aqui — veja em "Compra de Insumos".</p></div></div>
+<div class="tabs2">
+<button class="tab2 active" onclick="switchDreTab('dreGeral',this)">📊 DRE Geral</button>
+<button class="tab2" onclick="switchDreTab('dreAnimalTab',this)">🐂 DRE por Animal</button>
+</div>
+<div class="tabpanel2 active" id="dreGeral">
+<div class="search">
+<select id="dre_periodo" onchange="toggleDrePeriodo()">
+  <option value="tudo">Todo o histórico</option>
+  <option value="ano">Ano</option>
+  <option value="mes">Mês específico</option>
+  <option value="dia">Dia específico</option>
+  <option value="intervalo">Intervalo de datas</option>
+</select>
+<select id="dre_ano" style="display:none"></select>
+<input type="month" id="dre_mes" style="display:none">
+<input type="date" id="dre_dia" style="display:none">
+<input type="date" id="dre_de" style="display:none" placeholder="De">
+<input type="date" id="dre_ate" style="display:none" placeholder="Até">
+<button class="btn primary" onclick="renderDre()">Aplicar filtro</button>
+</div>
+<div class="grid" id="kpiDre"></div>
+<div class="card" id="dreBox"></div>
+</div>
+<div class="tabpanel2" id="dreAnimalTab">
+<div class="search"><select id="dre_animal_select"></select><button class="btn primary" onclick="renderDreAnimal()">Ver DRE do animal</button></div>
+<div class="card" id="dreAnimalBox"></div>
+</div>
+</section>
+
+<section id="estoqueinsumos" class="page">
+<div class="headerbar"><div><h2>Compra de Insumos (não consumidos)</h2><p>Mostra o que foi comprado e pago no Caixa, mas ainda não foi usado em nenhuma dieta ou aplicação sanitária — fica disponível em estoque.</p></div></div>
+<div class="grid" id="kpiInsumos"></div>
+<div class="tablewrap"><table><thead><tr><th>Produto</th><th>Qtd. comprada (período)</th><th>Valor comprado</th><th>Qtd. consumida</th><th>Valor consumido</th><th>Saldo em estoque</th></tr></thead><tbody id="tbInsumos"></tbody></table></div>
+</section>
+
+<section id="relatorios" class="page">
+<div class="headerbar"><div><h2>Relatórios</h2><p>Análises completas de lotes, vendas e financeiro.</p></div></div>
+<div class="grid">
+<div class="kpi" style="cursor:pointer" onclick="relLotes()"><small>📦 Resultado por Lote</small><b class="blue" style="font-size:15px">Ver relatório</b></div>
+<div class="kpi" style="cursor:pointer" onclick="relVendas()"><small>💰 Resultado por Venda</small><b class="green" style="font-size:15px">Ver relatório</b></div>
+<div class="kpi" style="cursor:pointer" onclick="relFinanceiro()"><small>🏦 Relatório Financeiro</small><b class="amber" style="font-size:15px">Ver relatório</b></div>
+<div class="kpi" style="cursor:pointer" onclick="relCurrais()"><small>🏚️ Resultado por Curral</small><b class="purple" style="font-size:15px">Ver relatório</b></div>
+</div>
+<div class="card" id="relOutput" style="display:none"></div>
+</section>
+
+</main></div>
+<div id="mFornecedor" class="modalbg"><div class="modal"><h3>Cadastrar Fornecedor</h3><div class="fg">
+<div class="field"><label>Nome*</label><input id="fr_nome"></div>
+<div class="field"><label>CPF/CNPJ</label><input id="fr_doc"></div>
+<div class="field"><label>Endereço</label><input id="fr_end"></div>
+<div class="field"><label>Inscrição Estadual</label><input id="fr_ie"></div>
+<div class="field"><label>Telefone</label><input id="fr_tel"></div>
+<div class="field"><label>E-mail</label><input id="fr_email"></div>
+</div><div class="footer"><button class="btn" onclick="closeM('mFornecedor')">Cancelar</button><button class="btn primary" onclick="saveFornecedor()">Salvar</button></div></div></div>
+
+<div id="mCliente" class="modalbg"><div class="modal"><h3>Cadastrar Cliente</h3><div class="fg">
+<div class="field"><label>Nome*</label><input id="cl_nome"></div>
+<div class="field"><label>CPF/CNPJ</label><input id="cl_doc"></div>
+<div class="field"><label>Endereço</label><input id="cl_end"></div>
+<div class="field"><label>Inscrição Estadual</label><input id="cl_ie"></div>
+<div class="field"><label>Telefone</label><input id="cl_tel"></div>
+<div class="field"><label>E-mail</label><input id="cl_email"></div>
+</div><div class="footer"><button class="btn" onclick="closeM('mCliente')">Cancelar</button><button class="btn primary" onclick="saveCliente()">Salvar</button></div></div></div>
+
+<div id="mAnimal" class="modalbg"><div class="modal" style="max-width:880px"><h3>Cadastrar Animal</h3><div class="fg">
+<div class="field"><label>Brinco*</label><input id="a_brinco"></div>
+<div class="field"><label>Categoria</label><select id="a_cat"><option>Terneiro</option><option>Novilho leve</option><option>Novilho médio</option><option>Novilho pesado</option><option>Vaca</option><option>Boi magro</option></select></div>
+<div class="field"><label>Idade (meses)</label><input type="number" id="a_idade"></div>
+<div class="field"><label>Data chegada</label><input type="date" id="a_data"></div>
+<div class="field"><label>Peso chegada kg*</label><input type="number" id="a_peso" oninput="calcValorAnimal()"></div>
+<div class="field"><label>Preço do kg vivo R$*</label><input type="number" step="0.01" id="a_precokg" oninput="calcValorAnimal()"></div>
+<div class="field"><label>Valor total do animal R$ (auto)</label><input type="number" id="a_valor"></div>
+<div class="field"><label>Fornecedor</label><select id="a_forn"></select></div>
+<div class="field"><label>Curral</label><select id="a_curral"></select></div>
+<div class="field"><label>Lote</label><select id="a_lote"></select></div>
+</div>
+<div class="notice" style="margin-top:14px"><b>Pagamento da compra</b> — define como esse valor entra no Caixa Real.</div>
+<div class="fg">
+<div class="field"><label>Forma de pagamento</label><select id="a_forma" onchange="toggleAnimalPagamento()"><option value="vista">À vista</option><option value="prazo">A prazo (1 vencimento)</option><option value="parcelado">Parcelado</option></select></div>
+<div class="field" id="a_vencBox"><label>Data de pagamento/vencimento</label><input type="date" id="a_venc"></div>
+<div class="field" id="a_parcelasBox" style="display:none"><label>Nº de parcelas</label><input type="number" id="a_parcelas" value="2" min="2"></div>
+</div>
+<div class="footer"><button class="btn" onclick="closeM('mAnimal')">Cancelar</button><button class="btn primary" onclick="saveAnimal()">Salvar</button></div></div></div>
+
+<div id="mBaixaMorte" class="modalbg"><div class="modal"><h3>Registrar Baixa por Morte</h3>
+<div class="alertbox danger2" id="baixaMorteInfo"></div>
+<div class="fg">
+<div class="field"><label>Data da morte*</label><input type="date" id="bm_data"></div>
+<div class="field"><label>Motivo*</label><select id="bm_motivo"><option>Doença</option><option>Acidente</option><option>Problema metabólico (acidose/timpanismo)</option><option>Intoxicação</option><option>Predador</option><option>Causa desconhecida</option><option>Outro</option></select></div>
+</div>
+<div class="field" style="margin-top:10px"><label>Observações</label><textarea id="bm_obs" rows="3"></textarea></div>
+<div class="footer"><button class="btn" onclick="closeM('mBaixaMorte')">Cancelar</button><button class="btn danger" onclick="confirmBaixaMorte()">Confirmar Baixa por Morte</button></div></div></div>
+
+<div id="mCurral" class="modalbg"><div class="modal"><h3>Novo Curral</h3><div class="fg">
+<div class="field"><label>Nome*</label><input id="c_nome"></div>
+<div class="field"><label>Capacidade</label><input type="number" id="c_cap" value="40"></div>
+<div class="field"><label>Tipo</label><select id="c_tipo"><option>Adaptação</option><option>Engorda</option><option>Terminação</option><option>Quarentena</option><option>Pastagem</option></select></div>
+</div><div class="footer"><button class="btn" onclick="closeM('mCurral')">Cancelar</button><button class="btn primary" onclick="saveCurral()">Salvar</button></div></div></div>
+
+<div id="mLote" class="modalbg"><div class="modal"><h3>Novo Lote</h3><div class="fg">
+<div class="field"><label>Nome*</label><input id="l_nome"></div>
+<div class="field"><label>Objetivo</label><select id="l_obj"><option>Recria</option><option>Engorda</option><option>Terminação</option><option>Teste alimentar</option></select></div>
+<div class="field"><label>Data início</label><input type="date" id="l_data"></div>
+<div class="field"><label>Curral principal</label><select id="l_curral"></select></div>
+<div class="field"><label>Fornecedor</label><select id="l_forn"></select></div>
+<div class="field" style="grid-column:1/-1"><label>Documento de compra (nota/contrato)</label><input id="l_doc" placeholder="ex: NF 1234, Contrato 56..."></div>
+</div><div class="footer"><button class="btn" onclick="closeM('mLote')">Cancelar</button><button class="btn primary" onclick="saveLote()">Salvar</button></div></div></div>
+
+<div id="mPesagem" class="modalbg"><div class="modal"><h3>Nova Pesagem Avulsa</h3><div class="notice">Use esta tela sempre que pesar qualquer animal em uma nova data. Pode ser pesagem aleatória ou pesagem de rotina.</div><div class="fg">
+<div class="field"><label>Animal*</label><select id="p_animal" onchange="previewPesagem()"></select></div>
+<div class="field"><label>Data</label><input type="date" id="p_data" onchange="previewPesagem()"></div>
+<div class="field"><label>Peso atual kg*</label><input type="number" id="p_peso" oninput="previewPesagem()"></div>
+</div><div class="notice" id="p_preview" style="display:none"></div><div class="footer"><button class="btn" onclick="closeM('mPesagem')">Cancelar</button><button class="btn primary" onclick="savePesagem()">Salvar Pesagem</button></div></div></div>
+<div id="mRemanej" class="modalbg"><div class="modal"><h3>Remanejar Animal</h3>
+<div class="notice">Selecione o animal e o curral de destino. O curral atual é detectado automaticamente.</div>
+<div class="fg">
+<div class="field"><label>Animal*</label><select id="rm_animal" onchange="previewRemanej()"></select></div>
+<div class="field"><label>Curral atual</label><input id="rm_origem" readonly></div>
+<div class="field"><label>Curral de destino*</label><select id="rm_destino"></select></div>
+<div class="field"><label>Data</label><input type="date" id="rm_data"></div>
+<div class="field"><label>Motivo</label><select id="rm_motivo"><option>Término de adaptação</option><option>Avanço de fase (engorda)</option><option>Avanço de fase (terminação)</option><option>Reagrupamento por peso</option><option>Questão sanitária / quarentena</option><option>Superlotação do curral</option><option>Outro</option></select></div>
+</div>
+<div class="field"><label>Observação</label><textarea id="rm_obs" rows="2"></textarea></div>
+<div class="notice" id="rm_preview" style="display:none"></div>
+<div class="footer"><button class="btn" onclick="closeM('mRemanej')">Cancelar</button><button class="btn primary" onclick="saveRemanej()">Confirmar Remanejamento</button></div></div></div>
+<div id="mEstoque" class="modalbg"><div class="modal"><h3>Movimentar Estoque (Compra de Matéria-Prima)</h3>
+<div class="notice">Compras de insumos aqui geram lançamento automático no Caixa Real — escolha à vista ou parcelado.</div>
+<div class="fg">
+<div class="field"><label>Produto*</label><input id="e_prod" list="ingredientesList"></div>
+<datalist id="ingredientesList"></datalist>
+<div class="field"><label>Categoria</label><select id="e_cat"><option>Alimento</option><option>Feno</option><option>Silagem</option><option>Medicamento</option><option>Vacina</option><option>Combustível</option><option>Semente</option><option>Insumo agrícola</option></select></div>
+<div class="field"><label>Tipo</label><select id="e_tipo" onchange="toggleEstoqueFin()"><option>ENTRADA</option><option>SAÍDA</option></select></div>
+<div class="field"><label>Quantidade*</label><input type="number" id="e_qtd"></div>
+<div class="field"><label>Unidade</label><select id="e_un"><option>kg</option><option>t</option><option>fardo</option><option>L</option><option>ml</option><option>un</option><option>saco</option></select></div>
+<div class="field"><label>Valor total R$</label><input type="number" id="e_valor"></div>
+<div class="field"><label>Estoque mínimo</label><input type="number" id="e_min"></div>
+</div>
+<div id="estoqueFinBox">
+<div class="fg" style="margin-top:8px">
+<div class="field"><label>Lançar no Caixa?</label><select id="e_lancarfin"><option value="1">Sim, é uma compra (gera saída no caixa)</option><option value="0">Não, só ajuste de estoque</option></select></div>
+<div class="field"><label>Fornecedor</label><select id="e_forn"></select></div>
+<div class="field"><label>Forma de pagamento</label><select id="e_forma" onchange="toggleParcelas()"><option value="vista">À vista</option><option value="prazo">A prazo (1 vencimento)</option><option value="parcelado">Parcelado</option></select></div>
+<div class="field" id="e_parcelasBox" style="display:none"><label>Nº de parcelas</label><input type="number" id="e_parcelas" value="2" min="2"></div>
+<div class="field"><label>Data 1º vencimento</label><input type="date" id="e_venc"></div>
+</div>
+</div>
+<div class="footer"><button class="btn" onclick="closeM('mEstoque')">Cancelar</button><button class="btn primary" onclick="saveEstoque()">Salvar</button></div></div></div>
+
+<div id="mIngrediente" class="modalbg"><div class="modal"><h3>Novo Ingrediente</h3><div class="fg">
+<div class="field"><label>Nome*</label><input id="ig_nome"></div>
+<div class="field"><label>Categoria</label><select id="ig_cat"><option>Volumoso</option><option>Concentrado energético</option><option>Concentrado proteico</option><option>Mineral</option><option>Aditivo</option><option>Subproduto</option></select></div>
+<div class="field"><label>Custo por kg R$*</label><input type="number" step="0.001" id="ig_custo"></div>
+<div class="field"><label>Unidade base</label><select id="ig_un"><option>kg</option><option>t</option></select></div>
+</div><div class="footer"><button class="btn" onclick="closeM('mIngrediente')">Cancelar</button><button class="btn primary" onclick="saveIngrediente()">Salvar</button></div></div></div>
+
+<div id="mDieta" class="modalbg"><div class="modal" style="max-width:680px"><h3>Nova Dieta</h3><div class="fg">
+<div class="field"><label>Nome da dieta*</label><input id="dt_nome" placeholder="ex: Adaptação, Crescimento, Terminação"></div>
+<div class="field"><label>Custo/cab/dia (calculado)</label><input id="dt_custocalc" readonly></div>
+</div>
+<div class="field" style="margin-top:10px"><label>Selecione os ingredientes e a quantidade (kg/cab/dia)</label>
+<div id="dietaIngredientesBox" style="max-height:280px;overflow:auto;border:1px solid #DDE4DC;border-radius:11px;padding:10px;margin-top:6px"></div>
+</div>
+<div class="footer"><button class="btn" onclick="closeM('mDieta')">Cancelar</button><button class="btn primary" onclick="saveDieta()">Salvar Dieta</button></div></div></div>
+
+<div id="mMedicamento" class="modalbg"><div class="modal"><h3>Novo Medicamento</h3><div class="fg">
+<div class="field"><label>Nome*</label><input id="md_nome"></div>
+<div class="field"><label>Tipo</label><select id="md_tipo"><option>Vacina</option><option>Antiparasitário</option><option>Antibiótico</option><option>Anti-inflamatório</option><option>Vitamínico</option><option>Hormonal</option><option>Outro</option></select></div>
+<div class="field"><label>Unidade</label><select id="md_un"><option>dose</option><option>ml</option><option>mg</option><option>comprimido</option></select></div>
+<div class="field"><label>Custo unitário R$*</label><input type="number" step="0.01" id="md_custo"></div>
+<div class="field"><label>Carência (dias)</label><input type="number" id="md_carencia" value="0"></div>
+</div><div class="footer"><button class="btn" onclick="closeM('mMedicamento')">Cancelar</button><button class="btn primary" onclick="saveMedicamento()">Salvar</button></div></div></div>
+
+<div id="mDietaPeriodo" class="modalbg"><div class="modal"><h3>Novo Período de Dieta no Curral</h3>
+<div class="notice">A partir da data de início, todos os animais ativos deste curral passam a "consumir" essa dieta. Quando você cadastrar o período seguinte, este se fecha automaticamente na véspera.</div>
+<div class="fg">
+<div class="field"><label>Curral*</label><select id="dp_curral"></select></div>
+<div class="field"><label>Dieta*</label><select id="dp_dieta" onchange="previewDietaPeriodo()"></select></div>
+<div class="field"><label>Data início*</label><input type="date" id="dp_inicio"></div>
+<div class="field"><label>Data fim (opcional, deixe vazio se em andamento)</label><input type="date" id="dp_fim"></div>
+</div>
+<div class="notice" id="dp_preview" style="display:none"></div>
+<div class="footer"><button class="btn" onclick="closeM('mDietaPeriodo')">Cancelar</button><button class="btn primary" onclick="saveDietaPeriodo()">Salvar Período</button></div></div></div>
+<div id="mSan" class="modalbg"><div class="modal" style="max-width:680px"><h3>Aplicação Sanitária</h3>
+<div class="fg">
+<div class="field"><label>Medicamento*</label><select id="s_med" onchange="updateSanCusto()"></select></div>
+<div class="field"><label>Data</label><input type="date" id="s_data"></div>
+<div class="field"><label>Dose por animal</label><input type="number" step="0.01" id="s_dose" value="1" oninput="updateSanCusto()"></div>
+<div class="field"><label>Custo unitário (do cadastro)</label><input type="number" step="0.01" id="s_custounit" readonly></div>
+</div>
+<div class="field" style="margin-top:10px"><label>Filtrar animais por curral/lote (opcional)</label>
+<div class="fg" style="margin-bottom:8px">
+<select id="s_filtroCurral" onchange="renderSanAnimalList()"><option value="">Todos os currais</option></select>
+<select id="s_filtroLote" onchange="renderSanAnimalList()"><option value="">Todos os lotes</option></select>
+</div>
+<label>Selecione os animais que receberam a aplicação*</label>
+<div id="sanAnimalList" style="max-height:240px;overflow:auto;border:1px solid #DDE4DC;border-radius:11px;padding:10px;margin-top:6px"></div>
+</div>
+<div class="notice" id="sanCustoPreview" style="margin-top:10px"></div>
+<div class="footer"><button class="btn" onclick="closeM('mSan')">Cancelar</button><button class="btn primary" onclick="saveSan()">Salvar Aplicação</button></div></div></div>
+
+<div id="mVenda" class="modalbg"><div class="modal"><h3>Venda de Animal</h3><div class="fg">
+<div class="field"><label>Animal*</label><select id="v_animal" onchange="prefillVenda()"></select></div>
+<div class="field"><label>Data venda</label><input type="date" id="v_data"></div>
+<div class="field"><label>Peso venda kg*</label><input type="number" id="v_peso" oninput="calcVendaValor()"></div>
+<div class="field"><label>Valor do kg R$*</label><input type="number" step="0.01" id="v_precokg" oninput="calcVendaValor()"></div>
+<div class="field"><label>Valor bruto R$ (auto, editável)</label><input type="number" id="v_bruto"></div>
+<div class="field"><label>Despesas venda R$</label><input type="number" id="v_desp" value="0"></div>
+<div class="field"><label>Cliente</label><select id="v_cliente"></select></div>
+<div class="field"><label>Comprador (texto livre, opcional)</label><input id="v_comprador"></div>
+<div class="field"><label>Recebimento</label><select id="v_recstatus" onchange="toggleVendaVenc()"><option value="RECEBIDO">À vista (recebido)</option><option value="A RECEBER">A receber (prazo)</option></select></div>
+<div class="field" id="v_vencBox" style="display:none"><label>Data de recebimento prevista</label><input type="date" id="v_venc"></div>
+</div><div class="footer"><button class="btn" onclick="closeM('mVenda')">Cancelar</button><button class="btn primary" onclick="saveVenda()">Vender</button></div></div></div>
+
+<div id="mAgro" class="modalbg"><div class="modal"><h3>Safra / Produção Agrícola</h3>
+<div class="notice">Selecione no campo "Produto gerado no estoque" o MESMO produto que já existe no estoque/ingredientes (ex: "Silagem de milho"), para que a produção própria some no mesmo saldo da compra — em vez de criar um item duplicado.</div>
+<div class="fg">
+<div class="field"><label>Safra/Talhão*</label><input id="g_nome"></div>
+<div class="field"><label>Cultura (livre, só anotação)</label><input id="g_cult"></div>
+<div class="field"><label>Área ha</label><input type="number" id="g_area"></div>
+<div class="field"><label>Destino (categoria)</label><select id="g_dest"><option>Feno</option><option>Silagem</option><option>Grão</option><option>Pastagem</option><option>Venda</option></select></div>
+<div class="field"><label>Produto gerado no estoque*</label><input id="g_prod" list="produtosEstoqueList" placeholder="ex: Silagem de milho"></div>
+<datalist id="produtosEstoqueList"></datalist>
+<div class="field"><label>Custo semente R$</label><input type="number" id="g_sem"></div>
+<div class="field"><label>Custo adubo/insumos R$</label><input type="number" id="g_ins"></div>
+<div class="field"><label>Corte/Enfardamento R$</label><input type="number" id="g_serv"></div>
+<div class="field"><label>Outros custos R$</label><input type="number" id="g_out"></div>
+<div class="field"><label>Quantidade produzida</label><input type="number" id="g_qtd"></div>
+<div class="field"><label>Unidade</label><select id="g_un"><option>kg</option><option>fardo</option><option>t</option><option>saca</option></select></div>
+<div class="field"><label>Peso médio por unidade kg (se fardo/saca)</label><input type="number" id="g_peso" value="18"></div>
+</div><div class="footer"><button class="btn" onclick="closeM('mAgro')">Cancelar</button><button class="btn primary" onclick="saveAgro()">Salvar e gerar estoque</button></div></div></div>
+
+<div id="mMaq" class="modalbg"><div class="modal"><h3>Cadastrar / Editar Máquina</h3><div class="fg">
+<div class="field"><label>Máquina</label><input id="m_nome"></div>
+<div class="field"><label>Valor compra R$</label><input type="number" id="m_val"></div>
+<div class="field"><label>Vida útil anos</label><input type="number" id="m_vida" value="10"></div>
+<div class="field"><label>Manutenção / custos acumulados R$</label><input type="number" id="m_manut" value="0"></div>
+</div><div class="footer"><button class="btn" onclick="closeM('mMaq')">Cancelar</button><button class="btn primary" onclick="saveMaq()">Salvar</button></div></div></div>
+
+<div id="mPatrimonio" class="modalbg"><div class="modal"><h3>Cadastrar / Editar Item do Patrimônio</h3><div class="fg">
+<div class="field"><label>Descrição do item</label><input id="pat_nome" placeholder="Ex: Galpão de máquinas, Curral coberto, Cerca elétrica..."></div>
+<div class="field"><label>Categoria</label><select id="pat_categoria">
+<option>Benfeitoria/Construção</option><option>Equipamento fixo</option><option>Veículo</option><option>Terreno</option><option>Outros</option>
+</select></div>
+<div class="field"><label>Data de aquisição</label><input type="date" id="pat_data"></div>
+<div class="field"><label>Valor R$</label><input type="number" id="pat_valor"></div>
+<div class="field"><label>Vida útil (anos)</label><input type="number" id="pat_vida" value="25"></div>
+<div class="field"><label>Status</label><select id="pat_status"><option>ATIVO</option><option>EM MANUTENÇÃO</option><option>BAIXADO</option></select></div>
+</div><div class="footer"><button class="btn" onclick="closeM('mPatrimonio')">Cancelar</button><button class="btn primary" onclick="savePatrimonio()">Salvar</button></div></div></div>
+
+<div id="mConstrucao" class="modalbg"><div class="modal"><h3>Nova Construção</h3><div class="fg">
+<div class="field"><label>Nome da obra</label><input id="con_nome" placeholder="Ex: Galpão novo, Curral 5, Cerca do piquete 3..."></div>
+<div class="field"><label>Categoria ao concluir (vai para o Patrimônio como)</label><select id="con_categoria">
+<option>Benfeitoria/Construção</option><option>Equipamento fixo</option><option>Outros</option>
+</select></div>
+<div class="field"><label>Data de início</label><input type="date" id="con_inicio"></div>
+<div class="field"><label>Previsão de término</label><input type="date" id="con_previsao"></div>
+</div><div class="footer"><button class="btn" onclick="closeM('mConstrucao')">Cancelar</button><button class="btn primary" onclick="saveConstrucao()">Salvar</button></div></div></div>
+
+<div id="mConstrucaoItem" class="modalbg"><div class="modal"><h3>Lançar Item / Custo na Obra</h3><div class="fg">
+<div class="field"><label>Descrição</label><input id="ci_desc" placeholder="Ex: Cimento, Mão de obra, Telhas, Aluguel de retroescavadeira..."></div>
+<div class="field"><label>Data</label><input type="date" id="ci_data"></div>
+<div class="field"><label>Valor R$</label><input type="number" id="ci_valor"></div>
+</div><div class="footer"><button class="btn" onclick="closeM('mConstrucaoItem')">Cancelar</button><button class="btn primary" onclick="saveConstrucaoItem()">Lançar</button></div></div></div>
+
+<div id="mFin" class="modalbg"><div class="modal"><h3>Lançamento Financeiro Manual</h3><div class="fg">
+<div class="field"><label>Data</label><input type="date" id="f_data"></div>
+<div class="field"><label>Vencimento</label><input type="date" id="f_venc"></div>
+<div class="field"><label>Tipo</label><select id="f_tipo"><option>SAÍDA</option><option>ENTRADA</option></select></div>
+<div class="field"><label>Descrição</label><input id="f_desc"></div>
+<div class="field"><label>Centro</label><select id="f_cc"><option>Animais</option><option>Alimentação</option><option>Sanidade</option><option>Máquinas</option><option>Agricultura</option><option>Funcionários</option><option>Arrendamento</option><option>Energia/Água</option><option>Administrativo</option><option>Investimento</option><option>Perdas/Mortalidade</option><option>Vendas</option></select></div>
+<div class="field"><label>Valor R$</label><input type="number" id="f_val"></div>
+<div class="field"><label>Status</label><select id="f_status"><option>PAGO</option><option>PENDENTE</option><option>RECEBIDO</option><option>A RECEBER</option></select></div>
+</div><div class="footer"><button class="btn" onclick="closeM('mFin')">Cancelar</button><button class="btn primary" onclick="saveFin()">Salvar</button></div></div></div>
+
+<div id="mRelAnimal" class="modalbg"><div class="modal" style="max-width:980px">
+<h3>Ficha Completa do Animal</h3>
+<div id="relAnimalBox"></div>
+<div class="footer">
+<button class="btn" onclick="window.print()">Imprimir / Salvar PDF</button>
+<button class="btn primary" onclick="closeM('mRelAnimal')">Fechar</button>
+</div>
+</div></div>
+<script>
+// ===================================================================
+// PERSISTÊNCIA ONLINE (Vercel Postgres via /api/db)
+// Substitui o antigo localStorage. Mantém o mesmo formato de objeto
+// `db`, então TODA a lógica de negócio abaixo continua igual.
+// ===================================================================
+const ALL_KEYS=['animais','currais','lotes','pesagens','estoque','san','vendas','agro','maquinas','fin',
+  'fornecedores','ingredientes','dietas','medicamentos','dietaPeriodos','clientes','estoqueMov','compras','remanejamentos',
+  'patrimonio','construcoes'];
+
+let db={};
+ALL_KEYS.forEach(k=>db[k]=[]);
+
+let editAnimalId=null,editAgroId=null,editEstoqueId=null,editMachineId=null,editSanId=null,editFornecedorId=null,editIngredienteId=null,editDietaId=null,editMedicamentoId=null,editDietaPeriodoId=null;
+
+let _dbLoaded=false;
+let _saving=false;
+let _saveQueued=false;
+let _lastSavedJSON='';
+let _pollTimer=null;
+
+async function loadDb(){
+  try{
+    const r=await fetch('/api/db',{cache:'no-store'});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const data=await r.json();
+    ALL_KEYS.forEach(k=>{if(!data[k])data[k]=[]});
+    db=data;
+    _lastSavedJSON=JSON.stringify(db);
+    _dbLoaded=true;
+    document.getElementById('syncStatus')&&(document.getElementById('syncStatus').textContent='🟢 Online');
+    render();
+  }catch(err){
+    console.error('Falha ao carregar dados do servidor:',err);
+    document.getElementById('syncStatus')&&(document.getElementById('syncStatus').textContent='🔴 Sem conexão');
+  }
+}
+
+async function persist(){
+  // Salva no servidor (debounced) em vez de localStorage.
+  const json=JSON.stringify(db);
+  if(json===_lastSavedJSON)return; // nada mudou
+  if(_saving){_saveQueued=true;return}
+  _saving=true;
+  try{
+    const r=await fetch('/api/db',{method:'POST',headers:{'Content-Type':'application/json'},body:json});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    _lastSavedJSON=json;
+    document.getElementById('syncStatus')&&(document.getElementById('syncStatus').textContent='🟢 Online · salvo');
+  }catch(err){
+    console.error('Falha ao salvar no servidor:',err);
+    document.getElementById('syncStatus')&&(document.getElementById('syncStatus').textContent='🟠 Falha ao salvar — tentando novamente');
+    setTimeout(persist,3000);
+  }finally{
+    _saving=false;
+    if(_saveQueued){_saveQueued=false;persist();}
+  }
+}
+
+// Polling: a cada 5s, busca o estado mais recente do servidor.
+// Isso é o que dá a sensação de "simultâneo" entre computadores diferentes,
+// sem precisar de WebSocket: se alguém em outro PC salvou algo, este
+// navegador vai puxar a atualização em até 5 segundos.
+function startPolling(){
+  if(_pollTimer)clearInterval(_pollTimer);
+  _pollTimer=setInterval(async ()=>{
+    if(_saving)return; // evita conflito enquanto este navegador está salvando
+    try{
+      const r=await fetch('/api/db',{cache:'no-store'});
+      if(!r.ok)return;
+      const data=await r.json();
+      const json=JSON.stringify(data);
+      if(json!==_lastSavedJSON){
+        ALL_KEYS.forEach(k=>{if(!data[k])data[k]=[]});
+        db=data;
+        _lastSavedJSON=json;
+        render();
+        document.getElementById('syncStatus')&&(document.getElementById('syncStatus').textContent='🟢 Online · atualizado por outro usuário');
+      }
+    }catch(err){/* silencioso: só não atualiza desta vez */}
+  },5000);
+}
+function id(p,a){return p+String(a.length+1).padStart(3,'0')}
+function hoje(){return new Date().toISOString().slice(0,10)}
+function money(v){return 'R$ '+Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2})}
+function n(v,d=2){return Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d})}
+function days(a,b){return Math.max(1,Math.round((new Date(b||hoje())-new Date(a||hoje()))/86400000))}
+function bdg(s){let c=s==='ATIVO'||s==='OK'||s==='PAGO'||s==='RECEBIDO'?'ok':s==='BAIXO'||s==='MORTO'||s==='VENCIDO'?'bad':s==='PENDENTE'||s==='A RECEBER'?'warn':s==='VENDIDO'?'gray':'ok';return `<span class="badge ${c}">${s||'—'}</span>`}
+function empty(cols,txt){return `<tr><td colspan="${cols}" style="text-align:center;color:#999;padding:28px">${txt}</td></tr>`}
+function kpi(l,v,c){return `<div class="kpi"><small>${l}</small><b class="${c}">${v}</b></div>`}
+
+function go(p,el){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));
+  document.getElementById(p).classList.add('active');
+  if(el)el.classList.add('active');
+  render();
+}
+function openM(m){fill();document.getElementById(m).classList.add('open')}
+function closeM(m){
+  document.getElementById(m).classList.remove('open');
+  // Reseta automaticamente o "modo edição" ao fechar qualquer modal, para que
+  // o próximo "Novo X" sempre crie um registro novo em vez de sobrescrever o último editado.
+  switch(m){
+    case 'mAnimal': editAnimalId=null; break;
+    case 'mCurral': editCurralId=null; break;
+    case 'mFornecedor': editFornecedorId=null; break;
+    case 'mCliente': editClienteId=null; break;
+    case 'mIngrediente': editIngredienteId=null; break;
+    case 'mDieta': editDietaId=null; break;
+    case 'mMedicamento': editMedicamentoId=null; break;
+    case 'mEstoque': editEstoqueId=null; break;
+    case 'mSan': editSanId=null; break;
+    case 'mAgro': editAgroId=null; break;
+    case 'mMaq': editMachineId=null; break;
+  }
+}
+// Limpa os campos de texto/número de um modal (chamado antes de abrir para CRIAR um novo registro,
+// evitando que sobre valor residual de uma edição anterior cancelada).
+function clearFields(ids){
+  ids.forEach(x=>{let e=document.getElementById(x);if(e)e.value='';});
+}
+function openNovo(modalId, fieldIds, extraFn){
+  switch(modalId){
+    case 'mAnimal': editAnimalId=null; break;
+    case 'mCurral': editCurralId=null; break;
+    case 'mFornecedor': editFornecedorId=null; break;
+    case 'mCliente': editClienteId=null; break;
+    case 'mIngrediente': editIngredienteId=null; break;
+    case 'mDieta': editDietaId=null; break;
+    case 'mMedicamento': editMedicamentoId=null; break;
+    case 'mEstoque': editEstoqueId=null; break;
+    case 'mSan': editSanId=null; break;
+    case 'mAgro': editAgroId=null; break;
+    case 'mMaq': editMachineId=null; break;
+  }
+  clearFields(fieldIds||[]);
+  openM(modalId);
+  if(extraFn)extraFn();
+}
+document.querySelectorAll('.modalbg').forEach(m=>m.onclick=e=>{if(e.target===m)m.classList.remove('open')});
+
+function nameC(x){return (db.currais.find(c=>c.id===x)||{}).nome||x||'—'}
+function nameL(x){return (db.lotes.find(l=>l.id===x)||{}).nome||x||'—'}
+function nameF(x){return (db.fornecedores.find(f=>f.id===x)||{}).nome||'—'}
+function nameDieta(x){return (db.dietas.find(d=>d.id===x)||{}).nome||'—'}
+function nameMed(x){return (db.medicamentos.find(m=>m.id===x)||{}).nome||'—'}
+function active(){return db.animais.filter(a=>a.status==='ATIVO')}
+function anims(c,l){return db.animais.filter(a=>a.status==='ATIVO'&&(!c||a.curral===c)&&(!l||a.lote===l))}
+
+// Custo total do animal = compra + alimentação acumulada + sanidade acumulada (+ perda se morto, mas perda é = custo total quando morre)
+function cost(a){return (+a.valor||0)+(+a.custoAlim||0)+(+a.custoSan||0)+(+a.custoOutros||0)}
+
+function calcValorAnimal(){
+  let peso=+document.getElementById('a_peso').value||0;
+  let precoKg=+document.getElementById('a_precokg').value||0;
+  document.getElementById('a_valor').value=(peso*precoKg).toFixed(2);
+}
+function toggleAnimalPagamento(){
+  let forma=document.getElementById('a_forma').value;
+  document.getElementById('a_parcelasBox').style.display=forma==='parcelado'?'block':'none';
+  document.getElementById('a_vencBox').style.display=forma==='vista'?'none':'block';
+}
+
+// Gera lançamento(s) de caixa para uma compra, de acordo com a forma de pagamento.
+// forma: 'vista' | 'prazo' | 'parcelado'
+// retorna array de lançamentos criados (para referência se precisar)
+function gerarLancamentosCaixa({dataBase, forma, venc, parcelas, desc, cc, valorTotal, tipo}){
+  tipo=tipo||'SAÍDA';
+  let criados=[];
+  if(forma==='vista'){
+    let lanc={id:id('F',db.fin),data:dataBase,venc:dataBase,tipo,desc,cc,val:valorTotal,status:'PAGO'};
+    db.fin.push(lanc);criados.push(lanc);
+  }else if(forma==='prazo'){
+    // Lançamentos a prazo SEMPRE nascem como pendentes — mesmo que a data de vencimento
+    // já tenha passado no momento do cadastro (lançamento retroativo). O status só muda
+    // para PAGO/RECEBIDO quando o usuário confirma manualmente na tela de Caixa, evitando
+    // que uma dívida real seja escondida como "já paga" automaticamente.
+    let vencData=venc||dataBase;
+    let status=tipo==='SAÍDA'?'PENDENTE':'A RECEBER';
+    let lanc={id:id('F',db.fin),data:dataBase,venc:vencData,tipo,desc,cc,val:valorTotal,status};
+    db.fin.push(lanc);criados.push(lanc);
+  }else if(forma==='parcelado'){
+    let nParc=Math.max(2,+parcelas||2);
+    let valorParcela=valorTotal/nParc;
+    let vencBase=venc||dataBase;
+    let status=tipo==='SAÍDA'?'PENDENTE':'A RECEBER';
+    for(let i=0;i<nParc;i++){
+      let vd=new Date(vencBase+'T00:00:00');
+      vd.setMonth(vd.getMonth()+i);
+      let vencStr=vd.toISOString().slice(0,10);
+      let lanc={id:id('F',db.fin),data:dataBase,venc:vencStr,tipo,desc:desc+' ('+(i+1)+'/'+nParc+')',cc,val:valorParcela,status};
+      db.fin.push(lanc);criados.push(lanc);
+    }
+  }
+  return criados;
+}
+</script>
+<script>
+function fill(){
+  let cur='<option value="">—</option>'+db.currais.map(c=>`<option value="${c.id}">${c.nome}</option>`).join('');
+  let lot='<option value="">—</option>'+db.lotes.map(l=>`<option value="${l.id}">${l.nome}</option>`).join('');
+  let forn='<option value="">—</option>'+db.fornecedores.map(f=>`<option value="${f.id}">${f.nome}</option>`).join('');
+  let clientesOpts='<option value="">—</option>'+db.clientes.map(c=>`<option value="${c.id}">${c.nome}</option>`).join('');
+  ['v_cliente'].forEach(x=>{let e=document.getElementById(x);if(e)e.innerHTML=clientesOpts});
+  ['a_curral','l_curral','dp_curral','rm_destino'].forEach(x=>{let e=document.getElementById(x);if(e)e.innerHTML=cur});
+  ['a_lote'].forEach(x=>{let e=document.getElementById(x);if(e)e.innerHTML=lot});
+  ['a_forn','l_forn','e_forn'].forEach(x=>{let e=document.getElementById(x);if(e)e.innerHTML=forn});
+  let ani='<option value="">—</option>'+db.animais.filter(a=>a.status==='ATIVO').map(a=>`<option value="${a.id}">${a.brinco} (${a.id})</option>`).join('');
+  ['p_animal','v_animal','rm_animal'].forEach(x=>{let e=document.getElementById(x);if(e)e.innerHTML=ani});
+  let dietaOpts='<option value="">—</option>'+db.dietas.map(d=>`<option value="${d.id}">${d.nome} (${money(d.custoCabDia||0)}/cab/dia)</option>`).join('');
+  let e1=document.getElementById('dp_dieta');if(e1)e1.innerHTML=dietaOpts;
+  let medOpts='<option value="">—</option>'+db.medicamentos.map(m=>`<option value="${m.id}">${m.nome} (${money(m.custo||0)}/${m.un||'un'})</option>`).join('');
+  let e2=document.getElementById('s_med');if(e2)e2.innerHTML=medOpts;
+  let curralFiltro='<option value="">Todos os currais</option>'+db.currais.map(c=>`<option value="${c.id}">${c.nome}</option>`).join('');
+  let e3=document.getElementById('s_filtroCurral');if(e3)e3.innerHTML=curralFiltro;
+  let loteFiltro='<option value="">Todos os lotes</option>'+db.lotes.map(l=>`<option value="${l.id}">${l.nome}</option>`).join('');
+  let e4=document.getElementById('s_filtroLote');if(e4)e4.innerHTML=loteFiltro;
+  let ingrList=document.getElementById('ingredientesList');
+  if(ingrList)ingrList.innerHTML=db.ingredientes.map(i=>`<option value="${i.nome}">`).join('');
+  let prodList=document.getElementById('produtosEstoqueList');
+  if(prodList){
+    let nomes=new Set([...db.ingredientes.map(i=>i.nome), ...db.estoque.map(e=>e.prod)]);
+    prodList.innerHTML=Array.from(nomes).map(n=>`<option value="${n}">`).join('');
+  }
+  if(document.getElementById('sanAnimalList'))renderSanAnimalList();
+  if(document.getElementById('dietaIngredientesBox'))renderDietaIngredientesBox();
+}
+</script>
+<script>
+// ===== FORNECEDORES =====
+function saveFornecedor(){
+  if(!fr_nome.value)return alert('Informe o nome');
+  if(editFornecedorId){
+    let f=db.fornecedores.find(x=>x.id===editFornecedorId);
+    if(!f)return alert('Fornecedor não encontrado');
+    f.nome=fr_nome.value;f.doc=fr_doc.value;f.end=fr_end.value;f.ie=fr_ie.value;f.tel=fr_tel.value;f.email=fr_email.value;
+    editFornecedorId=null;
+  }else{
+    db.fornecedores.push({id:id('FR',db.fornecedores),nome:fr_nome.value,doc:fr_doc.value,end:fr_end.value,ie:fr_ie.value,tel:fr_tel.value,email:fr_email.value});
+  }
+  persist();closeM('mFornecedor');render();
+  ['fr_nome','fr_doc','fr_end','fr_ie','fr_tel','fr_email'].forEach(x=>document.getElementById(x).value='');
+}
+function editFornecedor(idv){
+  let f=db.fornecedores.find(x=>x.id===idv);
+  if(!f)return alert('Não encontrado');
+  editFornecedorId=idv;
+  fr_nome.value=f.nome||'';fr_doc.value=f.doc||'';fr_end.value=f.end||'';fr_ie.value=f.ie||'';fr_tel.value=f.tel||'';fr_email.value=f.email||'';
+  openM('mFornecedor');
+}
+
+// ===== CLIENTES =====
+let editClienteId=null;
+function nameCliente(x){return (db.clientes.find(c=>c.id===x)||{}).nome||'—'}
+function saveCliente(){
+  if(!cl_nome.value)return alert('Informe o nome');
+  if(editClienteId){
+    let c=db.clientes.find(x=>x.id===editClienteId);
+    if(!c)return alert('Cliente não encontrado');
+    c.nome=cl_nome.value;c.doc=cl_doc.value;c.end=cl_end.value;c.ie=cl_ie.value;c.tel=cl_tel.value;c.email=cl_email.value;
+    editClienteId=null;
+  }else{
+    db.clientes.push({id:id('CL',db.clientes),nome:cl_nome.value,doc:cl_doc.value,end:cl_end.value,ie:cl_ie.value,tel:cl_tel.value,email:cl_email.value});
+  }
+  persist();closeM('mCliente');render();
+  ['cl_nome','cl_doc','cl_end','cl_ie','cl_tel','cl_email'].forEach(x=>document.getElementById(x).value='');
+}
+function editCliente(idv){
+  let c=db.clientes.find(x=>x.id===idv);
+  if(!c)return alert('Não encontrado');
+  editClienteId=idv;
+  cl_nome.value=c.nome||'';cl_doc.value=c.doc||'';cl_end.value=c.end||'';cl_ie.value=c.ie||'';cl_tel.value=c.tel||'';cl_email.value=c.email||'';
+  openM('mCliente');
+}
+
+// ===== ANIMAL =====
+function saveAnimal(){
+  if(!a_brinco.value||!a_peso.value||!a_valor.value)return alert('Brinco, peso e valor são obrigatórios');
+  if(editAnimalId){
+    let a=db.animais.find(x=>x.id===editAnimalId);
+    if(!a)return alert('Animal não encontrado');
+    if(db.animais.some(x=>x.brinco===a_brinco.value&&x.id!==editAnimalId&&x.status==='ATIVO'))return alert('Já existe outro animal ativo com esse brinco');
+    a.brinco=a_brinco.value;a.cat=a_cat.value;a.idade=+a_idade.value||0;
+    a.data=a_data.value||a.data||hoje();a.pesoEntrada=+a_peso.value||0;
+    a.precoKg=+a_precokg.value||0;a.valor=+a_valor.value||0;
+    a.forn=a_forn.value;a.curral=a_curral.value;a.lote=a_lote.value;
+    if(!a.pesoAtual)a.pesoAtual=a.pesoEntrada;
+    editAnimalId=null;
+  }else{
+    if(db.animais.some(a=>a.brinco===a_brinco.value&&a.status==='ATIVO'))return alert('Brinco duplicado');
+    let novoAnimal={id:id('A',db.animais),brinco:a_brinco.value,cat:a_cat.value,idade:+a_idade.value||0,
+      data:a_data.value||hoje(),pesoEntrada:+a_peso.value,pesoAtual:+a_peso.value,
+      precoKg:+a_precokg.value||0,valor:+a_valor.value,forn:a_forn.value,curral:a_curral.value,lote:a_lote.value,
+      gmd:0,custoAlim:0,custoSan:0,custoOutros:0,status:'ATIVO',historicoDietas:[],custosExtras:[]};
+    db.animais.push(novoAnimal);
+    // Lançamento automático de compra no caixa, conforme forma de pagamento escolhida
+    gerarLancamentosCaixa({
+      dataBase:novoAnimal.data,
+      forma:document.getElementById('a_forma').value,
+      venc:document.getElementById('a_venc').value,
+      parcelas:document.getElementById('a_parcelas').value,
+      desc:'Compra animal '+novoAnimal.brinco+(novoAnimal.forn?' — '+nameF(novoAnimal.forn):''),
+      cc:'Animais',
+      valorTotal:novoAnimal.valor,
+      tipo:'SAÍDA'
+    });
+  }
+  persist();closeM('mAnimal');render();
+  ['a_brinco','a_idade','a_peso','a_precokg','a_valor'].forEach(x=>{if(document.getElementById(x))document.getElementById(x).value=''});
+}
+function editAnimal(idv){
+  let a=db.animais.find(x=>x.id===idv);
+  if(!a)return alert('Animal não encontrado');
+  editAnimalId=idv;
+  document.querySelector('#mAnimal .notice').style.display='none';
+  document.getElementById('a_forma').closest('.fg').style.display='none';
+  openM('mAnimal'); // já chama fill() — popula selects ANTES de setarmos os valores abaixo
+  a_brinco.value=a.brinco||'';a_cat.value=a.cat||'Terneiro';a_idade.value=a.idade||0;
+  a_data.value=a.data||hoje();a_peso.value=a.pesoEntrada||0;a_precokg.value=a.precoKg||0;a_valor.value=a.valor||0;
+  a_forn.value=a.forn||'';a_curral.value=a.curral||'';a_lote.value=a.lote||'';
+}
+function addAnimalCost(idv){
+  let a=db.animais.find(x=>x.id===idv);
+  if(!a)return alert('Animal não encontrado');
+  let desc=prompt('Descrição do custo extra para o animal '+a.brinco+' (ex: frete, comissão, manejo):');
+  if(desc===null)return;
+  let val=parseFloat(prompt('Valor em R$:')||'0');
+  if(!val)return alert('Valor inválido');
+  a.custoOutros=(a.custoOutros||0)+val;
+  a.custosExtras=a.custosExtras||[];
+  a.custosExtras.push({data:hoje(),desc:desc,valor:val});
+  persist();render();
+}
+
+// ===== BAIXA POR MORTE =====
+let baixaMorteAnimalId=null;
+function abrirBaixaMorte(idv){
+  let a=db.animais.find(x=>x.id===idv);
+  if(!a)return alert('Animal não encontrado');
+  baixaMorteAnimalId=idv;
+  document.getElementById('baixaMorteInfo').innerHTML=`Animal <b>${a.brinco}</b> (${a.id}) — Custo acumulado até hoje: <b>${money(cost(a))}</b>. Esse valor será lançado como PERDA no financeiro e na ficha do animal.`;
+  document.getElementById('bm_data').value=hoje();
+  openM('mBaixaMorte');
+}
+function confirmBaixaMorte(){
+  let a=db.animais.find(x=>x.id===baixaMorteAnimalId);
+  if(!a)return;
+  let dataMorte=document.getElementById('bm_data').value||hoje();
+  let motivo=document.getElementById('bm_motivo').value;
+  let obs=document.getElementById('bm_obs').value;
+  let custoTotal=cost(a);
+  a.status='MORTO';
+  a.dataMorte=dataMorte;
+  a.motivoMorte=motivo;
+  a.obsMorte=obs;
+  a.custoPerda=custoTotal;
+  // Lançamento no financeiro como perda (não é saída de caixa nova, é reconhecimento de perda contábil)
+  db.fin.push({id:id('F',db.fin),data:dataMorte,venc:dataMorte,tipo:'SAÍDA',
+    desc:'Perda por mortalidade — animal '+a.brinco+' ('+motivo+')',
+    cc:'Perdas/Mortalidade',val:custoTotal,status:'PAGO',ehPerda:true,animalId:a.id});
+  persist();closeM('mBaixaMorte');render();
+  reportAnimal(a.id);
+}
+</script>
+<script>
+// ===== CURRAL / LOTE =====
+let editCurralId=null;
+function saveCurral(){
+  if(!c_nome.value)return alert('Informe o nome do curral');
+  if(editCurralId){
+    let c=db.currais.find(x=>x.id===editCurralId);
+    if(!c)return alert('Curral não encontrado');
+    c.nome=c_nome.value;c.cap=+c_cap.value||40;c.tipo=c_tipo.value;
+    editCurralId=null;
+  }else{
+    db.currais.push({id:id('C',db.currais),nome:c_nome.value,cap:+c_cap.value||40,tipo:c_tipo.value});
+  }
+  persist();closeM('mCurral');render();
+}
+function editCurral(idv){
+  let c=db.currais.find(x=>x.id===idv);
+  if(!c)return alert('Curral não encontrado');
+  editCurralId=idv;
+  c_nome.value=c.nome||'';c_cap.value=c.cap||40;c_tipo.value=c.tipo||'Engorda';
+  openM('mCurral');
+}
+function saveLote(){
+  db.lotes.push({id:id('L',db.lotes),nome:l_nome.value,obj:l_obj.value,data:l_data.value||hoje(),curral:l_curral.value,forn:l_forn.value,doc:l_doc.value});
+  persist();closeM('mLote');render();
+}
+
+// ===== PESAGEM =====
+function previewPesagem(){
+  let a=db.animais.find(x=>x.id===p_animal.value);
+  let box=document.getElementById('p_preview');
+  if(!a||!p_peso.value){if(box)box.style.display='none';return;}
+  let peso=+p_peso.value,d=p_data.value||hoje();
+  let pes=db.pesagens.filter(p=>p.animal===a.id).sort((x,y)=>x.data.localeCompare(y.data));
+  let ult=pes.length?pes[pes.length-1]:null;
+  let ant=ult?ult.peso:a.pesoAtual;
+  let dataAnt=ult?ult.data:a.data;
+  let diasPeriodo=days(dataAnt,d);
+  let gmdPeriodo=(peso-ant)/diasPeriodo;
+  let diasTotal=days(a.data,d);
+  let gmdTotal=(peso-a.pesoEntrada)/diasTotal;
+  box.style.display='block';
+  box.innerHTML=`Animal <b>${a.brinco}</b> | Peso anterior: <b>${n(ant,1)} kg</b> | Ganho no período: <b>${n(peso-ant,1)} kg</b> | GMD do período: <b>${n(gmdPeriodo,3)} kg/dia</b> | GMD acumulado: <b>${n(gmdTotal,3)} kg/dia</b>`;
+}
+function savePesagem(){
+  let a=db.animais.find(x=>x.id===p_animal.value);
+  if(!a)return alert('Selecione um animal');
+  let peso=+p_peso.value;
+  if(!peso)return alert('Informe o novo peso');
+  let d=p_data.value||hoje();
+  let pes=db.pesagens.filter(p=>p.animal===a.id).sort((x,y)=>x.data.localeCompare(y.data));
+  let ult=pes.length?pes[pes.length-1]:null;
+  let ant=ult?ult.peso:a.pesoAtual;
+  let dataAnt=ult?ult.data:a.data;
+  let diasPeriodo=days(dataAnt,d);
+  let gmdPeriodo=(peso-ant)/diasPeriodo;
+  let diasTotal=days(a.data,d);
+  let gmdTotal=(peso-a.pesoEntrada)/diasTotal;
+  db.pesagens.push({id:id('P',db.pesagens),data:d,animal:a.id,ant,peso,ganho:peso-ant,dias:diasTotal,diasPeriodo,gmd:gmdTotal,gmdPeriodo,proj30:peso+gmdTotal*30,proj60:peso+gmdTotal*60,proj90:peso+gmdTotal*90});
+  a.pesoAtual=peso;a.gmd=gmdTotal;
+  persist();closeM('mPesagem');render();
+}
+function quickPesagem(idv){
+  fill();
+  let a=db.animais.find(x=>x.id===idv);
+  if(!a)return alert('Animal não encontrado');
+  p_animal.value=idv;p_data.value=hoje();p_peso.value='';
+  document.getElementById('p_preview').style.display='none';
+  go('pesagens',document.querySelector('[onclick*="pesagens"]'));
+  openM('mPesagem');
+}
+
+// ===== REMANEJAMENTO ENTRE CURRAIS =====
+function previewRemanej(){
+  let a=db.animais.find(x=>x.id===rm_animal.value);
+  let box=document.getElementById('rm_preview');
+  if(!a){rm_origem.value='';box.style.display='none';return;}
+  rm_origem.value=nameC(a.curral);
+  let periodoAtual=db.dietaPeriodos.find(p=>p.curral===a.curral&&!p.fim);
+  box.style.display='block';
+  box.innerHTML=`Animal <b>${a.brinco}</b> está há <b>${a.diasNoCurralDesde?days(a.diasNoCurralDesde,hoje()):'—'}</b> no curral atual.
+    ${periodoAtual?'Dieta vigente aqui: <b>'+nameDieta(periodoAtual.dieta)+'</b> ('+money(periodoAtual.custoCabDia)+'/cab/dia).':'Sem dieta vigente cadastrada neste curral.'}`;
+}
+function saveRemanej(){
+  let a=db.animais.find(x=>x.id===rm_animal.value);
+  if(!a)return alert('Selecione um animal');
+  let destino=rm_destino.value;
+  if(!destino)return alert('Selecione o curral de destino');
+  if(destino===a.curral)return alert('O curral de destino é igual ao curral atual');
+  let data=rm_data.value||hoje();
+  db.remanejamentos=db.remanejamentos||[];
+  db.remanejamentos.push({
+    id:id('RM',db.remanejamentos),animal:a.id,brinco:a.brinco,
+    de:a.curral,para:destino,data,motivo:rm_motivo.value,obs:rm_obs.value
+  });
+  // Marca a partir de quando o animal está no curral novo, para o cálculo de alimentação
+  // (recalcularCustosAlimentacao usa o histórico de remanejamentos para saber em qual curral
+  // o animal estava em cada dia, em vez de assumir que ele sempre esteve no curral atual).
+  a.curral=destino;
+  persist();closeM('mRemanej');render();
+}
+function renderRemanejTable(){
+  let tb=document.getElementById('tbRemanej');
+  if(!tb)return;
+  let filtroOrigem=document.getElementById('rm_filtro_curral_origem')?.value||'';
+  let busca=(document.getElementById('rm_busca')?.value||'').toLowerCase();
+  let lista=(db.remanejamentos||[]).filter(r=>{
+    if(filtroOrigem&&r.de!==filtroOrigem)return false;
+    if(busca&&!r.brinco.toLowerCase().includes(busca))return false;
+    return true;
+  }).sort((a,b)=>b.data.localeCompare(a.data));
+  tb.innerHTML=lista.map(r=>`<tr><td>${r.data}</td><td><b>${r.brinco}</b></td><td>${nameC(r.de)}</td><td><b>${nameC(r.para)}</b></td><td><span class="badge gray">${r.motivo}</span></td><td>${r.obs||'—'}</td><td><button class='btn small danger' onclick='deleteRecord("remanejamentos","${r.id}")'>Excluir</button></td></tr>`).join('')||empty(7,'Nenhum remanejamento registrado');
+  let selOrigem=document.getElementById('rm_filtro_curral_origem');
+  if(selOrigem&&selOrigem.children.length<=1){
+    selOrigem.innerHTML='<option value="">Todos os currais de origem</option>'+db.currais.map(c=>`<option value="${c.id}">${c.nome}</option>`).join('');
+  }
+}
+</script>
+<script>
+// ===== INGREDIENTES =====
+function saveIngrediente(){
+  if(!ig_nome.value||!ig_custo.value)return alert('Informe nome e custo');
+  if(editIngredienteId){
+    let i=db.ingredientes.find(x=>x.id===editIngredienteId);
+    if(!i)return alert('Não encontrado');
+    i.nome=ig_nome.value;i.cat=ig_cat.value;i.custo=+ig_custo.value;i.un=ig_un.value;
+    editIngredienteId=null;
+  }else{
+    db.ingredientes.push({id:id('IG',db.ingredientes),nome:ig_nome.value,cat:ig_cat.value,custo:+ig_custo.value,un:ig_un.value});
+  }
+  persist();closeM('mIngrediente');render();
+  ['ig_nome','ig_custo'].forEach(x=>document.getElementById(x).value='');
+}
+function editIngrediente(idv){
+  let i=db.ingredientes.find(x=>x.id===idv);
+  if(!i)return alert('Não encontrado');
+  editIngredienteId=idv;
+  ig_nome.value=i.nome||'';ig_cat.value=i.cat||'Volumoso';ig_custo.value=i.custo||0;ig_un.value=i.un||'kg';
+  openM('mIngrediente');
+}
+function seedIngredientes20(){
+  if(db.ingredientes.length>0)return;
+  const seed=[
+    ['Silagem de milho','Volumoso',0.35],['Cana picada','Volumoso',0.18],['Feno de Tifton','Volumoso',0.55],
+    ['Bagaço de cana','Volumoso',0.12],['Casca de soja','Concentrado energético',0.85],
+    ['Milho moído','Concentrado energético',0.78],['Sorgo moído','Concentrado energético',0.70],
+    ['Polpa cítrica','Concentrado energético',0.65],['DDG (resíduo destilaria)','Concentrado proteico',0.95],
+    ['Farelo de soja','Concentrado proteico',2.10],['Farelo de algodão','Concentrado proteico',1.40],
+    ['Caroço de algodão','Concentrado proteico',1.60],['Ureia pecuária','Concentrado proteico',3.20],
+    ['Núcleo mineral','Mineral',6.50],['Sal mineral','Mineral',2.80],['Calcário calcítico','Mineral',0.45],
+    ['Bicarbonato de sódio','Aditivo',3.00],['Monensina sódica','Aditivo',18.00],
+    ['Levedura viva','Aditivo',12.00],['Farelo de trigo','Subproduto',1.10]
+  ];
+  seed.forEach(s=>db.ingredientes.push({id:id('IG',db.ingredientes),nome:s[0],cat:s[1],custo:s[2],un:'kg'}));
+  persist();
+}
+
+// ===== DIETAS =====
+function renderDietaIngredientesBox(){
+  let box=document.getElementById('dietaIngredientesBox');
+  if(!box)return;
+  let editing=db.dietas.find(d=>d.id===editDietaId);
+  box.innerHTML=db.ingredientes.map(i=>{
+    let item=editing?editing.itens.find(x=>x.ingredienteId===i.id):null;
+    return `<div class="ingrow">
+      <input type="checkbox" id="dchk_${i.id}" ${item?'checked':''} onchange="calcDietaCusto()">
+      <span class="nm">${i.nome} <small style="color:#999">(${money(i.custo)}/kg)</small></span>
+      <input type="number" step="0.01" id="dqty_${i.id}" placeholder="kg/cab/dia" value="${item?item.qtd:''}" oninput="calcDietaCusto()">
+    </div>`;
+  }).join('')||'<p style="color:#999">Cadastre ingredientes primeiro.</p>';
+  calcDietaCusto();
+}
+function calcDietaCusto(){
+  let total=0;
+  db.ingredientes.forEach(i=>{
+    let chk=document.getElementById('dchk_'+i.id);
+    let qty=document.getElementById('dqty_'+i.id);
+    if(chk&&chk.checked&&qty&&+qty.value>0){total+=(+qty.value)*i.custo}
+  });
+  let out=document.getElementById('dt_custocalc');
+  if(out)out.value=money(total);
+  return total;
+}
+function saveDieta(){
+  if(!dt_nome.value)return alert('Informe o nome da dieta');
+  let itens=[];
+  db.ingredientes.forEach(i=>{
+    let chk=document.getElementById('dchk_'+i.id);
+    let qty=document.getElementById('dqty_'+i.id);
+    if(chk&&chk.checked&&qty&&+qty.value>0){itens.push({ingredienteId:i.id,qtd:+qty.value})}
+  });
+  if(!itens.length)return alert('Selecione ao menos um ingrediente com quantidade');
+  let custoCabDia=itens.reduce((s,it)=>{let ing=db.ingredientes.find(i=>i.id===it.ingredienteId);return s+(ing?ing.custo*it.qtd:0)},0);
+  if(editDietaId){
+    let d=db.dietas.find(x=>x.id===editDietaId);
+    if(!d)return alert('Dieta não encontrada');
+    d.nome=dt_nome.value;d.itens=itens;d.custoCabDia=custoCabDia;
+    editDietaId=null;
+  }else{
+    db.dietas.push({id:id('DT',db.dietas),nome:dt_nome.value,itens,custoCabDia});
+  }
+  persist();closeM('mDieta');render();
+  document.getElementById('dt_nome').value='';
+}
+function editDieta(idv){
+  editDietaId=idv;
+  let d=db.dietas.find(x=>x.id===idv);
+  if(!d)return alert('Não encontrada');
+  dt_nome.value=d.nome||'';
+  openM('mDieta');
+}
+function deleteDieta(idv){
+  if(!confirm('Excluir esta dieta?'))return;
+  db.dietas=db.dietas.filter(x=>x.id!==idv);
+  persist();render();
+}
+
+// ===== MEDICAMENTOS =====
+function saveMedicamento(){
+  if(!md_nome.value||!md_custo.value)return alert('Informe nome e custo');
+  if(editMedicamentoId){
+    let m=db.medicamentos.find(x=>x.id===editMedicamentoId);
+    if(!m)return alert('Não encontrado');
+    m.nome=md_nome.value;m.tipo=md_tipo.value;m.un=md_un.value;m.custo=+md_custo.value;m.carencia=+md_carencia.value||0;
+    editMedicamentoId=null;
+  }else{
+    db.medicamentos.push({id:id('MD',db.medicamentos),nome:md_nome.value,tipo:md_tipo.value,un:md_un.value,custo:+md_custo.value,carencia:+md_carencia.value||0});
+  }
+  persist();closeM('mMedicamento');render();
+  ['md_nome','md_custo'].forEach(x=>document.getElementById(x).value='');
+}
+function editMedicamento(idv){
+  let m=db.medicamentos.find(x=>x.id===idv);
+  if(!m)return alert('Não encontrado');
+  editMedicamentoId=idv;
+  md_nome.value=m.nome||'';md_tipo.value=m.tipo||'Vacina';md_un.value=m.un||'dose';md_custo.value=m.custo||0;md_carencia.value=m.carencia||0;
+  openM('mMedicamento');
+}
+</script>
+<script>
+// ===== DIETA POR CURRAL (PERÍODO) =====
+function previewDietaPeriodo(){
+  let dietaId=dp_dieta.value;
+  let curralId=dp_curral.value;
+  let box=document.getElementById('dp_preview');
+  if(!dietaId||!curralId){box.style.display='none';return}
+  let dieta=db.dietas.find(d=>d.id===dietaId);
+  let aa=anims(curralId,'');
+  box.style.display='block';
+  box.innerHTML=`Dieta <b>${dieta.nome}</b> custa <b>${money(dieta.custoCabDia)}/cab/dia</b>. Curral tem <b>${aa.length}</b> animal(is) ativo(s) agora. Custo diário total estimado do curral: <b>${money(dieta.custoCabDia*aa.length)}</b>/dia.`;
+}
+function saveDietaPeriodo(){
+  if(!dp_curral.value||!dp_dieta.value||!dp_inicio.value)return alert('Selecione curral, dieta e data de início');
+  let curralId=dp_curral.value,dietaId=dp_dieta.value,inicio=dp_inicio.value,fim=dp_fim.value||null;
+  let dieta=db.dietas.find(d=>d.id===dietaId);
+  // Fecha automaticamente qualquer período em andamento do mesmo curral na véspera do novo início
+  let diaAnterior=new Date(new Date(inicio+'T00:00:00').getTime()-86400000).toISOString().slice(0,10);
+  db.dietaPeriodos.filter(p=>p.curral===curralId&&!p.fim).forEach(p=>{p.fim=diaAnterior});
+  db.dietaPeriodos.push({id:id('DP',db.dietaPeriodos),curral:curralId,dieta:dietaId,inicio,fim,custoCabDia:dieta.custoCabDia});
+  persist();closeM('mDietaPeriodo');render();
+}
+function finalizarDietaPeriodo(idv){
+  let p=db.dietaPeriodos.find(x=>x.id===idv);
+  if(!p)return;
+  let dataFim=prompt('Data de fim deste período (AAAA-MM-DD):',hoje());
+  if(!dataFim)return;
+  p.fim=dataFim;
+  persist();render();
+}
+function deleteDietaPeriodo(idv){
+  if(!confirm('Excluir este período de dieta?'))return;
+  db.dietaPeriodos=db.dietaPeriodos.filter(x=>x.id!==idv);
+  persist();render();
+}
+
+// Calcula quanto cada animal ATIVO já acumulou de custo de alimentação,
+// percorrendo todos os períodos de dieta dos currais por onde ele passou.
+// Para simplificar e ser auditável, somamos diretamente nos campos do animal
+// sempre que o "fechamento" é processado (função recalcularCustosAlimentacao).
+// Recalcula custo de alimentação de cada animal E dá baixa física no estoque
+// pelo custo médio do estoque (não pelo custo de cadastro do ingrediente).
+// Cada execução é IDEMPOTENTE: desfaz o que tinha feito antes e refaz do zero,
+// para evitar duplicar baixa de estoque a cada clique em "Atualizar".
+function recalcularCustosAlimentacao(){
+  // 1) Desfazer baixas de estoque feitas em execuções anteriores (devolve ao estoque)
+  (db.estoqueMov||[]).filter(m=>m.origem==='dieta').forEach(m=>{
+    let it=db.estoque.find(e=>e.id===m.estoqueId);
+    if(it)it.qtd=(it.qtd||0)+m.qtdConsumida;
+  });
+  db.estoqueMov=(db.estoqueMov||[]).filter(m=>m.origem!=='dieta');
+
+  // 2) Zerar custo de alimentação e histórico antes de recalcular
+  db.animais.forEach(a=>{a.custoAlim=0;a.historicoDietas=[]});
+
+  // 2b) Para cada animal, monta a linha do tempo de currais por onde ele passou:
+  // [{curral, inicio, fim}] — começa no curral de chegada e cada remanejamento fecha
+  // o intervalo anterior e abre um novo, evitando contar alimentação em dois currais ao mesmo tempo.
+  function getTimelineCurrais(a){
+    let remanejAnimal=(db.remanejamentos||[]).filter(r=>r.animal===a.id).sort((x,y)=>x.data.localeCompare(y.data));
+    let timeline=[];
+    let curralAtualNoIntervalo=remanejAnimal.length?remanejAnimal[0].de:a.curral; // curral de origem no momento da entrada
+    let inicioIntervalo=a.data;
+    remanejAnimal.forEach(r=>{
+      // O curral antigo conta até a véspera da transferência; o novo curral começa no dia da transferência.
+      let vespera=new Date(r.data+'T00:00:00');
+      vespera.setDate(vespera.getDate()-1);
+      timeline.push({curral:curralAtualNoIntervalo,inicio:inicioIntervalo,fim:vespera.toISOString().slice(0,10)});
+      curralAtualNoIntervalo=r.para;
+      inicioIntervalo=r.data;
+    });
+    timeline.push({curral:curralAtualNoIntervalo,inicio:inicioIntervalo,fim:null}); // intervalo aberto até hoje/saída
+    return timeline;
+  }
+
+  // 3) Para cada período de dieta, percorrer os animais que passaram por aquele curral
+  // dentro da janela de tempo em que a dieta esteve vigente E o animal esteve lá.
+  db.dietaPeriodos.forEach(p=>{
+    let fimPeriodo=p.fim?new Date(p.fim+'T00:00:00'):new Date(hoje()+'T00:00:00');
+    let iniPeriodo=new Date(p.inicio+'T00:00:00');
+    let dieta=db.dietas.find(d=>d.id===p.dieta);
+    if(!dieta)return;
+
+    db.animais.forEach(a=>{
+      let timeline=getTimelineCurrais(a);
+      let saidaAnimalGeral=a.status==='ATIVO'?null:new Date((a.dataMorte||a.dataVenda||hoje())+'T00:00:00');
+
+      timeline.filter(t=>t.curral===p.curral).forEach(intervaloCurral=>{
+        let iniIntervalo=new Date(intervaloCurral.inicio+'T00:00:00');
+        let fimIntervalo=intervaloCurral.fim?new Date(intervaloCurral.fim+'T00:00:00'):(saidaAnimalGeral||fimPeriodo);
+        if(saidaAnimalGeral&&fimIntervalo>saidaAnimalGeral)fimIntervalo=saidaAnimalGeral;
+
+        // Interseção entre [iniIntervalo,fimIntervalo] (tempo no curral) e [iniPeriodo,fimPeriodo] (dieta vigente)
+        let inicioEfetivo=iniIntervalo>iniPeriodo?iniIntervalo:iniPeriodo;
+        let fimEfetivo=fimIntervalo<fimPeriodo?fimIntervalo:fimPeriodo;
+        let diasAnimal=Math.max(0,Math.round((fimEfetivo-inicioEfetivo)/86400000)+1);
+        if(inicioEfetivo>fimEfetivo)diasAnimal=0;
+        if(diasAnimal<=0)return;
+
+        let custo=diasAnimal*p.custoCabDia;
+        a.custoAlim=(a.custoAlim||0)+custo;
+        a.historicoDietas.push({dietaPeriodoId:p.id,curral:p.curral,dieta:p.dieta,inicio:p.inicio,fim:p.fim,dias:diasAnimal,custoCabDia:p.custoCabDia,custoTotal:custo});
+
+        // Baixa física: para cada ingrediente da dieta, consome qtd(kg/cab/dia) x diasAnimal
+        dieta.itens.forEach(item=>{
+          let ing=db.ingredientes.find(i=>i.id===item.ingredienteId);
+          if(!ing)return;
+          let estoqueItem=db.estoque.find(e=>e.prod.toLowerCase()===ing.nome.toLowerCase());
+          let qtdConsumida=item.qtd*diasAnimal;
+          if(estoqueItem){
+            let custoMedioConsumo=estoqueItem.custo;
+            estoqueItem.qtd=Math.max(0,(estoqueItem.qtd||0)-qtdConsumida);
+            db.estoqueMov.push({id:id('EM',db.estoqueMov),origem:'dieta',estoqueId:estoqueItem.id,prod:ing.nome,
+              animalId:a.id,dietaPeriodoId:p.id,data:p.fim||hoje(),qtdConsumida,custoUnitario:custoMedioConsumo,
+              custoConsumido:qtdConsumida*custoMedioConsumo,cc:'Alimentação'});
+          }else{
+            db.estoqueMov.push({id:id('EM',db.estoqueMov),origem:'dieta',estoqueId:null,prod:ing.nome,
+              animalId:a.id,dietaPeriodoId:p.id,data:p.fim||hoje(),qtdConsumida,custoUnitario:ing.custo,
+              custoConsumido:qtdConsumida*ing.custo,cc:'Alimentação'});
+          }
+        });
+      });
+    });
+  });
+  persist();
+}
+</script>
+<script>
+// ===== ESTOQUE / COMPRA DE MATÉRIA-PRIMA =====
+function toggleEstoqueFin(){
+  let box=document.getElementById('estoqueFinBox');
+  box.style.display=e_tipo.value==='ENTRADA'?'block':'none';
+}
+function toggleParcelas(){
+  document.getElementById('e_parcelasBox').style.display=e_forma.value==='parcelado'?'block':'none';
+}
+function getCost(p){let it=db.estoque.find(e=>e.prod.toLowerCase()===String(p).toLowerCase());return it?+it.custo||0:0}
+function baixaEstoque(p,q){let it=db.estoque.find(e=>e.prod.toLowerCase()===String(p).toLowerCase());if(it)it.qtd=Math.max(0,it.qtd-q)}
+
+function saveEstoque(){
+  let prod=e_prod.value,q=+e_qtd.value||0,val=+e_valor.value||0;
+  if(!prod)return alert('Informe o produto');
+  if(editEstoqueId){
+    let it=db.estoque.find(e=>e.id===editEstoqueId);
+    if(!it)return alert('Item não encontrado');
+    it.prod=prod;it.cat=e_cat.value;it.un=e_un.value;it.min=+e_min.value||0;
+    if(q>=0)it.qtd=q;
+    if(val>0&&q>0)it.custo=val/q;
+    editEstoqueId=null;
+    persist();closeM('mEstoque');render();
+    return;
+  }
+  if(!q)return alert('Informe a quantidade');
+  let it=db.estoque.find(e=>e.prod===prod);
+  if(!it){it={id:id('E',db.estoque),prod,cat:e_cat.value,qtd:0,un:e_un.value,custo:0,min:+e_min.value||0};db.estoque.push(it)}
+  if(e_tipo.value==='ENTRADA'){
+    let total=it.qtd*it.custo;it.qtd+=q;it.custo=it.qtd?(total+val)/it.qtd:0;
+    // Registra a compra (para DRE: distinguir "comprado" de "consumido")
+    if(val>0){
+      db.compras=db.compras||[];
+      db.compras.push({id:id('CP',db.compras),data:hoje(),prod,qtd:q,valorTotal:val,cc:e_cat.value==='Medicamento'||e_cat.value==='Vacina'?'Sanidade':'Alimentação'});
+    }
+    // Gerar lançamento no caixa se marcado — usa a mesma lógica central de pagamento
+    if(document.getElementById('e_lancarfin').value==='1'&&val>0){
+      let fornId=document.getElementById('e_forn').value;
+      let descBase='Compra de '+prod+(fornId?' — '+nameF(fornId):'');
+      gerarLancamentosCaixa({
+        dataBase:hoje(),
+        forma:document.getElementById('e_forma').value,
+        venc:document.getElementById('e_venc').value,
+        parcelas:document.getElementById('e_parcelas').value,
+        desc:descBase,
+        cc:e_cat.value==='Medicamento'||e_cat.value==='Vacina'?'Sanidade':'Alimentação',
+        valorTotal:val,
+        tipo:'SAÍDA'
+      });
+    }
+  }else{
+    it.qtd=Math.max(0,it.qtd-q);
+  }
+  persist();closeM('mEstoque');render();
+  ['e_prod','e_qtd','e_valor'].forEach(x=>{if(document.getElementById(x))document.getElementById(x).value=''});
+}
+function editEstoque(idv){
+  let it=db.estoque.find(e=>e.id===idv);
+  if(!it)return alert('Item de estoque não encontrado');
+  editEstoqueId=idv;
+  e_prod.value=it.prod||'';e_cat.value=it.cat||'Alimento';e_tipo.value='ENTRADA';
+  e_qtd.value=it.qtd||0;e_un.value=it.un||'kg';e_valor.value=(it.qtd||0)*(it.custo||0);e_min.value=it.min||0;
+  toggleEstoqueFin();
+  openM('mEstoque');
+}
+
+// ===== SANIDADE (aplicação direta por animal, editável) =====
+function updateSanCusto(){
+  let med=db.medicamentos.find(m=>m.id===s_med.value);
+  document.getElementById('s_custounit').value=med?med.custo:0;
+  renderSanCustoPreview();
+}
+function renderSanAnimalList(){
+  let box=document.getElementById('sanAnimalList');
+  if(!box)return;
+  let curralF=document.getElementById('s_filtroCurral')?.value||'';
+  let loteF=document.getElementById('s_filtroLote')?.value||'';
+  let lista=db.animais.filter(a=>a.status==='ATIVO'&&(!curralF||a.curral===curralF)&&(!loteF||a.lote===loteF));
+  let editing=db.san.find(s=>s.id===editSanId);
+  box.innerHTML=lista.map(a=>{
+    let checked=editing?editing.animais.includes(a.id):false;
+    return `<div class="ingrow"><input type="checkbox" class="sanAnimalChk" value="${a.id}" ${checked?'checked':''} onchange="renderSanCustoPreview()"><span class="nm">${a.brinco} (${a.id}) — ${nameC(a.curral)} / ${nameL(a.lote)}</span></div>`;
+  }).join('')||'<p style="color:#999">Nenhum animal ativo encontrado com esse filtro.</p>';
+  renderSanCustoPreview();
+}
+function renderSanCustoPreview(){
+  let checks=document.querySelectorAll('.sanAnimalChk:checked');
+  let dose=+document.getElementById('s_dose')?.value||1;
+  let custoUnit=+document.getElementById('s_custounit')?.value||0;
+  let custoCab=dose*custoUnit;
+  let total=custoCab*checks.length;
+  let box=document.getElementById('sanCustoPreview');
+  if(box)box.innerHTML=`${checks.length} animal(is) selecionado(s) × ${money(custoCab)}/cab = <b>${money(total)}</b> total`;
+}
+function saveSan(){
+  let checks=Array.from(document.querySelectorAll('.sanAnimalChk:checked')).map(c=>c.value);
+  if(!checks.length)return alert('Selecione ao menos um animal');
+  if(!s_med.value)return alert('Selecione o medicamento');
+  let med=db.medicamentos.find(m=>m.id===s_med.value);
+  let dose=+s_dose.value||1;
+  let custoCab=dose*(med?med.custo:0);
+  let data=s_data.value||hoje();
+  if(editSanId){
+    // Remove custo antigo dos animais antigos antes de reaplicar
+    let old=db.san.find(s=>s.id===editSanId);
+    if(old){
+      old.animais.forEach(aid=>{let a=db.animais.find(x=>x.id===aid);if(a)a.custoSan=Math.max(0,(a.custoSan||0)-old.custoCab)});
+      db.estoqueMov=(db.estoqueMov||[]).filter(m=>m.origem!=='sanidade'||m.sanId!==editSanId);
+    }
+    old.data=data;old.medicamento=s_med.value;old.dose=dose;old.custoCab=custoCab;old.custoTotal=custoCab*checks.length;old.animais=checks;old.carencia=med?med.carencia:0;
+    checks.forEach(aid=>{
+      let a=db.animais.find(x=>x.id===aid);
+      if(a)a.custoSan=(a.custoSan||0)+custoCab;
+      db.estoqueMov.push({id:id('EM',db.estoqueMov),origem:'sanidade',sanId:editSanId,estoqueId:null,prod:nameMed(s_med.value),
+        animalId:aid,data,qtdConsumida:dose,custoUnitario:med?med.custo:0,custoConsumido:custoCab,cc:'Sanidade'});
+    });
+    editSanId=null;
+  }else{
+    let novoSan={id:id('S',db.san),data,medicamento:s_med.value,dose,custoCab,custoTotal:custoCab*checks.length,animais:checks,carencia:med?med.carencia:0};
+    db.san.push(novoSan);
+    checks.forEach(aid=>{
+      let a=db.animais.find(x=>x.id===aid);
+      if(a)a.custoSan=(a.custoSan||0)+custoCab;
+      db.estoqueMov.push({id:id('EM',db.estoqueMov),origem:'sanidade',sanId:novoSan.id,estoqueId:null,prod:nameMed(s_med.value),
+        animalId:aid,data,qtdConsumida:dose,custoUnitario:med?med.custo:0,custoConsumido:custoCab,cc:'Sanidade'});
+    });
+  }
+  persist();closeM('mSan');render();
+}
+function editSan(idv){
+  let s=db.san.find(x=>x.id===idv);
+  if(!s)return alert('Não encontrado');
+  editSanId=idv;
+  openM('mSan'); // já chama fill() internamente — popula os selects ANTES de setarmos os valores
+  s_med.value=s.medicamento;s_data.value=s.data;s_dose.value=s.dose;
+  updateSanCusto();
+  renderSanAnimalList();
+}
+function deleteSan(idv){
+  let s=db.san.find(x=>x.id===idv);
+  if(!s)return;
+  if(!confirm('Excluir esta aplicação sanitária? O custo será removido dos animais.'))return;
+  s.animais.forEach(aid=>{let a=db.animais.find(x=>x.id===aid);if(a)a.custoSan=Math.max(0,(a.custoSan||0)-s.custoCab)});
+  db.san=db.san.filter(x=>x.id!==idv);
+  db.estoqueMov=(db.estoqueMov||[]).filter(m=>m.origem!=='sanidade'||m.sanId!==idv);
+  persist();render();
+}
+</script>
+<script>
+// ===== VENDA =====
+function prefillVenda(){
+  let a=db.animais.find(x=>x.id===v_animal.value);
+  if(!a)return;
+  v_peso.value=a.pesoAtual||'';
+  calcVendaValor();
+}
+function calcVendaValor(){
+  let peso=+document.getElementById('v_peso').value||0;
+  let precoKg=+document.getElementById('v_precokg').value||0;
+  if(peso&&precoKg)document.getElementById('v_bruto').value=(peso*precoKg).toFixed(2);
+}
+function toggleVendaVenc(){
+  document.getElementById('v_vencBox').style.display=document.getElementById('v_recstatus').value==='A RECEBER'?'block':'none';
+}
+function saveVenda(){
+  let a=db.animais.find(x=>x.id===v_animal.value);
+  if(!a)return alert('Selecione um animal');
+  let liq=(+v_bruto.value||0)-(+v_desp.value||0),c=cost(a),ds=days(a.data,v_data.value||hoje()),g=((+v_peso.value||a.pesoAtual)-a.pesoEntrada)/ds;
+  let dataVenda=v_data.value||hoje();
+  let recStatus=document.getElementById('v_recstatus').value;
+  let clienteId=document.getElementById('v_cliente').value;
+  let compradorTexto=v_comprador.value||(clienteId?nameCliente(clienteId):'');
+  db.vendas.push({id:id('V',db.vendas),data:dataVenda,animal:a.id,brinco:a.brinco,peso:+v_peso.value||a.pesoAtual,
+    precoKg:+v_precokg.value||0,liq,custo:c,lucro:liq-c,gmd:g,comprador:compradorTexto,cliente:clienteId});
+  a.status='VENDIDO';a.dataVenda=dataVenda;
+  // Lançamento automático no caixa
+  let venc=recStatus==='A RECEBER'?(document.getElementById('v_venc').value||dataVenda):dataVenda;
+  db.fin.push({id:id('F',db.fin),data:dataVenda,venc,tipo:'ENTRADA',
+    desc:'Venda animal '+a.brinco+(compradorTexto?' — '+compradorTexto:''),
+    cc:'Vendas',val:liq,status:recStatus});
+  persist();closeM('mVenda');render();
+}
+
+// ===== AGRO =====
+function saveAgro(){
+  let custoBase=(+g_sem.value||0)+(+g_ins.value||0)+(+g_serv.value||0)+(+g_out.value||0);
+  let q=+g_qtd.value||0,p=+g_peso.value||1,kg=g_un.value==='fardo'||g_un.value==='saca'?q*p:g_un.value==='t'?q*1000:q;
+  let prodNome=(g_prod.value||'').trim()||(g_dest.value+' de '+g_cult.value);
+  if(editAgroId){
+    let g=db.agro.find(x=>x.id===editAgroId);
+    if(!g)return alert('Cultura não encontrada');
+    g.nome=g_nome.value;g.cult=g_cult.value;g.area=+g_area.value||0;g.dest=g_dest.value;g.prod=prodNome;
+    g.custo=custoBase+(g.custoAdicional||0);g.q=q;g.un=g_un.value;g.cu=q?g.custo/q:0;g.ck=kg?g.custo/kg:0;
+    editAgroId=null;
+  }else{
+    let custo=custoBase;let cu=q?custo/q:0,ck=kg?custo/kg:0;
+    db.agro.push({id:id('G',db.agro),nome:g_nome.value,cult:g_cult.value,area:+g_area.value||0,dest:g_dest.value,prod:prodNome,custo,q,un:g_un.value,cu,ck,custoAdicional:0,custosExtras:[]});
+    // Funde com o item de estoque EXISTENTE de mesmo nome (case-insensitive), sem duplicar.
+    // Isso garante que produção própria + compra do mesmo insumo fiquem no mesmo saldo físico,
+    // com o custo médio ponderado entre as duas origens.
+    let it=db.estoque.find(e=>e.prod.toLowerCase()===prodNome.toLowerCase());
+    if(!it){it={id:id('E',db.estoque),prod:prodNome,cat:g_dest.value,qtd:0,un:kg?'kg':g_un.value,custo:0,min:0};db.estoque.push(it)}
+    let qtdEmKg=kg||q; // produção própria sempre soma em kg no estoque para casar com a unidade da dieta
+    let total=it.qtd*it.custo;it.qtd+=qtdEmKg;it.custo=it.qtd?(total+custo)/it.qtd:0;
+  }
+  persist();closeM('mAgro');render();
+}
+function editAgro(idv){
+  let g=db.agro.find(x=>x.id===idv);
+  if(!g)return alert('Cultura não encontrada');
+  editAgroId=idv;
+  g_nome.value=g.nome||'';g_cult.value=g.cult||'';g_area.value=g.area||0;g_dest.value=g.dest||'Feno';
+  g_sem.value=0;g_ins.value=0;g_serv.value=0;g_out.value=g.custo||0;g_qtd.value=g.q||0;g_un.value=g.un||'fardo';g_peso.value=18;
+  openM('mAgro');
+}
+function addAgroCost(idv){
+  let g=db.agro.find(x=>x.id===idv);
+  if(!g)return alert('Cultura não encontrada');
+  let desc=prompt('Descrição do novo custo (ex: ureia, herbicida, corte, enfardamento):');
+  if(desc===null)return;
+  let val=parseFloat(prompt('Valor em R$:')||'0');
+  if(!val)return alert('Valor inválido');
+  g.custoAdicional=(g.custoAdicional||0)+val;g.custo=(g.custo||0)+val;
+  g.custosExtras=g.custosExtras||[];g.custosExtras.push({data:hoje(),desc:desc,valor:val});
+  if(g.q)g.cu=g.custo/g.q;
+  persist();render();
+}
+
+// ===== MÁQUINAS =====
+function saveMaq(){
+  let val=+m_val.value||0,vida=+m_vida.value||10,manut=+m_manut.value||0;
+  if(!m_nome.value)return alert('Informe o nome da máquina');
+  if(editMachineId){
+    let m=db.maquinas.find(x=>x.id===editMachineId);
+    if(!m)return alert('Máquina não encontrada');
+    m.nome=m_nome.value;m.val=val;m.vida=vida;m.dep=vida?val/(vida*12):0;m.manut=manut;m.status=m.status||'ATIVA';
+    editMachineId=null;
+  }else{
+    db.maquinas.push({id:id('M',db.maquinas),nome:m_nome.value,val,vida,dep:vida?val/(vida*12):0,manut,status:'ATIVA',custosExtras:[]});
+  }
+  persist();closeM('mMaq');render();
+}
+function editMachine(idv){
+  let m=db.maquinas.find(x=>x.id===idv);
+  if(!m)return alert('Máquina não encontrada');
+  editMachineId=idv;
+  m_nome.value=m.nome||'';m_val.value=m.val||0;m_vida.value=m.vida||10;m_manut.value=m.manut||0;
+  openM('mMaq');
+}
+function addMachineCost(idv){
+  let m=db.maquinas.find(x=>x.id===idv);
+  if(!m)return alert('Máquina não encontrada');
+  let desc=prompt('Descrição do custo da máquina (ex: diesel, óleo, pneus, oficina, peça):');
+  if(desc===null)return;
+  let val=parseFloat(prompt('Valor em R$:')||'0');
+  if(!val)return alert('Valor inválido');
+  m.manut=(m.manut||0)+val;
+  m.custosExtras=m.custosExtras||[];m.custosExtras.push({data:hoje(),desc:desc,valor:val});
+  db.fin.push({id:id('F',db.fin),data:hoje(),venc:hoje(),tipo:'SAÍDA',desc:'Máquina '+m.nome+': '+desc,cc:'Máquinas',val,status:'PAGO'});
+  persist();render();
+}
+
+// ===== PATRIMÔNIO IMOBILIZADO =====
+let editPatrimonioId=null;
+function savePatrimonio(){
+  let nome=pat_nome.value,cat=pat_categoria.value,data=pat_data.value||hoje();
+  let valor=+pat_valor.value||0,vida=+pat_vida.value||25,status=pat_status.value;
+  if(!nome)return alert('Informe a descrição do item');
+  let depMensal=vida?valor/(vida*12):0;
+  if(editPatrimonioId){
+    let p=db.patrimonio.find(x=>x.id===editPatrimonioId);
+    if(!p)return alert('Item não encontrado');
+    Object.assign(p,{nome,categoria:cat,data,valor,vida,depMensal,status});
+    editPatrimonioId=null;
+  }else{
+    db.patrimonio.push({id:id('PAT',db.patrimonio),nome,categoria:cat,origem:'Cadastro manual',data,valor,vida,depMensal,status,construcaoOrigemId:null});
+  }
+  persist();closeM('mPatrimonio');render();
+}
+function editPatrimonio(idv){
+  let p=db.patrimonio.find(x=>x.id===idv);
+  if(!p)return alert('Item não encontrado');
+  editPatrimonioId=idv;
+  pat_nome.value=p.nome||'';pat_categoria.value=p.categoria||'Outros';pat_data.value=p.data||hoje();
+  pat_valor.value=p.valor||0;pat_vida.value=p.vida||25;pat_status.value=p.status||'ATIVO';
+  openM('mPatrimonio');
+}
+function mesesDesde(dataISO){
+  if(!dataISO)return 0;
+  return Math.max(0,Math.round((new Date()-new Date(dataISO))/(30.44*86400000)));
+}
+function renderPatrimonio(){
+  let totalValor=db.patrimonio.reduce((s,p)=>s+(p.valor||0),0);
+  let totalDepAcum=db.patrimonio.reduce((s,p)=>s+Math.min(p.valor||0,(p.depMensal||0)*mesesDesde(p.data)),0);
+  let valorAtual=totalValor-totalDepAcum;
+  let ativos=db.patrimonio.filter(p=>p.status==='ATIVO').length;
+  document.getElementById('kpiPatrimonio').innerHTML=
+    kpi('Itens cadastrados',db.patrimonio.length,'blue')+
+    kpi('Valor de aquisição (total)',money(totalValor),'green')+
+    kpi('Depreciação acumulada',money(totalDepAcum),'amber')+
+    kpi('Valor contábil atual',money(valorAtual),valorAtual>=0?'green':'red')+
+    kpi('Itens ativos',ativos,'blue');
+  document.getElementById('tbPatrimonio').innerHTML=db.patrimonio.map(p=>{
+    let depAcum=Math.min(p.valor||0,(p.depMensal||0)*mesesDesde(p.data));
+    let valorAtual=(p.valor||0)-depAcum;
+    let origemTag=p.construcaoOrigemId?` <span class="badge ok" title="Gerado automaticamente a partir de uma obra finalizada">via obra</span>`:'';
+    return `<tr><td><b>${p.nome}</b>${origemTag}</td><td>${p.categoria}</td><td>${p.origem||'—'}</td><td>${p.data?new Date(p.data).toLocaleDateString('pt-BR'):'—'}</td><td>${money(p.valor)}</td><td>${p.vida} anos</td><td>${money(p.depMensal)}</td><td>${money(valorAtual)}</td><td>${bdg(p.status)}</td><td><button class='btn small' onclick='editPatrimonio("${p.id}")'>Editar</button> <button class='btn small danger' onclick='deleteRecord("patrimonio","${p.id}")'>Excluir</button></td></tr>`;
+  }).join('')||empty(10,'Nenhum item de patrimônio cadastrado ainda');
+}
+
+// ===== CONSTRUÇÕES / OBRAS =====
+let editConstrucaoId=null;
+let construcaoAtivaId=null; // para qual obra estamos lançando um item no momento
+function saveConstrucao(){
+  let nome=con_nome.value,cat=con_categoria.value,inicio=con_inicio.value||hoje(),previsao=con_previsao.value||'';
+  if(!nome)return alert('Informe o nome da obra');
+  if(editConstrucaoId){
+    let c=db.construcoes.find(x=>x.id===editConstrucaoId);
+    if(!c)return alert('Obra não encontrada');
+    Object.assign(c,{nome,categoria:cat,inicio,previsao});
+    editConstrucaoId=null;
+  }else{
+    db.construcoes.push({id:id('OBR',db.construcoes),nome,categoria:cat,inicio,previsao,status:'EM ANDAMENTO',itens:[],patrimonioGeradoId:null});
+  }
+  persist();closeM('mConstrucao');render();
+}
+function editConstrucao(idv){
+  let c=db.construcoes.find(x=>x.id===idv);
+  if(!c)return alert('Obra não encontrada');
+  editConstrucaoId=idv;
+  con_nome.value=c.nome||'';con_categoria.value=c.categoria||'Benfeitoria/Construção';
+  con_inicio.value=c.inicio||hoje();con_previsao.value=c.previsao||'';
+  openM('mConstrucao');
+}
+function abrirLancamentoConstrucao(idv){
+  construcaoAtivaId=idv;
+  ci_desc.value='';ci_data.value=hoje();ci_valor.value='';
+  openM('mConstrucaoItem');
+}
+function saveConstrucaoItem(){
+  let c=db.construcoes.find(x=>x.id===construcaoAtivaId);
+  if(!c)return alert('Obra não encontrada');
+  let desc=ci_desc.value,data=ci_data.value||hoje(),valor=+ci_valor.value||0;
+  if(!desc)return alert('Informe a descrição do item/custo');
+  if(!valor)return alert('Informe um valor válido');
+  c.itens=c.itens||[];
+  c.itens.push({data,desc,valor});
+  persist();closeM('mConstrucaoItem');render();
+}
+function custoConstrucao(c){return (c.itens||[]).reduce((s,i)=>s+(i.valor||0),0)}
+function finalizarConstrucao(idv){
+  let c=db.construcoes.find(x=>x.id===idv);
+  if(!c)return alert('Obra não encontrada');
+  if(c.status==='FINALIZADA')return alert('Esta obra já está finalizada.');
+  let total=custoConstrucao(c);
+  if(!confirm(`Finalizar a obra "${c.nome}"?\n\nCusto total acumulado: ${money(total)}\n\nEla será automaticamente lançada no Patrimônio Imobilizado com este valor.`))return;
+  c.status='FINALIZADA';
+  c.dataFinalizacao=hoje();
+  // Gera automaticamente o item de Patrimônio Imobilizado
+  let novoPatrimonio={
+    id:id('PAT',db.patrimonio),
+    nome:c.nome,
+    categoria:c.categoria||'Benfeitoria/Construção',
+    origem:'Obra: '+c.nome,
+    data:c.dataFinalizacao,
+    valor:total,
+    vida:25,
+    depMensal:total/(25*12),
+    status:'ATIVO',
+    construcaoOrigemId:c.id,
+    itensOrigem:c.itens||[]
+  };
+  db.patrimonio.push(novoPatrimonio);
+  c.patrimonioGeradoId=novoPatrimonio.id;
+  persist();render();
+  alert(`Obra finalizada! "${c.nome}" foi lançada no Patrimônio Imobilizado com valor de ${money(total)}.`);
+}
+function renderConstrucoes(){
+  let emAndamento=db.construcoes.filter(c=>c.status==='EM ANDAMENTO');
+  let custoTotalAndamento=emAndamento.reduce((s,c)=>s+custoConstrucao(c),0);
+  let finalizadas=db.construcoes.filter(c=>c.status==='FINALIZADA').length;
+  document.getElementById('kpiConstrucoes').innerHTML=
+    kpi('Obras em andamento',emAndamento.length,'amber')+
+    kpi('Custo acumulado (em andamento)',money(custoTotalAndamento),'blue')+
+    kpi('Obras finalizadas',finalizadas,'green')+
+    kpi('Total de obras',db.construcoes.length,'blue');
+  document.getElementById('tbConstrucoes').innerHTML=db.construcoes.map(c=>{
+    let total=custoConstrucao(c);
+    let acoes=c.status==='FINALIZADA'
+      ? `<button class='btn small' onclick='editConstrucao("${c.id}")'>Editar</button> <span class="badge ok">No patrimônio</span>`
+      : `<button class='btn small' onclick='editConstrucao("${c.id}")'>Editar</button> <button class='btn small' onclick='abrirLancamentoConstrucao("${c.id}")'>+ Item</button> <button class='btn small primary' onclick='finalizarConstrucao("${c.id}")'>✓ Finalizar obra</button> <button class='btn small danger' onclick='deleteRecord("construcoes","${c.id}")'>Excluir</button>`;
+    return `<tr><td><b>${c.nome}</b></td><td>${c.inicio?new Date(c.inicio).toLocaleDateString('pt-BR'):'—'}</td><td>${c.previsao?new Date(c.previsao).toLocaleDateString('pt-BR'):'—'}</td><td>${(c.itens||[]).length} itens</td><td>${money(total)}</td><td>${bdg(c.status==='FINALIZADA'?'OK':'PENDENTE')} ${c.status}</td><td>${acoes}</td></tr>`;
+  }).join('')||empty(7,'Nenhuma construção cadastrada ainda');
+}
+
+// ===== FINANCEIRO MANUAL =====
+function saveFin(){
+  db.fin.push({id:id('F',db.fin),data:f_data.value||hoje(),venc:f_venc.value||f_data.value||hoje(),tipo:f_tipo.value,desc:f_desc.value,cc:f_cc.value,val:+f_val.value||0,status:f_status.value});
+  persist();closeM('mFin');render();
+}
+
+// ===== GENÉRICOS =====
+function deleteRecord(arr,idv){
+  if(!confirm('Tem certeza que deseja excluir este lançamento?'))return;
+  db[arr]=db[arr].filter(x=>x.id!==idv);
+  persist();render();
+}
+function deleteAnimal(idv){
+  let a=db.animais.find(x=>x.id===idv);
+  if(!a)return;
+  if(!confirm('Excluir animal '+a.brinco+'? Isso também removerá pesagens, vendas e lançamentos sanitários vinculados.'))return;
+  db.animais=db.animais.filter(x=>x.id!==idv);
+  db.pesagens=db.pesagens.filter(x=>x.animal!==idv);
+  db.vendas=db.vendas.filter(x=>x.animal!==idv);
+  db.san.forEach(s=>{s.animais=s.animais.filter(aid=>aid!==idv)});
+  persist();render();
+}
+</script>
+<script>
+function reportAnimal(idv){
+  recalcularCustosAlimentacao();
+  let a=db.animais.find(x=>x.id===idv);
+  if(!a)return alert('Animal não encontrado');
+  let pes=db.pesagens.filter(p=>p.animal===idv);
+  let vendas=db.vendas.filter(v=>v.animal===idv);
+  let san=db.san.filter(s=>s.animais.includes(idv));
+  let custoCompra=+a.valor||0;
+  let custoAlim=+a.custoAlim||0;
+  let custoSan=+a.custoSan||0;
+  let custoOutros=+a.custoOutros||0;
+  let custoTotal=cost(a);
+  let receita=vendas.reduce((s,v)=>s+(+v.liq||0),0);
+  let lucro=receita?receita-custoTotal:0;
+  let dataFimRef=a.status==='VENDIDO'?(vendas[0]?.data):a.status==='MORTO'?a.dataMorte:hoje();
+  let dias=days(a.data,dataFimRef||hoje());
+  let ganho=(+a.pesoAtual||0)-(+a.pesoEntrada||0);
+  let gmd=dias?ganho/dias:0;
+
+  let rowsPes=pes.map(p=>`<tr><td>${p.data}</td><td>${n(p.ant,1)} kg</td><td>${n(p.peso,1)} kg</td><td>${n(p.ganho,1)} kg</td><td>${p.dias}</td><td>${n(p.gmd,3)}</td></tr>`).join('')||'<tr><td colspan="6">Sem pesagens registradas.</td></tr>';
+
+  let rowsSan=san.map(s=>`<tr><td>${s.data}</td><td>${nameMed(s.medicamento)}</td><td>${s.dose}</td><td>${money(s.custoCab||0)}</td><td>${s.carencia||0} dias</td></tr>`).join('')||'<tr><td colspan="5">Sem lançamentos sanitários.</td></tr>';
+
+  let rowsVenda=vendas.map(v=>`<tr><td>${v.data}</td><td>${n(v.peso,1)} kg</td><td>${money(v.liq)}</td><td>${money(v.custo)}</td><td class="${v.lucro>=0?'green':'red'}">${money(v.lucro)}</td></tr>`).join('')||'<tr><td colspan="5">Animal ainda não vendido.</td></tr>';
+
+  let extras=(a.custosExtras||[]).map(c=>`<tr><td>${c.data}</td><td>${c.desc}</td><td>${money(c.valor)}</td></tr>`).join('')||'<tr><td colspan="3">Sem custos extras.</td></tr>';
+
+  // NOVO: tabela de custo diário detalhado por período de dieta
+  let rowsDietas=(a.historicoDietas||[]).map(h=>`<tr>
+    <td>${nameC(h.curral)}</td><td>${nameDieta(h.dieta)}</td>
+    <td>${h.inicio}</td><td>${h.fim||'em andamento'}</td>
+    <td>${h.dias}</td><td>${money(h.custoCabDia)}</td><td><b>${money(h.custoTotal)}</b></td>
+  </tr>`).join('')||'<tr><td colspan="7">Sem períodos de dieta vinculados.</td></tr>';
+
+  let statusBadge=bdg(a.status);
+  let perdaBox=a.status==='MORTO'?`<div class="alertbox danger2"><b>Baixa por morte em ${a.dataMorte}</b> — Motivo: ${a.motivoMorte||'—'}. ${a.obsMorte?('Obs: '+a.obsMorte):''}<br>Custo total até a morte (registrado como PERDA): <b>${money(a.custoPerda||custoTotal)}</b></div>`:'';
+
+  document.getElementById('relAnimalBox').innerHTML=`
+  ${perdaBox}
+  <div class="grid">
+   <div class="kpi"><small>Brinco</small><b>${a.brinco}</b></div>
+   <div class="kpi"><small>Status</small><b>${statusBadge}</b></div>
+   <div class="kpi"><small>Idade</small><b>${a.idade||0} meses</b></div>
+   <div class="kpi"><small>Peso atual</small><b>${n(a.pesoAtual,1)} kg</b></div>
+   <div class="kpi"><small>GMD</small><b>${n(a.gmd||gmd,3)} kg/dia</b></div>
+   <div class="kpi"><small>Custo total acumulado</small><b class="amber">${money(custoTotal)}</b></div>
+   <div class="kpi"><small>Receita</small><b class="green">${receita?money(receita):'—'}</b></div>
+   <div class="kpi"><small>Lucro</small><b class="${lucro>=0?'green':'red'}">${receita?money(lucro):'—'}</b></div>
+  </div>
+  <div class="card"><h3>Resumo do animal</h3>
+   <p><b>ID:</b> ${a.id} &nbsp; <b>Categoria:</b> ${a.cat} &nbsp; <b>Entrada:</b> ${a.data} &nbsp; <b>Fornecedor:</b> ${nameF(a.forn)}</p>
+   <p><b>Curral:</b> ${nameC(a.curral)} &nbsp; <b>Lote:</b> ${nameL(a.lote)} &nbsp; <b>Preço kg vivo na compra:</b> ${money(a.precoKg)} &nbsp; <b>Peso entrada:</b> ${n(a.pesoEntrada,1)} kg &nbsp; <b>Ganho:</b> ${n(ganho,1)} kg</p>
+  </div>
+  <div class="card"><h3>Composição de custos (até ${dataFimRef||hoje()})</h3>
+   <table><thead><tr><th>Compra</th><th>Alimentação</th><th>Sanidade</th><th>Custos extras</th><th>Total</th></tr></thead>
+   <tbody><tr><td>${money(custoCompra)}</td><td>${money(custoAlim)}</td><td>${money(custoSan)}</td><td>${money(custoOutros)}</td><td><b>${money(custoTotal)}</b></td></tr></tbody></table>
+  </div>
+  <div class="card"><h3>Custo diário por período de dieta</h3>
+   <p style="color:var(--muted);font-size:12.5px;margin-bottom:10px">Mostra quanto este animal custou de alimentação em cada fase, conforme a dieta vigente no curral em que estava.</p>
+   <table><thead><tr><th>Curral</th><th>Dieta</th><th>Início</th><th>Fim</th><th>Dias</th><th>Custo/cab/dia</th><th>Custo no período</th></tr></thead><tbody>${rowsDietas}</tbody></table>
+  </div>
+  <div class="card"><h3>Pesagens</h3><table><thead><tr><th>Data</th><th>Peso anterior</th><th>Peso atual</th><th>Ganho</th><th>Dias</th><th>GMD</th></tr></thead><tbody>${rowsPes}</tbody></table></div>
+  <div class="card"><h3>Sanidade</h3><table><thead><tr><th>Data</th><th>Medicamento</th><th>Dose</th><th>Custo animal</th><th>Carência</th></tr></thead><tbody>${rowsSan}</tbody></table></div>
+  <div class="card"><h3>Custos extras</h3><table><thead><tr><th>Data</th><th>Descrição</th><th>Valor</th></tr></thead><tbody>${extras}</tbody></table></div>
+  <div class="card"><h3>Venda</h3><table><thead><tr><th>Data</th><th>Peso venda</th><th>Receita líquida</th><th>Custo</th><th>Lucro</th></tr></thead><tbody>${rowsVenda}</tbody></table></div>
+  `;
+  openM('mRelAnimal');
+}
+</script>
+<script>
+function relLotes(){
+  let box=document.getElementById('relOutput');box.style.display='block';
+  let rows=db.lotes.map(l=>{
+    let aa=db.animais.filter(x=>x.lote===l.id);
+    let ativos=aa.filter(x=>x.status==='ATIVO');
+    let vendidosIds=aa.filter(x=>x.status==='VENDIDO').map(x=>x.id);
+    let vendasLote=db.vendas.filter(v=>vendidosIds.includes(v.animal));
+    let receita=vendasLote.reduce((s,v)=>s+v.liq,0);
+    let custoTotal=aa.reduce((s,x)=>s+cost(x),0);
+    let lucro=receita-vendasLote.reduce((s,v)=>s+v.custo,0);
+    let pm=ativos.length?ativos.reduce((s,x)=>s+x.pesoAtual,0)/ativos.length:0;
+    let gm=ativos.length?ativos.reduce((s,x)=>s+(x.gmd||0),0)/ativos.length:0;
+    return `<tr><td><b>${l.nome}</b></td><td>${aa.length}</td><td>${ativos.length}</td><td>${n(pm,1)}kg</td><td>${n(gm,3)}</td><td>${money(custoTotal)}</td><td>${money(receita)}</td><td class="${lucro>=0?'green':'red'}"><b>${money(lucro)}</b></td></tr>`;
+  }).join('')||empty(8,'Sem lotes');
+  box.innerHTML=`<h3>📦 Resultado por Lote</h3><table><thead><tr><th>Lote</th><th>Total animais</th><th>Ativos</th><th>Peso médio</th><th>GMD médio</th><th>Custo total</th><th>Receita</th><th>Lucro</th></tr></thead><tbody>${rows}</tbody></table>`;
+  box.scrollIntoView({behavior:'smooth'});
+}
+function relVendas(){
+  let box=document.getElementById('relOutput');box.style.display='block';
+  let rows=db.vendas.map(v=>`<tr><td>${v.data}</td><td>${v.brinco}</td><td>${v.comprador||'—'}</td><td>${n(v.peso,1)}kg</td><td>${money(v.liq)}</td><td>${money(v.custo)}</td><td class="${v.lucro>=0?'green':'red'}"><b>${money(v.lucro)}</b></td><td>${n(v.gmd,3)}</td></tr>`).join('')||empty(8,'Sem vendas');
+  let totalReceita=db.vendas.reduce((s,v)=>s+v.liq,0),totalLucro=db.vendas.reduce((s,v)=>s+v.lucro,0);
+  box.innerHTML=`<h3>💰 Resultado por Venda</h3>
+  <div class="grid">${kpi('Total vendido',db.vendas.length,'blue')}${kpi('Receita total',money(totalReceita),'green')}${kpi('Lucro total',money(totalLucro),totalLucro>=0?'green':'red')}</div>
+  <table><thead><tr><th>Data</th><th>Brinco</th><th>Comprador</th><th>Peso</th><th>Receita</th><th>Custo</th><th>Lucro</th><th>GMD</th></tr></thead><tbody>${rows}</tbody></table>`;
+  box.scrollIntoView({behavior:'smooth'});
+}
+function relFinanceiro(){
+  let box=document.getElementById('relOutput');box.style.display='block';
+  let receita=db.vendas.reduce((s,v)=>s+v.liq,0);
+  let entradasFin=db.fin.filter(f=>f.tipo==='ENTRADA').reduce((s,f)=>s+f.val,0);
+  let saidasFin=db.fin.filter(f=>f.tipo==='SAÍDA'&&!f.ehPerda).reduce((s,f)=>s+f.val,0);
+  let perdas=db.fin.filter(f=>f.ehPerda).reduce((s,f)=>s+f.val,0);
+  let porCC={};
+  db.fin.filter(f=>f.tipo==='SAÍDA').forEach(f=>{porCC[f.cc]=(porCC[f.cc]||0)+f.val});
+  let rowsCC=Object.entries(porCC).sort((a,b)=>b[1]-a[1]).map(([cc,v])=>`<tr><td>${cc}</td><td>${money(v)}</td></tr>`).join('')||empty(2,'Sem despesas');
+  box.innerHTML=`<h3>🏦 Relatório Financeiro</h3>
+  <div class="grid">${kpi('Entradas (caixa)',money(entradasFin+receita),'green')}${kpi('Saídas (caixa)',money(saidasFin),'red')}${kpi('Perdas mortalidade',money(perdas),'red')}${kpi('Saldo',money(entradasFin+receita-saidasFin-perdas),(entradasFin+receita-saidasFin-perdas)>=0?'green':'red')}</div>
+  <h4 style="margin-top:18px">Saídas por centro de custo</h4>
+  <table><thead><tr><th>Centro de custo</th><th>Total</th></tr></thead><tbody>${rowsCC}</tbody></table>`;
+  box.scrollIntoView({behavior:'smooth'});
+}
+function relCurrais(){
+  let box=document.getElementById('relOutput');box.style.display='block';
+  let rows=db.currais.map(c=>{
+    let aa=anims(c.id,'');
+    let custoTotal=aa.reduce((s,x)=>s+cost(x),0);
+    let periodoAtivo=db.dietaPeriodos.find(p=>p.curral===c.id&&!p.fim);
+    let dietaNome=periodoAtivo?nameDieta(periodoAtivo.dieta):'—';
+    let custoDia=periodoAtivo?periodoAtivo.custoCabDia*aa.length:0;
+    return `<tr><td><b>${c.nome}</b></td><td>${aa.length}/${c.cap}</td><td>${dietaNome}</td><td>${money(custoDia)}/dia</td><td>${money(custoTotal)}</td></tr>`;
+  }).join('')||empty(5,'Sem currais');
+  box.innerHTML=`<h3>🏚️ Resultado por Curral</h3><table><thead><tr><th>Curral</th><th>Ocupação</th><th>Dieta vigente</th><th>Custo alimentação/dia</th><th>Custo acumulado animais</th></tr></thead><tbody>${rows}</tbody></table>`;
+  box.scrollIntoView({behavior:'smooth'});
+}
+</script>
+<script>
+function renderAnimais(){
+  let q=(buscaAnimal?.value||'').toLowerCase(),st=fStatus?.value||'';
+  tbAnimais.innerHTML=db.animais.filter(a=>(!st||a.status===st)&&(`${a.brinco} ${nameC(a.curral)} ${nameL(a.lote)}`.toLowerCase().includes(q))).map(a=>{
+    let acoesExtra=a.status==='ATIVO'?`<button class='btn small danger' onclick='abrirBaixaMorte("${a.id}")'>☠️ Morte</button>`:'';
+    return `<tr><td>${a.id}</td><td><b>${a.brinco}</b></td><td>${a.cat}</td><td>${a.idade||0}m</td><td>${nameC(a.curral)}</td><td>${nameL(a.lote)}</td><td>${n(a.pesoEntrada,1)}kg</td><td><b>${n(a.pesoAtual,1)}kg</b></td><td>${n(a.gmd,3)}</td><td>${money(cost(a))}</td><td>${bdg(a.status)}</td><td>
+    <button class='btn small primary' onclick='quickPesagem("${a.id}")'>Pesar</button>
+    <button class='btn small' onclick='reportAnimal("${a.id}")'>Ficha</button>
+    <button class='btn small' onclick='editAnimal("${a.id}")'>Editar</button>
+    <button class='btn small' onclick='addAnimalCost("${a.id}")'>+Custo</button>
+    ${acoesExtra}
+    <button class='btn small danger' onclick='deleteAnimal("${a.id}")'>Excluir</button>
+    </td></tr>`;
+  }).join('')||empty(12,'Nenhum animal');
+}
+
+function renderFinTable(){
+  let q=(buscaFin?.value||'').toLowerCase(),st=fFinStatus?.value||'';
+  let hojeStr=hoje();
+  let rows=db.fin.filter(f=>{
+    if(st){
+      if(st==='VENCIDO'){if(!(f.venc&&f.venc<hojeStr&&(f.status==='PENDENTE'||f.status==='A RECEBER')))return false}
+      else if(f.status!==st)return false;
+    }
+    return `${f.desc} ${f.cc}`.toLowerCase().includes(q);
+  }).sort((a,b)=>(a.venc||a.data).localeCompare(b.venc||b.data));
+  tbFin.innerHTML=rows.map(f=>{
+    let vencido=f.venc&&f.venc<hojeStr&&(f.status==='PENDENTE'||f.status==='A RECEBER');
+    let statusShow=vencido?'VENCIDO':f.status;
+    let acaoBtn='';
+    if(f.status==='PENDENTE') acaoBtn=`<button class='btn small primary' onclick='confirmarPagamento("${f.id}")'>Pagar</button> `;
+    if(f.status==='A RECEBER') acaoBtn=`<button class='btn small primary' onclick='confirmarPagamento("${f.id}")'>Receber</button> `;
+    return `<tr><td>${f.data}</td><td>${f.venc||'—'}</td><td>${f.tipo}</td><td>${f.desc}</td><td>${f.cc}</td><td>${money(f.val)}</td><td>${bdg(statusShow)}</td><td>${acaoBtn}<button class='btn small danger' onclick='deleteRecord("fin","${f.id}")'>Excluir</button></td></tr>`;
+  }).join('')||empty(8,'Sem lançamentos');
+}
+function confirmarPagamento(idv){
+  let f=db.fin.find(x=>x.id===idv);
+  if(!f)return alert('Lançamento não encontrado');
+  if(f.status==='PENDENTE'){
+    if(!confirm('Confirmar pagamento de "'+f.desc+'" no valor de '+money(f.val)+'?'))return;
+    f.status='PAGO';f.dataPagamento=hoje();
+  }else if(f.status==='A RECEBER'){
+    if(!confirm('Confirmar recebimento de "'+f.desc+'" no valor de '+money(f.val)+'?'))return;
+    f.status='RECEBIDO';f.dataRecebimento=hoje();
+  }
+  persist();render();
+}
+
+function render(){
+  fill();
+  recalcularCustosAlimentacao();
+  let ativos=active();
+  let receita=db.vendas.reduce((s,v)=>s+v.liq,0);
+  let lucroVendas=db.vendas.reduce((s,v)=>s+v.lucro,0);
+  let entradasFin=db.fin.filter(f=>f.tipo==='ENTRADA'&&f.status!=='A RECEBER').reduce((s,f)=>s+f.val,0);
+  let saidasFinPagas=db.fin.filter(f=>f.tipo==='SAÍDA'&&f.status==='PAGO').reduce((s,f)=>s+f.val,0);
+  let caixa=entradasFin-saidasFinPagas;
+  let peso=ativos.length?ativos.reduce((s,a)=>s+a.pesoAtual,0)/ativos.length:0;
+  let pesados=ativos.filter(a=>a.gmd>0);
+  let gmd=pesados.length?pesados.reduce((s,a)=>s+a.gmd,0)/pesados.length:0;
+  let estoqueVal=db.estoque.reduce((s,e)=>s+e.qtd*e.custo,0);
+
+  kpis.innerHTML=kpi('Animais ativos',ativos.length,'green')+kpi('Peso médio',n(peso,1)+' kg','blue')+kpi('GMD médio'+(pesados.length<ativos.length?' ('+pesados.length+'/'+ativos.length+' pesados)':''),pesados.length?n(gmd,3)+' kg/d':'sem pesagens','amber')+kpi('Receita vendas',money(receita),'green')+kpi('Lucro realizado',money(lucroVendas),lucroVendas>=0?'green':'red')+kpi('Caixa real',money(caixa),caixa>=0?'green':'red')+kpi('Valor estoque',money(estoqueVal),'blue')+kpi('Máquinas',db.maquinas.length,'amber');
+
+  // ALERTAS de vencimento (hoje e atrasados)
+  let hojeStr=hoje();
+  let vencHoje=db.fin.filter(f=>f.venc===hojeStr&&(f.status==='PENDENTE'||f.status==='A RECEBER'));
+  let vencidos=db.fin.filter(f=>f.venc&&f.venc<hojeStr&&(f.status==='PENDENTE'||f.status==='A RECEBER'));
+  let alertasHtml='';
+  if(vencidos.length)alertasHtml+=`<div class="alertbox danger2"><b>⚠️ ${vencidos.length} lançamento(s) vencido(s):</b> ${vencidos.slice(0,5).map(f=>f.desc+' ('+money(f.val)+', venc. '+f.venc+')').join(' · ')}${vencidos.length>5?'...':''}</div>`;
+  if(vencHoje.length)alertasHtml+=`<div class="alertbox"><b>📅 ${vencHoje.length} vencimento(s) hoje:</b> ${vencHoje.map(f=>f.desc+' ('+money(f.val)+')').join(' · ')}</div>`;
+  if(db.estoque.some(e=>e.qtd<=e.min))alertasHtml+='<div class="alertbox">Atenção: há estoque abaixo do mínimo.</div>';
+  // Animais sem pesagem recente (>30 dias desde a entrada ou última pesagem) — ajuda a não perder o acompanhamento de GMD
+  let semPesoRecente=ativos.filter(a=>{
+    let ultimaPesagem=db.pesagens.filter(p=>p.animal===a.id).sort((x,y)=>y.data.localeCompare(x.data))[0];
+    let dataRef=ultimaPesagem?ultimaPesagem.data:a.data;
+    return days(dataRef,hojeStr)>30;
+  });
+  if(semPesoRecente.length)alertasHtml+=`<div class="alertbox"><b>⚖️ ${semPesoRecente.length} animal(is) sem pesagem há mais de 30 dias</b> — acompanhamento de GMD pode estar desatualizado.</div>`;
+  // Animais que já podem estar prontos pra venda (peso atual acima de referência de abate ~ 480kg) — referência editável conforme a categoria
+  let prontosParaVenda=ativos.filter(a=>(a.pesoAtual||0)>=480);
+  if(prontosParaVenda.length)alertasHtml+=`<div class="alertbox" style="background:#E1F5EE;color:#0F6E56"><b>✅ ${prontosParaVenda.length} animal(is) já atingiram peso de referência para abate (≥480kg)</b> — considere agendar a venda.</div>`;
+  // Currais perto da capacidade máxima
+  db.currais.forEach(c=>{
+    let ocup=ativos.filter(a=>a.curral===c.id).length;
+    if(c.cap&&ocup/c.cap>=0.9)alertasHtml+=`<div class="alertbox"><b>🏚️ ${c.nome} está com ${ocup}/${c.cap} (${Math.round(ocup/c.cap*100)}%) de ocupação</b> — perto da capacidade máxima.</div>`;
+  });
+  alerts.innerHTML=alertasHtml;
+
+  // GRÁFICOS dashboard
+  let maxAnim=Math.max(...db.currais.map(c=>anims(c.id,'').length),1);
+  document.getElementById('chartCurrais').innerHTML=db.currais.map(c=>{
+    let qtd=anims(c.id,'').length;
+    return `<div class="barRow"><div class="barLbl">${c.nome}</div><div class="barTrack"><div class="barFill" style="width:${(qtd/maxAnim*100).toFixed(1)}%;background:var(--v2)"></div></div><div class="barVal">${qtd} cab.</div></div>`;
+  }).join('')||'<p style="color:#999">Nenhum curral cadastrado</p>';
+
+  let mesAtual=hojeStr.slice(0,7);
+  let entradasMes=db.fin.filter(f=>f.tipo==='ENTRADA'&&f.data.slice(0,7)===mesAtual).reduce((s,f)=>s+f.val,0)+db.vendas.filter(v=>v.data.slice(0,7)===mesAtual).reduce((s,v)=>s+v.liq,0);
+  let saidasMes=db.fin.filter(f=>f.tipo==='SAÍDA'&&f.data.slice(0,7)===mesAtual).reduce((s,f)=>s+f.val,0);
+  let maxFin=Math.max(entradasMes,saidasMes,1);
+  document.getElementById('chartFin').innerHTML=`
+    <div class="barRow"><div class="barLbl">Entradas</div><div class="barTrack"><div class="barFill" style="width:${(entradasMes/maxFin*100).toFixed(1)}%;background:var(--v2)"></div></div><div class="barVal">${money(entradasMes)}</div></div>
+    <div class="barRow"><div class="barLbl">Saídas</div><div class="barTrack"><div class="barFill" style="width:${(saidasMes/maxFin*100).toFixed(1)}%;background:var(--r)"></div></div><div class="barVal">${money(saidasMes)}</div></div>
+  `;
+
+  renderAnimais();
+
+  tbCurrais.innerHTML=db.currais.map(c=>{
+    let a=anims(c.id,'');
+    let periodoAtivo=db.dietaPeriodos.find(p=>p.curral===c.id&&!p.fim);
+    let dietaNome=periodoAtivo?nameDieta(periodoAtivo.dieta):'—';
+    let custoCabDia=periodoAtivo?periodoAtivo.custoCabDia:0;
+    return `<tr><td>${c.id}</td><td><b>${c.nome}</b></td><td>${c.cap}</td><td>${a.length}</td><td>${n(c.cap?a.length/c.cap*100:0,1)}%</td><td>${c.tipo}</td><td>${dietaNome}</td><td>${money(custoCabDia)}</td><td><button class='btn small' onclick='editCurral("${c.id}")'>Editar</button> <button class='btn small danger' onclick='deleteRecord("currais","${c.id}")'>Excluir</button></td></tr>`;
+  }).join('')||empty(9,'Sem currais');
+
+  tbLotes.innerHTML=db.lotes.map(l=>{
+    let a=anims('',l.id),pm=a.length?a.reduce((s,x)=>s+x.pesoAtual,0)/a.length:0,g=a.length?a.reduce((s,x)=>s+x.gmd,0)/a.length:0,c=a.reduce((s,x)=>s+cost(x),0);
+    let vendidosIds=db.animais.filter(x=>x.lote===l.id&&x.status==='VENDIDO').map(x=>x.id);
+    let receita=db.vendas.filter(v=>vendidosIds.includes(v.animal)).reduce((s,v)=>s+v.liq,0);
+    let lucro=receita-db.vendas.filter(v=>vendidosIds.includes(v.animal)).reduce((s,v)=>s+v.custo,0);
+    return `<tr><td>${l.id}</td><td><b>${l.nome}</b></td><td>${l.obj}</td><td>${nameF(l.forn)}</td><td>${a.length}</td><td>${n(pm,1)}kg</td><td>${n(g,3)}</td><td>${money(c)}</td><td>${receita?money(receita):'—'}</td><td class="${lucro>=0?'green':'red'}">${receita?money(lucro):'—'}</td><td><button class='btn small danger' onclick='deleteRecord("lotes","${l.id}")'>Excluir</button></td></tr>`;
+  }).join('')||empty(11,'Sem lotes');
+
+  tbPesagens.innerHTML=db.pesagens.map(p=>{
+    let a=db.animais.find(x=>x.id===p.animal);
+    return `<tr><td>${p.data}</td><td>${a?a.brinco:p.animal}</td><td>${n(p.ant,1)}</td><td>${n(p.peso,1)}</td><td>${n(p.ganho,1)}</td><td>${p.dias}</td><td>${n(p.gmd,3)}</td><td>${n(p.gmdPeriodo||p.gmd,3)}</td><td>${n(p.proj30,1)}</td><td>${n(p.proj60,1)}</td><td>${n(p.proj90,1)}</td><td><button class='btn small danger' onclick='deleteRecord("pesagens","${p.id}")'>Excluir</button></td></tr>`;
+  }).join('')||empty(12,'Sem pesagens');
+
+  tbDietaPeriodo.innerHTML=db.dietaPeriodos.slice().sort((a,b)=>b.inicio.localeCompare(a.inicio)).map(p=>{
+    let aa=anims(p.curral,'');
+    let fimReal=p.fim||hoje();
+    let totalDias=days(p.inicio,fimReal);
+    let custoTotalPeriodo=p.custoCabDia*aa.length*totalDias;
+    return `<tr><td>${nameC(p.curral)}</td><td>${nameDieta(p.dieta)}</td><td>${p.inicio}</td><td>${p.fim||'em andamento'}</td><td>${money(p.custoCabDia)}</td><td>${aa.length}</td><td>${money(custoTotalPeriodo)}</td><td>${bdg(p.fim?'ENCERRADO':'ATIVO')}</td><td>
+      ${!p.fim?`<button class='btn small primary' onclick='finalizarDietaPeriodo("${p.id}")'>Finalizar</button>`:''}
+      <button class='btn small danger' onclick='deleteDietaPeriodo("${p.id}")'>Excluir</button>
+    </td></tr>`;
+  }).join('')||empty(9,'Nenhum período de dieta cadastrado');
+
+  tbIngredientes.innerHTML=db.ingredientes.map(i=>{
+    let est=db.estoque.find(e=>e.prod.toLowerCase()===i.nome.toLowerCase());
+    return `<tr><td><b>${i.nome}</b></td><td>${i.cat}</td><td>${money(i.custo)}</td><td>${est?n(est.qtd,1)+' '+est.un:'—'}</td><td><button class='btn small' onclick='editIngrediente("${i.id}")'>Editar</button></td></tr>`;
+  }).join('')||empty(5,'Sem ingredientes');
+
+  dietasList.innerHTML=db.dietas.map(d=>{
+    let itensHtml=d.itens.map(it=>{
+      let ing=db.ingredientes.find(i=>i.id===it.ingredienteId);
+      return `<span class="chip">${ing?ing.nome:'?'}: ${n(it.qtd,2)}kg</span>`;
+    }).join('');
+    return `<div class="card"><h3 style="margin-top:0">${d.nome} <span style="font-size:13px;color:var(--v2)">${money(d.custoCabDia)}/cab/dia</span></h3><div>${itensHtml}</div>
+    <div style="margin-top:12px"><button class='btn small' onclick='editDieta("${d.id}")'>Editar</button> <button class='btn small danger' onclick='deleteDieta("${d.id}")'>Excluir</button></div></div>`;
+  }).join('')||'<p style="color:#999">Nenhuma dieta cadastrada ainda.</p>';
+
+  tbMedicamentos.innerHTML=db.medicamentos.map(m=>`<tr><td><b>${m.nome}</b></td><td>${m.tipo}</td><td>${m.un}</td><td>${money(m.custo)}</td><td>${m.carencia}</td><td><button class='btn small' onclick='editMedicamento("${m.id}")'>Editar</button></td></tr>`).join('')||empty(6,'Sem medicamentos');
+
+  tbSan.innerHTML=db.san.slice().sort((a,b)=>b.data.localeCompare(a.data)).map(s=>`<tr><td>${s.data}</td><td>${nameMed(s.medicamento)}</td><td>${s.animais.length} animal(is)</td><td>${s.dose}</td><td>${money(s.custoCab)}</td><td>${money(s.custoTotal)}</td><td>${s.carencia} dias</td><td><button class='btn small' onclick='editSan("${s.id}")'>Editar</button> <button class='btn small danger' onclick='deleteSan("${s.id}")'>Excluir</button></td></tr>`).join('')||empty(8,'Sem sanidade');
+
+  tbVendas.innerHTML=db.vendas.map(v=>`<tr><td>${v.data}</td><td>${v.brinco}</td><td>${n(v.peso,1)}kg</td><td>${money(v.liq)}</td><td>${money(v.custo)}</td><td class="${v.lucro>=0?'green':'red'}"><b>${money(v.lucro)}</b></td><td>${n(v.gmd,3)}</td><td><button class='btn small danger' onclick='deleteRecord("vendas","${v.id}")'>Excluir</button></td></tr>`).join('')||empty(8,'Sem vendas');
+
+  tbFornecedores.innerHTML=db.fornecedores.map(f=>`<tr><td><b>${f.nome}</b></td><td>${f.doc||'—'}</td><td>${f.tel||'—'}</td><td>${f.email||'—'}</td><td>${f.end||'—'}</td><td>${f.ie||'—'}</td><td><button class='btn small' onclick='editFornecedor("${f.id}")'>Editar</button></td></tr>`).join('')||empty(7,'Sem fornecedores');
+
+  tbClientes.innerHTML=db.clientes.map(c=>`<tr><td><b>${c.nome}</b></td><td>${c.doc||'—'}</td><td>${c.tel||'—'}</td><td>${c.email||'—'}</td><td>${c.end||'—'}</td><td>${c.ie||'—'}</td><td><button class='btn small' onclick='editCliente("${c.id}")'>Editar</button></td></tr>`).join('')||empty(7,'Sem clientes');
+
+  tbEstoque.innerHTML=db.estoque.map(e=>`<tr><td><b>${e.prod}</b></td><td>${e.cat}</td><td>${n(e.qtd,2)}</td><td>${e.un}</td><td>${money(e.custo)}</td><td>${money(e.qtd*e.custo)}</td><td>${e.min}</td><td>${bdg(e.qtd<=e.min?'BAIXO':'OK')}</td><td><button class='btn small' onclick='editEstoque("${e.id}")'>Editar</button> <button class='btn small danger' onclick='deleteRecord("estoque","${e.id}")'>Excluir</button></td></tr>`).join('')||empty(9,'Estoque vazio');
+
+  tbAgro.innerHTML=db.agro.map(g=>`<tr><td><b>${g.nome}</b></td><td>${g.cult}</td><td>${n(g.area,2)}ha</td><td>${g.dest}</td><td>${money(g.custo)}</td><td>${n(g.q,2)} ${g.un}</td><td>${money(g.cu)}</td><td>${money(g.ck)}</td><td><button class='btn small' onclick='editAgro("${g.id}")'>Editar</button> <button class='btn small' onclick='addAgroCost("${g.id}")'>+Custo</button> <button class='btn small danger' onclick='deleteRecord("agro","${g.id}")'>Excluir</button></td></tr>`).join('')||empty(9,'Sem safra');
+
+  tbMaq.innerHTML=db.maquinas.map(m=>`<tr><td><b>${m.nome}</b></td><td>${money(m.val)}</td><td>${m.vida} anos</td><td>${money(m.dep)}</td><td>${money(m.manut)}</td><td>${bdg(m.status)}</td><td><button class='btn small' onclick='editMachine("${m.id}")'>Editar</button> <button class='btn small' onclick='addMachineCost("${m.id}")'>+Custo</button> <button class='btn small danger' onclick='deleteRecord("maquinas","${m.id}")'>Excluir</button></td></tr>`).join('')||empty(7,'Sem máquinas');
+  renderPatrimonio();
+  renderConstrucoes();
+
+  let pendenciasFin=db.fin.filter(f=>f.status==='PENDENTE'||f.status==='A RECEBER').reduce((s,f)=>s+f.val,0);
+  kpiFin.innerHTML=kpi('Caixa real',money(caixa),caixa>=0?'green':'red')+kpi('Entradas',money(entradasFin),'green')+kpi('Saídas',money(saidasFinPagas),'red')+kpi('Pendências',money(pendenciasFin),'amber');
+  renderFinTable();
+
+  // DRE agora é calculado em função separada (com filtro de período), chamada aqui sem filtro para o dashboard funcionar
+  renderDre();
+  renderInsumosNaoConsumidos();
+  renderRemanejTable();
+}
+
+// ===== DRE: filtros de período =====
+function toggleDrePeriodo(){
+  let v=document.getElementById('dre_periodo').value;
+  document.getElementById('dre_ano').style.display=v==='ano'?'inline-block':'none';
+  document.getElementById('dre_mes').style.display=v==='mes'?'inline-block':'none';
+  document.getElementById('dre_dia').style.display=v==='dia'?'inline-block':'none';
+  document.getElementById('dre_de').style.display=v==='intervalo'?'inline-block':'none';
+  document.getElementById('dre_ate').style.display=v==='intervalo'?'inline-block':'none';
+  if(v==='ano'){
+    let anos=new Set();
+    db.fin.forEach(f=>anos.add(f.data.slice(0,4)));
+    db.estoqueMov.forEach(m=>anos.add(m.data.slice(0,4)));
+    if(!anos.size)anos.add(hoje().slice(0,4));
+    document.getElementById('dre_ano').innerHTML=Array.from(anos).sort().reverse().map(a=>`<option value="${a}">${a}</option>`).join('');
+  }
+}
+function switchDreTab(tabId,el){
+  document.querySelectorAll('#dre .tabpanel2').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('#dre .tab2').forEach(t=>t.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  el.classList.add('active');
+  if(tabId==='dreAnimalTab'){
+    let sel=document.getElementById('dre_animal_select');
+    sel.innerHTML=db.animais.map(a=>`<option value="${a.id}">${a.brinco} (${a.id}) — ${bdg(a.status).replace(/<[^>]+>/g,'')}</option>`).join('');
+  }
+}
+// Retorna {de, ate} (strings AAAA-MM-DD) com base no filtro selecionado, ou null/null para "tudo"
+function getDreRange(){
+  let v=document.getElementById('dre_periodo')?.value||'tudo';
+  if(v==='ano'){let a=document.getElementById('dre_ano').value;return{de:a+'-01-01',ate:a+'-12-31'}}
+  if(v==='mes'){let m=document.getElementById('dre_mes').value;if(!m)return{de:null,ate:null};return{de:m+'-01',ate:m+'-31'}}
+  if(v==='dia'){let d=document.getElementById('dre_dia').value;if(!d)return{de:null,ate:null};return{de:d,ate:d}}
+  if(v==='intervalo'){return{de:document.getElementById('dre_de').value||null,ate:document.getElementById('dre_ate').value||null}}
+  return{de:null,ate:null};
+}
+function inRange(dateStr,de,ate){
+  if(!dateStr)return false;
+  if(de&&dateStr<de)return false;
+  if(ate&&dateStr>ate)return false;
+  return true;
+}
+
+function renderDre(){
+  recalcularCustosAlimentacao();
+  let {de,ate}=getDreRange();
+  let filtraData=d=>(!de&&!ate)?true:inRange(d,de,ate);
+
+  // ── RESULTADO REALIZADO (regime de competência correto) ──────────────────
+  // Só entra no resultado o que foi efetivamente VENDIDO no período.
+  // O custo de cada animal vendido é o custo TOTAL acumulado dele (compra+alimentação+sanidade+extras),
+  // não o consumo do estoque do período inteiro. Animais ainda ativos representam
+  // "estoque biológico em formação" — seu custo já investido NÃO é despesa do período,
+  // só vira custo quando ele for vendido (ou perda, se morrer).
+  let vendasPeriodo=db.vendas.filter(v=>filtraData(v.data));
+  let receita=vendasPeriodo.reduce((s,v)=>s+v.liq,0);
+  let custoAnimaisVendidos=vendasPeriodo.reduce((s,v)=>{let a=db.animais.find(x=>x.id===v.animal);return s+(a?cost(a):0)},0);
+  let resultadoVendas=receita-custoAnimaisVendidos;
+
+  // Perdas por mortalidade no período (custo total do animal perdido, reconhecido como perda no momento da morte)
+  let perdas=db.fin.filter(f=>f.ehPerda&&filtraData(f.data)).reduce((s,f)=>s+f.val,0);
+
+  // Despesas administrativas/outras (saídas de caixa que não são compra de insumo nem animal — ex: funcionários, energia, etc)
+  let despesasAdmin=db.fin.filter(f=>f.tipo==='SAÍDA'&&!f.ehPerda&&!['Alimentação','Sanidade','Animais'].includes(f.cc)&&filtraData(f.data)).reduce((s,f)=>s+f.val,0);
+
+  let dep=db.maquinas.reduce((s,m)=>s+m.dep,0); // depreciação mensal (referência fixa)
+
+  let lucroEco=resultadoVendas-perdas-despesasAdmin-dep;
+
+  // ── VALOR DO REBANHO ATIVO (estoque biológico) ────────────────────────────
+  // Animais ainda não vendidos: quanto já foi investido neles (custo) e quanto valeriam hoje
+  // a preço de mercado estimado pelo último preço de venda praticado (referência), se houver.
+  let ativos=db.animais.filter(a=>a.status==='ATIVO');
+  let custoInvestidoAtivos=ativos.reduce((s,a)=>s+cost(a),0);
+  let pesoVivoAtivos=ativos.reduce((s,a)=>s+(a.pesoAtual||0),0);
+  let ultimoPrecoKg=db.vendas.length?db.vendas[db.vendas.length-1].precoKg:0;
+  let valorEstimadoAtivos=ultimoPrecoKg?pesoVivoAtivos*ultimoPrecoKg:0;
+
+  document.getElementById('kpiDre').innerHTML=
+    kpi('Receita (animais vendidos)',money(receita),'green')+
+    kpi('Custo (animais vendidos)',money(custoAnimaisVendidos),'amber')+
+    kpi('Resultado das vendas',money(resultadoVendas),resultadoVendas>=0?'green':'red')+
+    kpi('Perdas mortalidade',money(perdas),'red')+
+    kpi('Despesas administrativas',money(despesasAdmin),'red')+
+    kpi('Depreciação mensal',money(dep),'amber')+
+    kpi('Lucro econômico do período',money(lucroEco),lucroEco>=0?'green':'red')+
+    kpi('Animais ainda ativos',ativos.length,'blue')+
+    kpi('Custo já investido (ativos)',money(custoInvestidoAtivos),'amber')+
+    kpi('Valor estimado do rebanho ativo',valorEstimadoAtivos?money(valorEstimadoAtivos):'—','green');
+
+  document.getElementById('dreBox').innerHTML=`<h3>DRE Gerencial ${de||ate?'('+( de||'...')+' até '+(ate||'...')+')':'(todo histórico)'}</h3>
+  <p><b>${vendasPeriodo.length}</b> animal(is) vendido(s) no período</p>
+  <p>Receita das vendas: <b class="green">${money(receita)}</b></p>
+  <p>(-) Custo total dos animais vendidos (compra + alimentação + sanidade + extras, do dia de entrada até a venda): <b class="red">${money(custoAnimaisVendidos)}</b></p>
+  <p style="font-weight:700">= Resultado das vendas: <b class="${resultadoVendas>=0?'green':'red'}">${money(resultadoVendas)}</b></p>
+  <p>(-) Perdas por mortalidade no período: <b class="red">${money(perdas)}</b></p>
+  <p>(-) Despesas administrativas/outras no período: <b class="red">${money(despesasAdmin)}</b></p>
+  <p>(-) Depreciação mensal de máquinas: <b class="red">${money(dep)}</b></p>
+  <hr><p style="font-size:16px">Lucro econômico do período: <b class="${lucroEco>=0?'green':'red'}">${money(lucroEco)}</b></p>
+  <div class="notice" style="margin-top:14px">
+    <b>📦 Rebanho ainda ativo (não entra no resultado acima):</b> ${ativos.length} animais ativos representam
+    <b>${money(custoInvestidoAtivos)}</b> já investidos (compra + alimentação + sanidade até hoje).
+    ${valorEstimadoAtivos?`A preço de mercado estimado (último kg vendido: R$${n(ultimoPrecoKg,2)}/kg), esse lote valeria aproximadamente <b>${money(valorEstimadoAtivos)}</b> hoje — um ganho potencial não realizado de <b class="${valorEstimadoAtivos-custoInvestidoAtivos>=0?'green':'red'}">${money(valorEstimadoAtivos-custoInvestidoAtivos)}</b> se vendido agora.`:'Cadastre uma venda para ter uma referência de preço de mercado e estimar o valor do rebanho.'}
+  </div>
+  <p style="color:var(--muted);font-size:12px;margin-top:10px">💡 O custo de alimentação de animais que ainda não foram vendidos é um investimento em estoque biológico, não uma despesa do período — ele só entra no resultado quando o animal é vendido ou morre. Insumos comprados mas ainda não usados ficam disponíveis em estoque — veja a aba "Compra de Insumos".</p>`;
+}
+
+function renderDreAnimal(){
+  let aid=document.getElementById('dre_animal_select').value;
+  let a=db.animais.find(x=>x.id===aid);
+  if(!a)return;
+  recalcularCustosAlimentacao();
+  let venda=db.vendas.find(v=>v.animal===aid);
+  let custoCompra=a.valor||0;
+  let custoAlim=a.custoAlim||0;
+  let custoSan=a.custoSan||0;
+  let custoOutros=a.custoOutros||0;
+  let custoTotal=custoCompra+custoAlim+custoSan+custoOutros;
+  let receita=venda?venda.liq:0;
+  let resultado=receita-custoTotal;
+  document.getElementById('dreAnimalBox').innerHTML=`
+  <h3>DRE individual — ${a.brinco} (${a.id}) ${bdg(a.status)}</h3>
+  <div class="grid">
+    ${kpi('Receita (se vendido)',venda?money(receita):'—','green')}
+    ${kpi('Custo aquisição',money(custoCompra),'amber')}
+    ${kpi('Custo alimentação',money(custoAlim),'amber')}
+    ${kpi('Custo sanidade',money(custoSan),'amber')}
+    ${kpi('Custo total',money(custoTotal),'red')}
+    ${kpi('Resultado',venda?money(resultado):'(ainda ativo)',resultado>=0?'green':'red')}
+  </div>
+  <table><thead><tr><th>Item</th><th>Valor</th></tr></thead><tbody>
+  <tr><td>Compra do animal</td><td>${money(custoCompra)}</td></tr>
+  <tr><td>Alimentação consumida (todas as dietas)</td><td>${money(custoAlim)}</td></tr>
+  <tr><td>Sanidade aplicada</td><td>${money(custoSan)}</td></tr>
+  <tr><td>Custos extras</td><td>${money(custoOutros)}</td></tr>
+  <tr style="font-weight:700"><td>CUSTO TOTAL</td><td>${money(custoTotal)}</td></tr>
+  ${venda?`<tr><td>Receita da venda</td><td class="green">${money(receita)}</td></tr><tr style="font-weight:700"><td>RESULTADO</td><td class="${resultado>=0?'green':'red'}">${money(resultado)}</td></tr>`:'<tr><td colspan="2" style="color:var(--muted)">Animal ainda ativo — sem receita realizada</td></tr>'}
+  </tbody></table>
+  <button class="btn" style="margin-top:14px" onclick="reportAnimal('${a.id}')">Ver ficha completa do animal</button>
+  `;
+}
+
+// ===== COMPRA DE INSUMOS (comprado vs consumido) =====
+function renderInsumosNaoConsumidos(){
+  let tb=document.getElementById('tbInsumos');
+  if(!tb)return;
+  let produtos=new Set();
+  (db.compras||[]).forEach(c=>produtos.add(c.prod));
+  (db.estoqueMov||[]).forEach(m=>produtos.add(m.prod));
+  let rows=Array.from(produtos).map(prod=>{
+    let compras=(db.compras||[]).filter(c=>c.prod===prod);
+    let qtdComprada=compras.reduce((s,c)=>s+c.qtd,0);
+    let valorComprado=compras.reduce((s,c)=>s+c.valorTotal,0);
+    let consumos=(db.estoqueMov||[]).filter(m=>m.prod===prod);
+    let qtdConsumida=consumos.reduce((s,m)=>s+m.qtdConsumida,0);
+    let valorConsumido=consumos.reduce((s,m)=>s+m.custoConsumido,0);
+    let estoqueItem=db.estoque.find(e=>e.prod===prod);
+    let saldo=estoqueItem?estoqueItem.qtd:0;
+    return{prod,qtdComprada,valorComprado,qtdConsumida,valorConsumido,saldo};
+  });
+  tb.innerHTML=rows.map(r=>`<tr><td><b>${r.prod}</b></td><td>${n(r.qtdComprada,1)}</td><td>${money(r.valorComprado)}</td><td>${n(r.qtdConsumida,1)}</td><td>${money(r.valorConsumido)}</td><td>${n(r.saldo,1)}</td></tr>`).join('')||empty(6,'Nenhuma compra registrada ainda');
+  let totalComprado=rows.reduce((s,r)=>s+r.valorComprado,0);
+  let totalConsumido=rows.reduce((s,r)=>s+r.valorConsumido,0);
+  document.getElementById('kpiInsumos').innerHTML=
+    kpi('Total comprado (caixa)',money(totalComprado),'red')+
+    kpi('Total consumido (DRE)',money(totalConsumido),'amber')+
+    kpi('Saldo disponível em estoque',money(totalComprado-totalConsumido),'green');
+}
+function exportData(){let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='backup_hp_agro_erp_v4.json';a.click()}
+function importData(evt){
+  let file=evt.target.files[0];if(!file)return;
+  let reader=new FileReader();
+  reader.onload=async function(e){
+    try{
+      let data=JSON.parse(e.target.result);
+      db=data;
+      ALL_KEYS.forEach(k=>{if(!db[k])db[k]=[]});
+      await persist();render();
+      alert('Backup importado com sucesso! Os demais usuários verão esta atualização em poucos segundos.');
+    }catch(err){alert('Erro ao importar: '+err.message)}
+  };
+  reader.readAsText(file);
+  evt.target.value='';
+}
+// Inicialização: carrega do servidor, e só então (depois de carregado)
+// roda o seed de ingredientes padrão (só na primeira vez, se a lista vier vazia)
+// e começa o polling de sincronização entre usuários.
+(async function init(){
+  await loadDb();
+  if(!db.ingredientes||db.ingredientes.length===0){
+    seedIngredientes20();
+    await persist();
+  }
+  render();
+  startPolling();
+})();
+</script>
+</body></html>
